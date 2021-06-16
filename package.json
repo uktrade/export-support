@@ -8,8 +8,7 @@
   },
   "scripts": {
     "build": "webpack --config=webpack.config.js --mode=production",
-    "watch": "webpack --config=webpack.config.js --mode=development --watch",
-    "fmt": "prettier --write '{,!(.*|build|node*)/**/}*.{js,json,md,css,scss}'"
+    "watch": "webpack --config=webpack.config.js --mode=development --watch"
   },
   "dependencies": {
     "copy-webpack-plugin": "^9.0.0",

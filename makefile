@@ -1,6 +1,7 @@
 install:
 	npm install
 	pip install --upgrade pip setuptools wheel && pip install -r requirements-dev.txt && pip install -r requirements.txt
+	pre-commit install
 
 clean:
 	rm -rf ./build
@@ -16,9 +17,7 @@ serve:
 	python manage.py runserver 127.0.0.1:8000
 
 fmt:
-	isort --line-width=90 --multi-line=3 --combine-as --trailing-comma .
-	black export_support
-	npm run fmt
+	pre-commit run -a
 
 deploy: clean
 	npm run build
