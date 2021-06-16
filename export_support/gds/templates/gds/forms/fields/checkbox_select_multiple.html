@@ -1,0 +1,17 @@
+{% for group, options, index in widget.optgroups %}
+    <div class="{% if group %}govuk-!-margin-bottom-6{% else %}govuk-!-margin-bottom-4{% endif %}">
+        {% if group %}
+            <h3 class="govuk-heading-m">{{ group }}</h3>
+        {% endif %}
+        <div class="govuk-checkboxes">
+            {% for option in options %}
+                <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" id="{{ option.attrs.id }}" name="{{ option.name }}" type="checkbox" {% if option.selected %}checked{% endif %} value="{{ option.value }}">
+                    <label class="govuk-label govuk-checkboxes__label" for="{{ option.attrs.id }}">
+                        {{ option.label }}
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endfor %}

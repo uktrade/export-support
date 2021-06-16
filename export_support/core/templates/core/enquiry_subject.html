@@ -1,0 +1,18 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <div class="govuk-width-container">
+        <main id="main-content" class="govuk-main-wrapper">
+            {% include "gds/forms/non_field_errors.html" %}
+            <form class="govuk-!-padding-top-6" method="post">
+                {% csrf_token %}
+                {% include "gds/forms/form_group.html" with field=form.enquiry_subject %}
+                <div class="govuk-!-margin-top-6">
+                    <button class="govuk-button">
+                        Continue
+                    </button>
+                </div>
+            </form>
+        </main>
+    </div>
+{% endblock %}

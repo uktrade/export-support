@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "export_support.core",
+    "export_support.gds",
     "webpack_loader",
 ]
 
