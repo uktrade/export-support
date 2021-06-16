@@ -1,0 +1,8 @@
+*$py.class
+*.py[cod]
+.env
+__pycache__/
+build/
+static/
+node_modules/
+webpack-stats.json

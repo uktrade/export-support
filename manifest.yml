@@ -1,0 +1,8 @@
+---
+applications:
+  - name: export-support
+    buildpacks:
+      - https://github.com/cloudfoundry/nodejs-buildpack.git#v1.7.54
+      - https://github.com/cloudfoundry/python-buildpack.git#v1.7.42
+    memory: 256M
+    disk_quota: 512M
