@@ -1,0 +1,21 @@
+version: "2"
+services:
+  django:
+    build:
+      context: .
+      dockerfile: ./compose/django/Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    stdin_open: true
+    tty: true
+  webpack:
+    build:
+      context: .
+      dockerfile: ./compose/webpack/Dockerfile
+    image: node:14
+    volumes:
+      - .:/app
