@@ -8,4 +8,9 @@ urlpatterns = [
     path(
         "import-enquiries", views.ImportEnquiriesView.as_view(), name="import-enquiries"
     ),
+    path(
+        "export-destination",
+        views.ExportDestinationFormView.as_view(),
+        name="export-destination",
+    ),
 ]

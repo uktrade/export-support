@@ -1,7 +1,7 @@
 from django.shortcuts import redirect
 from django.views.generic import FormView, TemplateView
 
-from .forms import EnquirySubjectChoices, EnquirySubjectForm
+from .forms import EnquirySubjectChoices, EnquirySubjectForm, ExportDestinationForm
 
 
 class EnquirySubjectFormView(FormView):
@@ -17,7 +17,12 @@ class EnquirySubjectFormView(FormView):
         if only_importing:
             return redirect("core:import-enquiries")
 
-        return super().form_valid(form)
+        return redirect("core:export-destination")
+
+
+class ExportDestinationFormView(FormView):
+    form_class = ExportDestinationForm
+    template_name = "core/export_destination.html"
 
 
 class ImportEnquiriesView(TemplateView):

@@ -18,3 +18,18 @@ class EnquirySubjectForm(forms.Form):
         required=True,
         widget=gds_fields.CheckboxSelectMultiple,
     )
+
+
+class ExportDestinationChoices(models.IntegerChoices):
+    SELLING_GOODS_ABROAD = 1, "Selling from the UK to an EU country"
+    SELLING_SERVICES_ABROAD = 2, "Selling from the UK to a non-EU country"
+
+
+class ExportDestinationForm(forms.Form):
+    export_destination = forms.TypedMultipleChoiceField(
+        coerce=lambda choice: ExportDestinationChoices(int(choice)),
+        choices=ExportDestinationChoices.choices,
+        label="Where are you selling to?",
+        required=True,
+        widget=gds_fields.CheckboxSelectMultiple,
+    )
