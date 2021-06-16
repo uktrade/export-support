@@ -21,8 +21,8 @@ class EnquirySubjectForm(forms.Form):
 
 
 class ExportDestinationChoices(models.IntegerChoices):
-    SELLING_GOODS_ABROAD = 1, "Selling from the UK to an EU country"
-    SELLING_SERVICES_ABROAD = 2, "Selling from the UK to a non-EU country"
+    EU = 1, "Selling from the UK to an EU country"
+    NON_EU = 2, "Selling from the UK to a non-EU country"
 
 
 class ExportDestinationForm(forms.Form):
