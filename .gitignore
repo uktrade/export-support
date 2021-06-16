@@ -8,3 +8,4 @@ node_modules/
 webpack-stats.json
 .DS_Store
 .python-version
+.vscode
