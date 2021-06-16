@@ -35,10 +35,29 @@ class ExportDestinationFormView(FormView):
 
         only_exporting_to_eu = export_destination_value == [ExportDestinationChoices.EU]
         if only_exporting_to_eu:
-            return redirect(settings.GREAT_CONTACT_FORM)
+            return redirect(settings.GREAT_CONTACT_FORM_URL)
 
-        return super().form_valid(form)
+        return redirect("core:non-eu-export-enquiries")
 
 
 class ImportEnquiriesView(TemplateView):
     template_name = "core/import_enquiries.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+
+        ctx["GOV_UK_EXPORT_GOODS_URL"] = settings.GOV_UK_EXPORT_GOODS_URL
+
+        return ctx
+
+
+class NonEUExportEnquiriesView(TemplateView):
+    template_name = "core/non_eu_export_enquiries.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+
+        ctx["GREAT_CONTACT_FORM_URL"] = settings.GREAT_CONTACT_FORM_URL
+        ctx["GOV_UK_EXPORT_GOODS_URL"] = settings.GOV_UK_EXPORT_GOODS_URL
+
+        return ctx

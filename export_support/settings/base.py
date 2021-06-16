@@ -119,4 +119,5 @@ STATIC_ROOT = "build/static"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-GREAT_CONTACT_FORM = "https://www.great.gov.uk/transition-period/contact/"
+GOV_UK_EXPORT_GOODS_URL = "https://www.gov.uk/export-goods"
+GREAT_CONTACT_FORM_URL = "https://www.great.gov.uk/transition-period/contact/"

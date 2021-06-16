@@ -13,10 +13,10 @@
                         For instance, you can submit an import enquiry if this enquiry relates to the importing of materials which are necessary for you to export a finished product.
                     </p>
                     <p class="govuk-body">
-                        If your import enquiry relates to a broader export enquiry, then <a class="govuk-link" href="#">continue within this service</a>.
+                        If your import enquiry relates to a broader export enquiry, then <a class="govuk-link" href="{% url "core:export-destination" %}">continue within this service</a>.
                     </p>
                     <p class="govuk-body">
-                        If your import enquiry doesn’t relate to a broader export enquiry, then <a class="govuk-link" href="https://www.gov.uk/import-goods-into-uk">find help with importing to the UK here</a>.
+                        If your import enquiry doesn’t relate to a broader export enquiry, then <a class="govuk-link" href="{{ GOV_UK_EXPORT_GOODS_URL }}">find help with importing to the UK here</a>.
                     </p>
                 </div>
             </div>

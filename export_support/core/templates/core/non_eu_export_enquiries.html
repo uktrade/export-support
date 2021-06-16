@@ -1,0 +1,22 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <div class="govuk-width-container">
+        <main id="main-content" class="govuk-main-wrapper">
+            <div class="govuk-grid-row govuk-!-margin-top-6">
+                <div class="govuk-grid-column-two-thirds">
+                    <h1 class="govuk-heading-l">We are currently responding to enquiries about selling UK goods and services in the EU</h1>
+                    <p class="govuk-body">
+                        We may expand it in the future to include other export destinations.
+                    </p>
+                    <p class="govuk-body">
+                        <a class="govuk-link" href="{{ GREAT_CONTACT_FORM_URL }}">Submit an enquiry about selling goods or services into a European Union country</a>.
+                    </p>
+                    <p class="govuk-body">
+                        <a class="govuk-link" href="{{ GOV_UK_EXPORT_GOODS_URL }}">Find information about selling goods or services into a non-EU country</a>.
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
+{% endblock %}

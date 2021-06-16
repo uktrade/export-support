@@ -13,4 +13,9 @@ urlpatterns = [
         views.ExportDestinationFormView.as_view(),
         name="export-destination",
     ),
+    path(
+        "non-eu-export-enquiries",
+        views.NonEUExportEnquiriesView.as_view(),
+        name="non-eu-export-enquiries",
+    ),
 ]
