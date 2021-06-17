@@ -55,6 +55,9 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+if not DEBUG:
+    MIDDLEWARE += ["csp.middleware.CSPMiddleware"]
+
 ROOT_URLCONF = "export_support.urls"
 
 TEMPLATES = [
@@ -121,3 +124,18 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 GOV_UK_EXPORT_GOODS_URL = "https://www.gov.uk/export-goods"
 GREAT_CONTACT_FORM_URL = "https://www.great.gov.uk/transition-period/contact/"
+
+if not DEBUG:
+    CSP_DEFAULT_SRC = ("'self'",)
+    CSP_SCRIPT_SRC = ("'self'",)
+    CSP_SCRIPT_SRC_ELEM = (
+        "'self'",
+        "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='",
+    )
+    CSP_STYLE_SRC_ATTR = ("'self'",)
+
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = True
+
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
