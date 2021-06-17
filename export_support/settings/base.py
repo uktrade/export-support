@@ -31,6 +31,8 @@ DEBUG = env.bool("DEBUG")
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
+ENABLE_CSP = env.bool("ENABLED_CSP", True)
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -55,7 +57,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-if not DEBUG:
+if ENABLE_CSP:
     MIDDLEWARE += ["csp.middleware.CSPMiddleware"]
 
 ROOT_URLCONF = "export_support.urls"
@@ -125,7 +127,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 GOV_UK_EXPORT_GOODS_URL = "https://www.gov.uk/export-goods"
 GREAT_CONTACT_FORM_URL = "https://www.great.gov.uk/transition-period/contact/"
 
-if not DEBUG:
+if ENABLE_CSP:
     CSP_DEFAULT_SRC = ("'self'",)
     CSP_SCRIPT_SRC = ("'self'",)
     CSP_SCRIPT_SRC_ELEM = (
