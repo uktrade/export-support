@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "export_support.core",
     "export_support.gds",
     "webpack_loader",
+    "csp",
 ]
 
 MIDDLEWARE = [
@@ -130,11 +131,9 @@ GREAT_CONTACT_FORM_URL = "https://www.great.gov.uk/transition-period/contact/"
 if ENABLE_CSP:
     CSP_DEFAULT_SRC = ("'self'",)
     CSP_SCRIPT_SRC = ("'self'",)
-    CSP_SCRIPT_SRC_ELEM = (
-        "'self'",
-        "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='",
-    )
+    CSP_SCRIPT_SRC_ELEM = ("'self'",)
     CSP_STYLE_SRC_ATTR = ("'self'",)
+    CSP_INCLUDE_NONCE_IN = ("script-src-elem",)
 
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
