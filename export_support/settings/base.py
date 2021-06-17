@@ -31,7 +31,7 @@ DEBUG = env.bool("DEBUG")
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
-ENABLE_CSP = env.bool("ENABLED_CSP", True)
+ENABLE_CSP = env.bool("ENABLE_CSP", True)
 
 # Application definition
 
