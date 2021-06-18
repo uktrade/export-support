@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "export_support.core",
     "export_support.gds",
+    "export_support.cookies",
     "webpack_loader",
     "csp",
 ]
@@ -138,6 +139,9 @@ if ENABLE_CSP:
 
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_AGE = 31 * 24 * 60 * 60
 
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
+
+GTM_GA_ID = env.str("GTM_GA_ID", None)

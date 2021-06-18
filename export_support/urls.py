@@ -17,4 +17,5 @@ from django.urls import include, path
 
 urlpatterns = [
     path("", include("export_support.core.urls", namespace="core")),
+    path("cookies", include("export_support.cookies.urls", namespace="cookies")),
 ]

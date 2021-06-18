@@ -1,0 +1,189 @@
+{% extends "core/base.html" %}
+
+{% block title %}Cookies{% endblock title %}
+
+{% block content %}
+    <div class="govuk-width-container">
+        <main id="main-content" class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <h2 class="govuk-heading-l">Details about cookies on GOV.UK</h2>
+                    <p class="govuk-body">
+                        GOV.UK puts small files (known as ‘cookies’) onto your computer to collect information about how you browse the site. Find out more about the cookies we use, what they’re for and when they expire.
+                    </p>
+
+                    <h3 class="govuk-heading-m">Cookies that measure website use</h3>
+                    <p class="govuk-body">
+                        We use Google Analytics software (Universal Analytics) to collect anonymised information about how you use GOV.UK. We do this to help make sure the site is meeting the needs of its users and to help us make improvements to the site and to government digital services.
+                    </p>
+
+                    <div class="govuk-inset-text">
+                        We do not allow Google to use or share the data about how you use this site.
+                    </div>
+
+                    <p class="govuk-body">Google Analytics stores information about:</p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>how you got to the site</li>
+                        <li>the pages you visit on GOV.UK and how long you spend on them</li>
+                        <li>what you click on while you’re visiting the site</li>
+                    </ul>
+
+                    <p class="govuk-body">Google Analytics sets the following cookies:</p>
+                    <table class="govuk-table app-cookies-table">
+                        <thead class="govuk-table__head">
+                            <tr class="govuk-table__row">
+                                <th class="govuk-table__header" scope="col">Name</th>
+                                <th class="govuk-table__header" scope="col">Purpose</th>
+                                <th class="govuk-table__header" scope="col">Expires</th>
+                            </tr>
+                        </thead>
+                        <tbody class="govuk-table__body">
+                        <tr class="govuk-table__row">
+                            <th class="govuk-table__header govuk-!-width-one-quarter app-!-vertical-align-top" scope="row">
+                                _ga
+                            </th>
+                            <td class="govuk-table__cell app-!-vertical-align-top">
+                                This helps us count how many people visit this site by tracking if you’ve visited before
+                            </td>
+                            <td class="govuk-table__cell app-!-vertical-align-top govuk-!-width-one-quarter">
+                                2 years
+                            </td>
+                        </tr>
+                        <tr class="govuk-table__row">
+                            <th class="govuk-table__header govuk-!-width-one-quarter app-!-vertical-align-top" scope="row">
+                                _gid
+                            </th>
+                            <td class="govuk-table__cell app-!-vertical-align-top">
+                                This helps us count how many people visit this site by tracking if you’ve visited before
+                            </td>
+                            <td class="govuk-table__cell app-!-vertical-align-top govuk-!-width-one-quarter">
+                                1 day
+                            </td>
+                        </tr>
+                        <tr class="govuk-table__row">
+                            <th class="govuk-table__header govuk-!-width-one-quarter app-!-vertical-align-top" scope="row">
+                                _gat
+                            </th>
+                            <td class="govuk-table__cell app-!-vertical-align-top">
+                                Used to manage the rate at which page view requests are made
+                            </td>
+                            <td class="govuk-table__cell app-!-vertical-align-top govuk-!-width-one-quarter">
+                                1 minute
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 class="govuk-heading-m">Session cookies</h3>
+                    <p class="govuk-body">
+                        We store session cookies on your computer to help keep your information secure.
+                    </p>
+
+                    <table class="govuk-table app-cookies-table">
+                        <thead class="govuk-table__head">
+                            <tr class="govuk-table__row">
+                                <th class="govuk-table__header" scope="col">Name</th>
+                                <th class="govuk-table__header" scope="col">Purpose</th>
+                                <th class="govuk-table__header" scope="col">Expires</th>
+                            </tr>
+                        </thead>
+                        <tbody class="govuk-table__body">
+                        <tr class="govuk-table__row">
+                            <th class="govuk-table__header govuk-!-width-one-quarter app-!-vertical-align-top" scope="row">
+                                sessionid
+                            </th>
+                            <td class="govuk-table__cell app-!-vertical-align-top">
+                                This is set to identify your session
+                            </td>
+                            <td class="govuk-table__cell app-!-vertical-align-top govuk-!-width-one-quarter">
+                                2 weeks
+                            </td>
+                        </tr>
+                        <tr class="govuk-table__row">
+                            <th class="govuk-table__header govuk-!-width-one-quarter app-!-vertical-align-top" scope="row">
+                                csrftoken
+                            </th>
+                            <td class="govuk-table__cell app-!-vertical-align-top">
+                                Cross Site Request Forgery (CSRF) protection
+                            </td>
+                            <td class="govuk-table__cell app-!-vertical-align-top govuk-!-width-one-quarter">
+                                1 month
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+
+                    <h3 class="govuk-heading-m">Cookies that help with our communications and marketing</h3>
+                    <p class="govuk-body">
+                        Some GOV.UK pages may contain content from other sites, like YouTube or Flickr, which may set
+                        their own cookies. These sites are sometimes called ‘third party’ services. This tells us how
+                        many people are seeing the content and whether it’s useful.
+                    </p>
+                    <p class="govuk-body">
+                        In addition, if you share a link to a GOV.UK page, the service you share it on (for example,
+                        Facebook) may set a cookie. We have no control over cookies set on other websites - you can turn
+                        them off, but not through us.
+                    </p>
+
+                    <h3 class="govuk-heading-m">Cookies message</h3>
+
+                    <p class="govuk-body">
+                        You may see a banner when you visit GOV.UK inviting you to accept cookies or review your
+                        settings. We’ll set cookies so that your computer knows you’ve seen it and not to show it again,
+                        and also to store your settings.
+                    </p>
+
+                    <table class="govuk-table app-cookies-table">
+                        <thead class="govuk-table__head">
+                            <tr class="govuk-table__row">
+                                <th class="govuk-table__header" scope="col">Name</th>
+                                <th class="govuk-table__header" scope="col">Purpose</th>
+                                <th class="govuk-table__header" scope="col">Expires</th>
+                            </tr>
+                        </thead>
+                        <tbody class="govuk-table__body">
+                        <tr class="govuk-table__row">
+                            <th class="govuk-table__header govuk-!-width-one-quarter app-!-vertical-align-top" scope="row">
+                                cookies_policy
+                            </th>
+                            <td class="govuk-table__cell app-!-vertical-align-top">
+                                Saves your cookie consent settings
+                            </td>
+                            <td class="govuk-table__cell app-!-vertical-align-top govuk-!-width-one-quarter">
+                                1 year
+                            </td>
+                        </tr>
+                        <tr class="govuk-table__row">
+                            <th class="govuk-table__header govuk-!-width-one-quarter app-!-vertical-align-top" scope="row">
+                                cookie_preferences_set
+                            </th>
+                            <td class="govuk-table__cell app-!-vertical-align-top">
+                                Lets us know that you’ve saved your cookie consent settings
+                            </td>
+                            <td class="govuk-table__cell app-!-vertical-align-top govuk-!-width-one-quarter">
+                                1 year
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 class="govuk-heading-m">Change your settings</h3>
+                    <p class="govuk-body">
+                        You can <a class="govuk-link" href="{% url 'cookies:cookies-details' %}">change which cookies you’re happy for us to use.</a>
+                    </p>
+                    <p class="govuk-body">
+                        Last updated 1 July 2021
+                    </p>
+
+                    <hr class="govuk-section-break--l" />
+
+                    <h4 class="govuk-heading-s">Elsewhere on the web</h4>
+                    <p class="govuk-body">
+                        <a href="https://ico.org.uk/for-the-public/online/cookies">Information Commissioner's Office: cookies</a>
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
+{% endblock %}

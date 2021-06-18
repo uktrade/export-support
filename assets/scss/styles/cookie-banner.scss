@@ -1,0 +1,73 @@
+.cookie-settings__no-js {
+  display: block;
+}
+
+// don't display cookie banner when JS disabled!
+.app-cookie-banner {
+  display: none;
+}
+
+.cookie-settings__form-wrapper {
+  display: none; // if no js then the form wont work anyway
+}
+
+.cookie-banner__confirmation {
+  .hide-button {
+    display: block;
+    text-align: right;
+    @include govuk-media-query($from: tablet) {
+      float: right;
+    }
+  }
+}
+
+.js-enabled {
+  .app-cookie-banner {
+    display: none;
+
+    .cookie-banner__confirmation {
+      display: none;
+    }
+  }
+
+  .app-cookie-banner--show {
+    display: block;
+  }
+
+  .app-cookie-banner--show__accepted-all {
+    .cookie-banner__confirmation {
+      display: block;
+    }
+
+    .cookie-banner__buttons {
+      display: none;
+    }
+  }
+
+  .cookie-settings__no-js {
+    display: none;
+  }
+
+  .cookie-settings__form-wrapper {
+    display: block; // if no js then the form wont work anyway
+  }
+
+  .app-cookie-banner__button-fixed-desktop {
+    @include govuk-media-query($from: tablet) {
+      margin-right: 30px;
+      width: 280px;
+    }
+  }
+}
+
+.cookie-preferences {
+  .govuk-hint {
+    color: $govuk-secondary-text-colour;
+  }
+
+  .cookie-settings__confirmation {
+    border: solid 5px;
+    border-color: $govuk-brand-colour;
+    display: none;
+  }
+}

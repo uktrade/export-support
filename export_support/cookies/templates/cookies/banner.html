@@ -1,0 +1,31 @@
+<div class="app-cookie-banner js--cookie-banner">
+    <div class="cookie-banner__buttons govuk-width-container">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <p class="app-cookie-banner__message">
+                    <span class="govuk-heading-m">Tell us whether you accept cookies</span>
+                    <p class="govuk-body">
+                        We use <a class="govuk-link" href="{% url 'cookies:cookies-details' %}">cookies to collect information</a> about how you use GOV.UK.<br/>
+                        We use this information to make the website work as well as possible and improve government services.
+                    </p>
+                </p>
+                <button class="govuk-button js-accept-cookie app-cookie-banner__button-fixed-desktop">Accept all cookies</button>
+                <a href="{% url 'cookies:cookies-details' %}" class="govuk-button app-cookie-banner__button-fixed-desktop">Set cookie preferences</a>
+            </div>
+        </div>
+    </div>
+    <div class="cookie-banner__confirmation govuk-width-container" tabindex="-1">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                <p class="govuk-body govuk-!-margin-top-4">
+                    You’ve accepted all cookies. You can
+                    <a class="govuk-link" href="{% url 'cookies:cookies-details' %}" data-module="track-click" data-track-category="cookieBanner" data-track-action="Cookie banner settings clicked from confirmation">
+                        change your cookie settings
+                    </a>
+                    at any time.
+                    <a class="govuk-link hide-button" href="#">Hide</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
