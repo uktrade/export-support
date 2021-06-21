@@ -4,14 +4,14 @@ from export_support.core import views
 
 app_name = "core"
 urlpatterns = [
-    path("", views.EnquirySubjectFormView.as_view(), name="index"),
+    path("", views.EnquiryWizardView.as_view(), name="wizard"),
     path(
         "import-enquiries", views.ImportEnquiriesView.as_view(), name="import-enquiries"
     ),
     path(
-        "export-destination",
-        views.ExportDestinationFormView.as_view(),
-        name="export-destination",
+        "eu-export-enquiries",
+        views.NonEUExportEnquiriesView.as_view(),
+        name="eu-export-enquiries",
     ),
     path(
         "non-eu-export-enquiries",

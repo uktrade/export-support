@@ -26,10 +26,10 @@ class ExportDestinationChoices(models.IntegerChoices):
 
 
 class ExportDestinationForm(forms.Form):
-    export_destination = forms.TypedMultipleChoiceField(
+    export_destination = forms.TypedChoiceField(
         coerce=lambda choice: ExportDestinationChoices(int(choice)),
         choices=ExportDestinationChoices.choices,
         label="Where are you selling to?",
         required=True,
-        widget=gds_fields.CheckboxSelectMultiple,
+        widget=gds_fields.RadioSelect,
     )

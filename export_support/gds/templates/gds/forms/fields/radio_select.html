@@ -1,0 +1,19 @@
+<div class="govuk-radios">
+    {% for group, options, index in widget.optgroups %}
+        {% if group %}
+            <div class="govuk-!-margin-bottom-6">
+                <h3 class="govuk-heading-m">{{ group }}</h3>
+        {% endif %}
+        {% for option in options %}
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="{{ option.attrs.id }}" name="{{ widget.name }}" type="radio" {% if option.selected %}checked{% endif %} value="{{ option.value }}">
+                <label class="govuk-label govuk-radios__label" for="{{ option.attrs.id }}">
+                    {{ option.label }}
+                </label>
+            </div>
+        {% endfor %}
+        {% if group %}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
