@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "export_support.cookies",
     "webpack_loader",
     "csp",
+    "formtools",
 ]
 
 MIDDLEWARE = [
@@ -83,10 +84,28 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "export_support.wsgi.application"
 
+VCAP_SERVICES = env.json("VCAP_SERVICES", {})
+
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {}
+
+if "redis" in VCAP_SERVICES:
+    REDIS_URL = VCAP_SERVICES["redis"][0]["credentials"]["uri"]
+else:
+    REDIS_URL = env.str("REDIS_URL")
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": REDIS_URL,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -136,6 +155,12 @@ if ENABLE_CSP:
     CSP_SCRIPT_SRC_ELEM = ("'self'",)
     CSP_STYLE_SRC_ATTR = ("'self'",)
     CSP_INCLUDE_NONCE_IN = ("script-src-elem",)
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_SAMESITE = "Strict"
 
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True

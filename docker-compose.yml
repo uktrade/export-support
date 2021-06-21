@@ -19,3 +19,5 @@ services:
     image: node:14
     volumes:
       - .:/app
+  redis:
+    image: redis:5
