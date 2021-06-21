@@ -64,6 +64,11 @@ MIDDLEWARE = [
 if ENABLE_CSP:
     MIDDLEWARE += ["csp.middleware.CSPMiddleware"]
 
+BASIC_AUTH = env.dict("BASIC_AUTH", default=None)
+if BASIC_AUTH:
+    MIDDLEWARE += ["basicauth.middleware.BasicAuthMiddleware"]
+    BASICAUTH_USERS = BASIC_AUTH
+
 ROOT_URLCONF = "export_support.urls"
 
 TEMPLATES = [
