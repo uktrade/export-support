@@ -15,7 +15,9 @@
             </div>
             <div class="govuk-grid-row govuk-!-margin-top-4">
                 <div class="govuk-grid-column-full">
-                    <h2 class="govuk-heading-m govuk-!-margin-bottom-6">Selling goods and services outside the EU</h2>
+                    {% if should_display_import_goods_section %}
+                        <h2 class="govuk-heading-m govuk-!-margin-bottom-6">Selling goods and services outside the EU</h2>
+                    {% endif %}
                     <p class="govuk-body">
                         <a class="govuk-link govuk-!-font-size-27 govuk-!-font-weight-bold" href="{{ GOV_UK_EXPORT_GOODS_URL }}">Export goods from the UK: step by step</a>
                     </p>
@@ -83,81 +85,83 @@
                     </div>
                 </div>
             </div>
-            <div class="govuk-grid-row govuk-!-margin-top-4">
-                <div class="govuk-grid-column-full">
-                    <h2 class="govuk-heading-m govuk-!-margin-bottom-6">Import goods into the UK</h2>
-                    <p class="govuk-body">
-                        <a class="govuk-link govuk-!-font-size-27 govuk-!-font-weight-bold" href="https://www.gov.uk/import-goods-into-uk">Import goods from the UK: step by step</a>
-                    </p>
-                    <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
-                        <div class="govuk-accordion__section ">
-                            <div class="govuk-accordion__section-header">
-                                <h2 class="govuk-accordion__section-heading">
-                                    <span class="govuk-accordion__section-button" id="accordion-default-heading-1">
-                                        Lorem ipsum dolor sit amet consectetur
-                                    </span>
-                                </h2>
+            {% if should_display_import_goods_section %}
+                <div class="govuk-grid-row govuk-!-margin-top-4">
+                    <div class="govuk-grid-column-full">
+                        <h2 class="govuk-heading-m govuk-!-margin-bottom-6">Import goods into the UK</h2>
+                        <p class="govuk-body">
+                            <a class="govuk-link govuk-!-font-size-27 govuk-!-font-weight-bold" href="https://www.gov.uk/import-goods-into-uk">Import goods from the UK: step by step</a>
+                        </p>
+                        <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
+                            <div class="govuk-accordion__section ">
+                                <div class="govuk-accordion__section-header">
+                                    <h2 class="govuk-accordion__section-heading">
+                                        <span class="govuk-accordion__section-button" id="accordion-default-heading-1">
+                                            Lorem ipsum dolor sit amet consectetur
+                                        </span>
+                                    </h2>
+                                </div>
+                                <div id="accordion-default-content-1" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-1">
+                                    <p class="govuk-body"></p>
+                                </div>
                             </div>
-                            <div id="accordion-default-content-1" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-1">
-                                <p class="govuk-body"></p>
+                            <div class="govuk-accordion__section ">
+                                <div class="govuk-accordion__section-header">
+                                    <h2 class="govuk-accordion__section-heading">
+                                        <span class="govuk-accordion__section-button" id="accordion-default-heading-2">
+                                            Adipiscing elit aenean euismod bibendum
+                                        </span>
+                                    </h2>
+                                </div>
+                                <div id="accordion-default-content-2" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-2">
+                                    <p class="govuk-body"></p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="govuk-accordion__section ">
-                            <div class="govuk-accordion__section-header">
-                                <h2 class="govuk-accordion__section-heading">
-                                    <span class="govuk-accordion__section-button" id="accordion-default-heading-2">
-                                        Adipiscing elit aenean euismod bibendum
-                                    </span>
-                                </h2>
+                            <div class="govuk-accordion__section ">
+                                <div class="govuk-accordion__section-header">
+                                    <h2 class="govuk-accordion__section-heading">
+                                        <span class="govuk-accordion__section-button" id="accordion-default-heading-3">
+                                            Laoreet proin gravida dolor sit amet lacus
+                                        </span>
+                                    </h2>
+                                </div>
+                                <div id="accordion-default-content-3" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-3">
+                                    <p class="govuk-body"></p>
+                                </div>
                             </div>
-                            <div id="accordion-default-content-2" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-2">
-                                <p class="govuk-body"></p>
+                            <div class="govuk-accordion__section ">
+                                <div class="govuk-accordion__section-header">
+                                    <h2 class="govuk-accordion__section-heading">
+                                        <span class="govuk-accordion__section-button" id="accordion-default-heading-4">
+                                            Accumsan et viverra justo commodo proin
+                                        </span>
+                                    </h2>
+                                </div>
+                                <div id="accordion-default-content-4" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-4">
+                                    <p class="govuk-body"></p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="govuk-accordion__section ">
-                            <div class="govuk-accordion__section-header">
-                                <h2 class="govuk-accordion__section-heading">
-                                    <span class="govuk-accordion__section-button" id="accordion-default-heading-3">
-                                        Laoreet proin gravida dolor sit amet lacus
-                                    </span>
-                                </h2>
-                            </div>
-                            <div id="accordion-default-content-3" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-3">
-                                <p class="govuk-body"></p>
-                            </div>
-                        </div>
-                        <div class="govuk-accordion__section ">
-                            <div class="govuk-accordion__section-header">
-                                <h2 class="govuk-accordion__section-heading">
-                                    <span class="govuk-accordion__section-button" id="accordion-default-heading-4">
-                                        Accumsan et viverra justo commodo proin
-                                    </span>
-                                </h2>
-                            </div>
-                            <div id="accordion-default-content-4" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-4">
-                                <p class="govuk-body"></p>
-                            </div>
-                        </div>
-                        <div class="govuk-accordion__section ">
-                            <div class="govuk-accordion__section-header">
-                                <h2 class="govuk-accordion__section-heading">
-                                    <span class="govuk-accordion__section-button" id="accordion-default-heading-5">
-                                        Sodales pulvinar sic tempor sociis natoque
-                                    </span>
-                                </h2>
-                            </div>
-                            <div id="accordion-default-content-5" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-5">
-                                <p class="govuk-body"></p>
+                            <div class="govuk-accordion__section ">
+                                <div class="govuk-accordion__section-header">
+                                    <h2 class="govuk-accordion__section-heading">
+                                        <span class="govuk-accordion__section-button" id="accordion-default-heading-5">
+                                            Sodales pulvinar sic tempor sociis natoque
+                                        </span>
+                                    </h2>
+                                </div>
+                                <div id="accordion-default-content-5" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-5">
+                                    <p class="govuk-body"></p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            {% endif %}
             <div class="govuk-grid-row govuk-!-margin-top-4">
                 <div class="govuk-grid-column-full">
-                    <h2 class="govuk-heading-m govuk-!-margin-bottom-6">Submit an enquiry</h2>
+                    <h2 class="govuk-heading-l govuk-!-margin-bottom-6">If you have not found what you're looking for</h2>
                     <p class="govuk-body">
-                        <a class="govuk-link" href="https://www.great.gov.uk/contact/office-finder/">Find your local trade office</a>.
+                        <a class="govuk-link govuk-!-font-size-24 govuk-!-font-weight-bold" href="https://www.great.gov.uk/contact/office-finder/">Find your local trade office</a>.
                     </p>
                 </div>
             </div>

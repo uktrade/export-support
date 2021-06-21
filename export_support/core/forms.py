@@ -19,6 +19,15 @@ class EnquirySubjectForm(forms.Form):
         widget=gds_fields.CheckboxSelectMultiple,
     )
 
+    def get_filter_data(self):
+        enquiry_subject_value = self.cleaned_data["enquiry_subject"]
+
+        filter_data = {
+            "enquiry_subject": enquiry_subject_value,
+        }
+
+        return filter_data
+
 
 class ExportDestinationChoices(models.IntegerChoices):
     EU = 1, "Selling from the UK to an EU country"
@@ -33,3 +42,6 @@ class ExportDestinationForm(forms.Form):
         required=True,
         widget=gds_fields.RadioSelect,
     )
+
+    def get_filter_data(self):
+        return {}
