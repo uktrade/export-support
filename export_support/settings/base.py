@@ -59,7 +59,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "export_support.core.middleware.no_index_middleware",
-    "export_support.core.middleware.no_store_middleware",
+    "export_support.core.middleware.no_cache_middleware",
 ]
 
 if ENABLE_CSP:

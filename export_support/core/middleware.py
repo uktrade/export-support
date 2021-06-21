@@ -12,14 +12,14 @@ def no_index_middleware(get_response):
     return middleware
 
 
-def no_store_middleware(get_response):
+def no_cache_middleware(get_response):
     def middleware(request):
         response = get_response(request)
 
         patch_cache_control(
-            response,
-            no_store=True,
+            response, no_cache=True, no_store=True, must_revalidate=True, private=True
         )
+        response["Pragma"] = "no-cache"
 
         return response
 
