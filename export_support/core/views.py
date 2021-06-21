@@ -65,7 +65,8 @@ class EnquiryWizardView(SessionWizardView):
             "export_destination"
         ]
         if export_destination_value == ExportDestinationChoices.EU:
-            return redirect("core:eu-export-enquiries")
+            url = reverse("core:eu-export-enquiries")
+            return redirect(f"{url}?{params.urlencode()}")
         elif export_destination_value == ExportDestinationChoices.NON_EU:
             url = reverse("core:non-eu-export-enquiries")
             return redirect(f"{url}?{params.urlencode()}")
@@ -85,6 +86,48 @@ class ImportEnquiriesView(TemplateView):
 class EUExportEnquiriesView(TemplateView):
     template_name = "core/eu_export_enquiries.html"
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+
+        ctx["should_display_sub_headings"] = True
+        ctx["should_display_export_goods"] = True
+        ctx["should_display_export_services"] = True
+        ctx["should_display_import_goods"] = True
+
+        enquiry_subject_form = EnquirySubjectForm(self.request.GET)
+        if enquiry_subject_form.is_valid():
+            enquiry_subject_value = enquiry_subject_form.cleaned_data["enquiry_subject"]
+
+            has_export_goods_selected = (
+                EnquirySubjectChoices.SELLING_GOODS_ABROAD in enquiry_subject_value
+            )
+            ctx["should_display_export_goods"] = has_export_goods_selected
+
+            has_export_services_selected = (
+                EnquirySubjectChoices.SELLING_SERVICES_ABROAD in enquiry_subject_value
+            )
+            ctx["should_display_export_services"] = has_export_services_selected
+
+            has_import_goods_selected = (
+                EnquirySubjectChoices.IMPORTING_GOODS_TO_THE_UK in enquiry_subject_value
+            )
+            ctx["should_display_import_goods"] = has_import_goods_selected
+
+            num_visible_sections = len(
+                [
+                    c
+                    for c in [
+                        has_export_goods_selected,
+                        has_export_services_selected,
+                        has_import_goods_selected,
+                    ]
+                    if c
+                ]
+            )
+            ctx["should_display_sub_headings"] = num_visible_sections > 1
+
+        return ctx
+
 
 class NonEUExportEnquiriesView(TemplateView):
     template_name = "core/non_eu_export_enquiries.html"
@@ -101,7 +144,5 @@ class NonEUExportEnquiriesView(TemplateView):
                 EnquirySubjectChoices.IMPORTING_GOODS_TO_THE_UK in enquiry_subject_value
             )
             ctx["should_display_import_goods_section"] = has_import_selected
-
-        ctx["GOV_UK_EXPORT_GOODS_URL"] = settings.GOV_UK_EXPORT_GOODS_URL
 
         return ctx

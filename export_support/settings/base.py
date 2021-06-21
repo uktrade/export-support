@@ -83,6 +83,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "export_support.core.context_processors.external_urls",
             ],
         },
     },
@@ -153,7 +154,9 @@ STATIC_ROOT = "build/static"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 GOV_UK_EXPORT_GOODS_URL = "https://www.gov.uk/export-goods"
+GOV_UK_IMPORT_GOODS_URL = "https://www.gov.uk/import-goods-into-uk"
 GREAT_CONTACT_FORM_URL = "https://www.great.gov.uk/transition-period/contact/"
+GREAT_OFFICE_FINDER_URL = "https://www.great.gov.uk/contact/office-finder/"
 
 if ENABLE_CSP:
     CSP_DEFAULT_SRC = ("'self'",)

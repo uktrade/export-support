@@ -10,7 +10,7 @@ urlpatterns = [
     ),
     path(
         "eu-export-enquiries",
-        views.NonEUExportEnquiriesView.as_view(),
+        views.EUExportEnquiriesView.as_view(),
         name="eu-export-enquiries",
     ),
     path(
