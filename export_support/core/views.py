@@ -94,19 +94,38 @@ class EUExportEnquiriesView(TemplateView):
         ctx["should_display_export_services"] = True
         ctx["should_display_import_goods"] = True
 
+        heading_components = {
+            EnquirySubjectChoices.SELLING_GOODS_ABROAD: "goods",
+            EnquirySubjectChoices.SELLING_SERVICES_ABROAD: "services",
+        }
+        selected_heading_components = [
+            EnquirySubjectChoices.SELLING_GOODS_ABROAD,
+            EnquirySubjectChoices.SELLING_SERVICES_ABROAD,
+        ]
+
         enquiry_subject_form = EnquirySubjectForm(self.request.GET)
         if enquiry_subject_form.is_valid():
+            selected_heading_components = []
+
             enquiry_subject_value = enquiry_subject_form.cleaned_data["enquiry_subject"]
 
             has_export_goods_selected = (
                 EnquirySubjectChoices.SELLING_GOODS_ABROAD in enquiry_subject_value
             )
             ctx["should_display_export_goods"] = has_export_goods_selected
+            if has_export_goods_selected:
+                selected_heading_components.append(
+                    EnquirySubjectChoices.SELLING_GOODS_ABROAD
+                )
 
             has_export_services_selected = (
                 EnquirySubjectChoices.SELLING_SERVICES_ABROAD in enquiry_subject_value
             )
             ctx["should_display_export_services"] = has_export_services_selected
+            if has_export_services_selected:
+                selected_heading_components.append(
+                    EnquirySubjectChoices.SELLING_SERVICES_ABROAD
+                )
 
             has_import_goods_selected = (
                 EnquirySubjectChoices.IMPORTING_GOODS_TO_THE_UK in enquiry_subject_value
@@ -125,6 +144,14 @@ class EUExportEnquiriesView(TemplateView):
                 ]
             )
             ctx["should_display_sub_headings"] = num_visible_sections > 1
+
+            selected_components_heading_content = [
+                heading_components[component]
+                for component in selected_heading_components
+            ]
+            ctx[
+                "heading"
+            ] = f"Sell {' and '.join(selected_components_heading_content)} into the EU"
 
         return ctx
 
