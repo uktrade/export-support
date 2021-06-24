@@ -7,7 +7,7 @@
             <form class="govuk-!-padding-top-6" method="post">
                 {% csrf_token %}
                 {{ wizard.management_form }}
-                {% include "gds/forms/form_group.html" with field=form.enquiry_subject %}
+                {% include "gds/forms/field_as_fieldset.html" with field=form.enquiry_subject %}
                 <div class="govuk-!-margin-top-6">
                     <button class="govuk-button">
                         Continue

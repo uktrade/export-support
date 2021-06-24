@@ -1,0 +1,30 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <div class="govuk-panel govuk-panel--confirmation">
+                        <h1 class="govuk-panel__title">
+                            Thank you for submitting your question
+                        </h1>
+                    </div>
+
+                    <p class="govuk-body">
+                        We have sent you a confirmation email.
+                    </p>
+
+                    <h2 class="govuk-heading-m">What happens next</h2>
+
+                    <p class="govuk-body">
+                        We will review your question and get back to you.
+                    </p>
+                    <p class="govuk-body">
+                        <a class="govuk-link" href="{{ GOV_UK_EXPORT_GOODS_URL }}">View further information on exporting</a>
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
+{% endblock %}

@@ -1,15 +1,13 @@
 <div class="govuk-form-group {% if field.errors %}govuk-form-group--error{% endif %}">
-    <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l {% if not field.errors %}govuk-!-margin-bottom-8{% endif %}">
-            <h1 class="govuk-fieldset__heading">
-                {{ field.label }}
-            </h1>
-        </legend>
+    <label class="govuk-label" for="{{ field.id_for_label }}">
+        {{ field.label }}
+    </label>
+    {% if field.errors %}
         {% for error in field.errors %}
             <span class="govuk-error-message">
                 <span class="govuk-visually-hidden">Error:</span> {{ error }}
             </span>
         {% endfor %}
-        {{ field }}
-    </fieldset>
+    {% endif %}
+    {{ field }}
 </div>

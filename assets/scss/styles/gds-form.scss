@@ -1,0 +1,9 @@
+.gds-form {
+  &__label__optional {
+    color: govuk-colour("mid-grey");
+  }
+
+  &__help_text__warning {
+    color: govuk-colour("red");
+  }
+}

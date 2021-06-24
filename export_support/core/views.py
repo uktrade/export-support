@@ -2,10 +2,12 @@ from django.conf import settings
 from django.http import QueryDict
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.views.generic import TemplateView
+from django.urls.base import reverse_lazy
+from django.views.generic import FormView, TemplateView
 from formtools.wizard.views import SessionWizardView
 
 from .forms import (
+    EnquiryContactForm,
     EnquirySubjectChoices,
     EnquirySubjectForm,
     ExportDestinationChoices,
@@ -173,3 +175,13 @@ class NonEUExportEnquiriesView(TemplateView):
             ctx["should_display_import_goods_section"] = has_import_selected
 
         return ctx
+
+
+class EnquiryContactView(FormView):
+    form_class = EnquiryContactForm
+    success_url = reverse_lazy("core:enquiry-contact-success")
+    template_name = "core/enquiry_contact.html"
+
+
+class EnquiryContactSuccessView(TemplateView):
+    template_name = "core/enquiry_contact_success.html"
