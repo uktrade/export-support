@@ -1,8 +1,7 @@
 from django.conf import settings
 from django.http import QueryDict
 from django.shortcuts import redirect
-from django.urls import reverse
-from django.urls.base import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView, TemplateView
 from django.views.generic.base import RedirectView
 from formtools.wizard.views import SessionWizardView
@@ -14,6 +13,10 @@ from .forms import (
     ExportDestinationChoices,
     ExportDestinationForm,
 )
+
+
+class IndexView(RedirectView):
+    url = reverse_lazy("core:enquiry-wizard")
 
 
 def should_display_export_destination_form(wizard):

@@ -4,7 +4,8 @@ from export_support.core import views
 
 app_name = "core"
 urlpatterns = [
-    path("", views.EnquiryWizardView.as_view(), name="wizard"),
+    path("", views.IndexView.as_view(), name="index"),
+    path("enquiry", views.EnquiryWizardView.as_view(), name="enquiry-wizard"),
     path(
         "import-enquiries", views.ImportEnquiriesView.as_view(), name="import-enquiries"
     ),
