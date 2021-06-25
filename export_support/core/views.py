@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.urls.base import reverse_lazy
 from django.views.generic import FormView, TemplateView
+from django.views.generic.base import RedirectView
 from formtools.wizard.views import SessionWizardView
 
 from .forms import (
@@ -174,3 +175,7 @@ class EnquiryContactView(FormView):
 
 class EnquiryContactSuccessView(TemplateView):
     template_name = "core/enquiry_contact_success.html"
+
+
+class StartPageRedirectView(RedirectView):
+    url = "https://34ul06.axshare.com/#id=shpprj&p=dev_prototype_-_v1&dp=0&fn=0&c=1"

@@ -28,4 +28,10 @@ urlpatterns = [
         views.EnquiryContactSuccessView.as_view(),
         name="enquiry-contact-success",
     ),
+    # Only necessary for user testing
+    path(
+        "start",
+        views.StartPageRedirectView.as_view(),
+        name="start-page-redirect",
+    ),
 ]
