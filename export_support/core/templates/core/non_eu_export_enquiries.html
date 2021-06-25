@@ -12,7 +12,7 @@
             </div>
             {% if should_display_export_goods %}
                 <div class="govuk-grid-row govuk-!-margin-top-4">
-                    <div class="govuk-grid-column-full">
+                    <div class="govuk-grid-column-two-thirds">
                         {% if should_display_sub_headings %}
                             <h2 class="govuk-heading-m govuk-!-margin-bottom-6">Sell goods abroad</h2>
                         {% endif %}
@@ -22,6 +22,8 @@
                         <p class="govuk-body">
                             <a class="govuk-link govuk-!-font-size-24 govuk-!-font-weight-bold" href="{{ GOV_UK_EXPORT_GOODS_URL }}" target="_blank">Export goods from the UK: step by step</a>
                         </p>
+                    </div>
+                    <div class="govuk-grid-column-full">
                         <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-export-goods">
                             <div class="govuk-accordion__section ">
                                 <div class="govuk-accordion__section-header">
@@ -206,13 +208,15 @@
             {% endif %}
             {% if should_display_export_services %}
                 <div class="govuk-grid-row govuk-!-margin-top-4">
-                    <div class="govuk-grid-column-full">
+                    <div class="govuk-grid-column-two-thirds">
                         {% if should_display_sub_headings %}
                             <h2 class="govuk-heading-m govuk-!-margin-bottom-6">Sell services abroad</h2>
                         {% endif %}
                         <p class="govuk-body">
                             Find information about selling services abroad (not including EU).
                         </p>
+                    </div>
+                    <div class="govuk-grid-column-full">
                         <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-export-services">
                             <div class="govuk-accordion__section ">
                                 <div class="govuk-accordion__section-header">
