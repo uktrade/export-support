@@ -4,7 +4,7 @@ from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView, TemplateView
 from django.views.generic.base import RedirectView
-from formtools.wizard.views import SessionWizardView
+from formtools.wizard.views import NamedUrlSessionWizardView
 
 from .forms import (
     EnquiryContactForm,
@@ -20,7 +20,7 @@ class IndexView(RedirectView):
 
 
 def should_display_export_destination_form(wizard):
-    enquiry_subject_cleaned_data = wizard.get_cleaned_data_for_step("enquiry_subject")
+    enquiry_subject_cleaned_data = wizard.get_cleaned_data_for_step("enquiry-subject")
     if not enquiry_subject_cleaned_data:
         return True
 
@@ -31,25 +31,25 @@ def should_display_export_destination_form(wizard):
     return not only_importing
 
 
-class EnquiryWizardView(SessionWizardView):
+class EnquiryWizardView(NamedUrlSessionWizardView):
     form_list = [
-        ("enquiry_subject", EnquirySubjectForm),
-        ("export_destination", ExportDestinationForm),
+        ("enquiry-subject", EnquirySubjectForm),
+        ("export-destination", ExportDestinationForm),
     ]
     condition_dict = {
-        "export_destination": should_display_export_destination_form,
+        "export-destination": should_display_export_destination_form,
     }
 
     def get_template_names(self):
         templates = {
-            form_name: f"core/{form_name}_wizard_step.html"
+            form_name: f"core/{form_name.replace('-', '_')}_wizard_step.html"
             for form_name in self.form_list
         }
 
         return [templates[self.steps.current]]
 
-    def done(self, form_list, form_dict):
-        enquiry_subject_form = form_dict["enquiry_subject"]
+    def done(self, form_list, form_dict, **kwargs):
+        enquiry_subject_form = form_dict["enquiry-subject"]
         enquiry_subject_value = enquiry_subject_form.cleaned_data["enquiry_subject"]
 
         params = QueryDict(mutable=True)
@@ -66,7 +66,7 @@ class EnquiryWizardView(SessionWizardView):
         if only_importing:
             return redirect("core:import-enquiries")
 
-        export_destination_form = form_dict["export_destination"]
+        export_destination_form = form_dict["export-destination"]
         export_destination_value = export_destination_form.cleaned_data[
             "export_destination"
         ]
