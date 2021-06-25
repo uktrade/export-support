@@ -23,9 +23,9 @@
 
                         <fieldset class="govuk-fieldset">
                             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                                <h1 class="govuk-fieldset__heading">
+                                <h2 class="govuk-fieldset__heading">
                                     Your personal details
-                                </h1>
+                                </h2>
                             </legend>
                             {% include "gds/forms/form_group.html" with field=form.first_name %}
                             {% include "gds/forms/form_group.html" with field=form.last_name %}
@@ -34,9 +34,9 @@
 
                         <fieldset class="govuk-fieldset">
                             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                                <h1 class="govuk-fieldset__heading">
+                                <h2 class="govuk-fieldset__heading">
                                     Your business details
-                                </h1>
+                                </h2>
                             </legend>
                             <p class="govuk-body">
                                 Your answers to the questions help us to decide the best way to support your business.
@@ -49,9 +49,9 @@
                         <div class="govuk-form-group {% if form.comment.errors %}govuk-form-group--error{% endif %}">
                             <fieldset class="govuk-fieldset">
                                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--l" for="{{ form.comment.id_for_label }}">
-                                    <h1 class="govuk-fieldset__heading">
+                                    <h2 class="govuk-fieldset__heading">
                                         {{ form.comment.label }}
-                                    </h1>
+                                    </h2>
                                 </legend>
                                 <p class="govuk-body">
                                     {{ form.comment.help_text }}
