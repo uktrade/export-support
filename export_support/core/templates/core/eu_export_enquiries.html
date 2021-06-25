@@ -358,56 +358,7 @@
                 </div>
             {% endif %}
             {% if should_display_import_goods %}
-                <div class="govuk-grid-row govuk-!-margin-top-4">
-                    <div class="govuk-grid-column-two-thirds">
-                        {% if should_display_sub_headings %}
-                            <h2 class="govuk-heading-m govuk-!-margin-bottom-6">Import goods into the UK</h2>
-                        {% endif %}
-                        <p class="govuk-body">
-                            This tool is for supporting businesses exporting from the UK.  To help businesses that also import, we’ve included some information on where to go for support on importing.
-                        </p>
-                    </div>
-                    <div class="govuk-grid-column-full">
-                        <p class="govuk-body">
-                            <a class="govuk-link govuk-!-font-size-24 govuk-!-font-weight-bold" href="{{ GOV_UK_IMPORT_GOODS_URL }}">Import goods into the UK: step by step</a>
-                        </p>
-                        <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-import-goods">
-                            <div class="govuk-accordion__section ">
-                                <div class="govuk-accordion__section-header">
-                                    <h2 class="govuk-accordion__section-heading">
-                                        <span class="govuk-accordion__section-button" id="accordion-import-goods-heading-1">
-                                            Import rules and procedures
-                                        </span>
-                                    </h2>
-                                </div>
-                                <div id="accordion-import-goods-content-1" class="govuk-accordion__section-content" aria-labelledby="accordion-import-goods-heading-1">
-                                    <p class="govuk-body">
-                                        Read our <a class="govuk-link" href="https://www.gov.uk/government/collections/import-and-export-procedures" target="_blank">guidance for businesses established in the UK who import into or export out of the EU</a>.
-                                    </p>
-
-                                    <h3 class="govuk-heading-s">Importing food</h3>
-                                    <p class="govuk-body">
-                                        Rules and regulations for <a class="govuk-link" href="https://www.food.gov.uk/business-guidance/imports-exports" target="_blank">importing food for human consumption</a>.
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="govuk-accordion__section ">
-                                <div class="govuk-accordion__section-header">
-                                    <h2 class="govuk-accordion__section-heading">
-                                        <span class="govuk-accordion__section-button" id="accordion-import-goods-heading-2">
-                                            Imports and exports: general enquiries
-                                        </span>
-                                    </h2>
-                                </div>
-                                <div id="accordion-import-goods-content-2" class="govuk-accordion__section-content" aria-labelledby="accordion-import-goods-heading-2">
-                                    <p class="govuk-body">
-                                        Contact HMRC for <a class="govuk-link" href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/customs-international-trade-and-excise-enquiries" target="_blank">customs related queries on imports and exports</a>.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {% include "core/_import_goods.html" %}
             {% endif %}
             <div class="govuk-grid-row govuk-!-margin-top-4">
                 <div class="govuk-grid-column-full">

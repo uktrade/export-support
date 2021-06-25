@@ -6,161 +6,280 @@
             <div class="govuk-grid-row govuk-!-margin-top-4">
                 <div class="govuk-grid-column-two-thirds">
                     <h1 class="govuk-heading-l">
-                        Sell goods and services outside the EU
+                        {{ heading }}
                     </h1>
-                    <p class="govuk-body">
-                        Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor.
-                    </p>
                 </div>
             </div>
-            <div class="govuk-grid-row govuk-!-margin-top-4">
-                <div class="govuk-grid-column-full">
-                    {% if should_display_import_goods_section %}
-                        <h2 class="govuk-heading-m govuk-!-margin-bottom-6">Sell goods and services outside the EU</h2>
-                    {% endif %}
-                    <p class="govuk-body">
-                        <a class="govuk-link govuk-!-font-size-24 govuk-!-font-weight-bold" href="{{ GOV_UK_EXPORT_GOODS_URL }}">Export goods from the UK: step by step</a>
-                    </p>
-                    <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-export-goods">
-                        <div class="govuk-accordion__section ">
-                            <div class="govuk-accordion__section-header">
-                                <h2 class="govuk-accordion__section-heading">
-                                    <span class="govuk-accordion__section-button" id="accordion-export-goods-heading-1">
-                                        Lorem ipsum dolor sit amet consectetur
-                                    </span>
-                                </h2>
-                            </div>
-                            <div id="accordion-export-goods-content-1" class="govuk-accordion__section-content" aria-labelledby="accordion-export-goods-heading-1">
-                                <p class="govuk-body"></p>
-                            </div>
-                        </div>
-                        <div class="govuk-accordion__section ">
-                            <div class="govuk-accordion__section-header">
-                                <h2 class="govuk-accordion__section-heading">
-                                    <span class="govuk-accordion__section-button" id="accordion-export-goods-heading-2">
-                                        Adipiscing elit aenean euismod bibendum
-                                    </span>
-                                </h2>
-                            </div>
-                            <div id="accordion-export-goods-content-2" class="govuk-accordion__section-content" aria-labelledby="accordion-export-goods-heading-2">
-                                <p class="govuk-body"></p>
-                            </div>
-                        </div>
-                        <div class="govuk-accordion__section ">
-                            <div class="govuk-accordion__section-header">
-                                <h2 class="govuk-accordion__section-heading">
-                                    <span class="govuk-accordion__section-button" id="accordion-export-goods-heading-3">
-                                        Laoreet proin gravida dolor sit amet lacus
-                                    </span>
-                                </h2>
-                            </div>
-                            <div id="accordion-export-goods-content-3" class="govuk-accordion__section-content" aria-labelledby="accordion-export-goods-heading-3">
-                                <p class="govuk-body"></p>
-                            </div>
-                        </div>
-                        <div class="govuk-accordion__section ">
-                            <div class="govuk-accordion__section-header">
-                                <h2 class="govuk-accordion__section-heading">
-                                    <span class="govuk-accordion__section-button" id="accordion-export-goods-heading-4">
-                                        Accumsan et viverra justo commodo proin
-                                    </span>
-                                </h2>
-                            </div>
-                            <div id="accordion-export-goods-content-4" class="govuk-accordion__section-content" aria-labelledby="accordion-export-goods-heading-4">
-                                <p class="govuk-body"></p>
-                            </div>
-                        </div>
-                        <div class="govuk-accordion__section ">
-                            <div class="govuk-accordion__section-header">
-                                <h2 class="govuk-accordion__section-heading">
-                                    <span class="govuk-accordion__section-button" id="accordion-export-goods-heading-5">
-                                        Sodales pulvinar sic tempor sociis natoque
-                                    </span>
-                                </h2>
-                            </div>
-                            <div id="accordion-export-goods-content-5" class="govuk-accordion__section-content" aria-labelledby="accordion-export-goods-heading-5">
-                                <p class="govuk-body"></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% if should_display_import_goods_section %}
+            {% if should_display_export_goods %}
                 <div class="govuk-grid-row govuk-!-margin-top-4">
-                    <div class="govuk-grid-column-two-thirds">
-                        <h2 class="govuk-heading-m govuk-!-margin-bottom-6">Import goods into the UK</h2>
-                        <p class="govuk-body">
-                            Lorem ipsum dolor sit amet. Bit of text explaining that this site isn’t really about importing, and this is just a bit of helpful info, in case your importing issues are related to your exporting issues.
-                        </p>
-                    </div>
                     <div class="govuk-grid-column-full">
+                        {% if should_display_sub_headings %}
+                            <h2 class="govuk-heading-m govuk-!-margin-bottom-6">Sell goods abroad</h2>
+                        {% endif %}
                         <p class="govuk-body">
-                            <a class="govuk-link govuk-!-font-size-24 govuk-!-font-weight-bold" href="{{ GOV_UK_IMPORT_GOODS_URL }}">Import goods from the UK: step by step</a>
+                            Find information about exporting goods abroad (not including EU). All links open in a new tab.
                         </p>
-                        <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-import-goods">
+                        <p class="govuk-body">
+                            <a class="govuk-link govuk-!-font-size-24 govuk-!-font-weight-bold" href="{{ GOV_UK_EXPORT_GOODS_URL }}" target="_blank">Export goods from the UK: step by step</a>
+                        </p>
+                        <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-export-goods">
                             <div class="govuk-accordion__section ">
                                 <div class="govuk-accordion__section-header">
                                     <h2 class="govuk-accordion__section-heading">
-                                        <span class="govuk-accordion__section-button" id="accordion-import-goods-heading-1">
-                                            Lorem ipsum dolor sit amet consectetur
+                                        <span class="govuk-accordion__section-button" id="accordion-export-goods-heading-1">
+                                            Learn about exporting and markets abroad
                                         </span>
                                     </h2>
                                 </div>
-                                <div id="accordion-import-goods-content-1" class="govuk-accordion__section-content" aria-labelledby="accordion-import-goods-heading-1">
-                                    <p class="govuk-body"></p>
+                                <div id="accordion-export-goods-content-1" class="govuk-accordion__section-content" aria-labelledby="accordion-export-goods-heading-1">
+                                    <h3 class="govuk-heading-s">Lessons on great.gov.uk</h3>
+                                    <p class="govuk-body">
+                                        Visit <a class="govuk-link" href="https://www.great.gov.uk/" target="_blank">great.gov.uk</a> to find out more about:
+                                    </p>
+                                    <ul class="govuk-list govuk-list--bullet">
+                                        <li>learning to export: step-by-step lessons</li>
+                                        <li>helping you choose the right markets</li>
+                                        <li>making an export plan</li>
+                                    </ul>
                                 </div>
                             </div>
                             <div class="govuk-accordion__section ">
                                 <div class="govuk-accordion__section-header">
                                     <h2 class="govuk-accordion__section-heading">
-                                        <span class="govuk-accordion__section-button" id="accordion-import-goods-heading-2">
-                                            Adipiscing elit aenean euismod bibendum
+                                        <span class="govuk-accordion__section-button" id="accordion-export-goods-heading-2">
+                                            Taxes and tariffs
                                         </span>
                                     </h2>
                                 </div>
-                                <div id="accordion-import-goods-content-2" class="govuk-accordion__section-content" aria-labelledby="accordion-import-goods-heading-2">
-                                    <p class="govuk-body"></p>
+                                <div id="accordion-export-goods-content-2" class="govuk-accordion__section-content" aria-labelledby="accordion-export-goods-heading-2">
+                                    <h3 class="govuk-heading-s">Sending goods abroad and charging VAT</h3>
+                                    <p class="govuk-body">
+                                        Find out if <a class="govuk-link" href="https://www.gov.uk/guidance/vat-exports-dispatches-and-supplying-goods-abroad" target="_blank">VAT is due when you sell, send or transfer goods abroad</a>, including:
+                                    </p>
+                                    <ul class="govuk-list govuk-list--bullet">
+                                        <li>from Great Britain to outside the EU</li>
+                                        <li>from Northern Ireland outside the UK and EU</li>
+                                    </ul>
+
+                                    <h3 class="govuk-heading-s">Trade tariff tool</h3>
+                                    <p class="govuk-body">
+                                        Use the <a class="govuk-link" href="https://www.gov.uk/trade-tariff" target="_blank">UK global online tariff tool</a> to look up commodity codes, duty and VAT rates.
+                                    </p>
+
+                                    <h3 class="govuk-heading-s">Rules of origin and claiming reduced tariff rates</h3>
+                                    <p class="govuk-body">
+                                        Learn about how the rules of origin apply to your goods. Find specific rules and tariff quotas in the relevant trade agreement parliamentary report:
+                                    </p>
+                                    <ul class="govuk-list govuk-list--bullet">
+                                        <li>
+                                            <a class="govuk-link" href="https://www.gov.uk/guidance/uk-trade-agreements-with-non-eu-countries" target="_blank">UK trade agreements with non-EU countries</a>
+                                        </li>
+                                        <li>
+                                            <a class="govuk-link" href="https://www.gov.uk/check-duties-customs-exporting" target="_blank">check duties and customs procedures for exporting goods</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="govuk-accordion__section">
+                                <div class="govuk-accordion__section-header">
+                                    <h2 class="govuk-accordion__section-heading">
+                                        <span class="govuk-accordion__section-button" id="accordion-export-goods-heading-3">
+                                            Customs declarations and exporting documents
+                                        </span>
+                                    </h2>
+                                </div>
+                                <div id="accordion-export-goods-content-3" class="govuk-accordion__section-content" aria-labelledby="accordion-export-goods-heading-3">
+                                    <h3 class="govuk-heading-s">Check if you need to declare goods you take out of the country</h3>
+                                    <p class="govuk-body">
+                                        Whether you need to declare goods to UK customs depends where in the UK they start or end their journey.
+                                    </p>
+                                    <p class="govuk-body">
+                                        Follow the <a class="govuk-link" href="https://www.gov.uk/export-customs-declaration" target="_blank">Get UK customs clearance when exporting goods: step by step</a>.
+                                    </p>
+
+                                    <h3 class="govuk-heading-s">Get someone to deal with customs for you</h3>
+                                    <p class="govuk-body">
+                                        Read guidance on <a class="govuk-link" href="https://www.gov.uk/guidance/appoint-someone-to-deal-with-customs-on-your-behalf" target="_blank">getting someone to deal with customs for you</a>.
+                                    </p>
+
+                                    <h3 class="govuk-heading-s">Customs declarations: Customs Handling of Import and Export Freight (CHIEF)</h3>
+                                    <p class="govuk-body">
+                                        You can use CHIEF to make export declarations:
+                                    </p>
+                                    <ul class="govuk-list govuk-list--bullet">
+                                        <li>
+                                            <a class="govuk-link" href="https://www.gov.uk/guidance/apply-to-access-customs-handling-of-import-and-export-freight-c1800" target="_blank">apply to access CHIEF</a>
+                                        </li>
+                                        <li>
+                                            <a class="govuk-link" href="https://www.gov.uk/government/collections/uk-trade-tariff-volume-3-for-chief" target="_blank">how to input data on to CHIEF</a>
+                                        </li>
+                                    </ul>
+
+                                    <h3 class="govuk-heading-s">Using the Customs Declaration Service (moving goods to Northern Ireland)</h3>
+                                    <p class="govuk-body">
+                                        The Customs Declaration Service is to declare goods being moved from Great Britain to Northern Ireland.
+                                    </p>
+                                    <p class="govuk-body">
+                                        Learn about the <a class="govuk-link" href="https://www.gov.uk/government/collections/customs-declaration-service" target="_blank">Customs Declaration Service</a>.
+                                    </p>
+                                    <p class="govuk-body">
+                                        The <a class="govuk-link" href="https://www.tradersupportservice.co.uk/tss" target="_blank">Trader Support Service</a> can help businesses moving goods to Northern Ireland.
+                                    </p>
                                 </div>
                             </div>
                             <div class="govuk-accordion__section ">
                                 <div class="govuk-accordion__section-header">
                                     <h2 class="govuk-accordion__section-heading">
-                                        <span class="govuk-accordion__section-button" id="accordion-import-goods-heading-3">
-                                            Laoreet proin gravida dolor sit amet lacus
+                                        <span class="govuk-accordion__section-button" id="accordion-export-goods-heading-4">
+                                            Rules for specific goods (such as food, animal products and controlled goods)
                                         </span>
                                     </h2>
                                 </div>
-                                <div id="accordion-import-goods-content-3" class="govuk-accordion__section-content" aria-labelledby="accordion-import-goods-heading-3">
-                                    <p class="govuk-body"></p>
+                                <div id="accordion-export-goods-content-4" class="govuk-accordion__section-content" aria-labelledby="accordion-export-goods-heading-4">
+                                    <p class="govuk-body">
+                                        There are special rules and you may need to get licences or certificates to export the following:
+                                    </p>
+                                    <ul class="govuk-list govuk-list--bullet">
+                                        <li>
+                                            <a class="govuk-link" href="https://www.gov.uk/government/collections/guidance-on-importing-and-exporting-live-animals-or-animal-products?step-by-step-nav=b9347000-c726-4c3c-b76a-e52b6cebb3eb" target="_blank">animals and animal products</a>
+                                        </li>
+                                        <li>
+                                            <a class="govuk-link" href="https://www.gov.uk/guidance/export-art-antiques-and-cultural-goods-special-rules?step-by-step-nav=b9347000-c726-4c3c-b76a-e52b6cebb3eb" target="_blank">art works, antiques and culturally significant goods</a>
+                                        </li>
+                                        <li>
+                                            <a class="govuk-link" href="https://www.gov.uk/guidance/export-chemicals-licences-and-special-rules?step-by-step-nav=b9347000-c726-4c3c-b76a-e52b6cebb3eb" target="_blank">chemicals</a>
+                                        </li>
+                                        <li>
+                                            <a class="govuk-link" href="https://www.gov.uk/guidance/export-diamonds-special-rules?step-by-step-nav=b9347000-c726-4c3c-b76a-e52b6cebb3eb" target="_blank">diamonds</a>
+                                        </li>
+                                        <li>
+                                            <a class="govuk-link" href="https://www.gov.uk/guidance/export-drugs-and-medicines-special-rules?step-by-step-nav=b9347000-c726-4c3c-b76a-e52b6cebb3eb" target="_blank">drugs and medicine</a>
+                                        </li>
+                                        <li>
+                                            <a class="govuk-link" href="https://www.gov.uk/guidance/firearms-and-export-control-forms?step-by-step-nav=b9347000-c726-4c3c-b76a-e52b6cebb3eb" target="_blank">firearms, ammunition and related equipment</a>
+                                        </li>
+                                        <li>
+                                            <a class="govuk-link" href="https://www.gov.uk/guidance/controls-on-torture-goods?step-by-step-nav=b9347000-c726-4c3c-b76a-e52b6cebb3eb" target="_blank">goods that could be used for torture or capital punishment</a>
+                                        </li>
+                                        <li>
+                                            <a class="govuk-link" href="https://www.gov.uk/guidance/export-controls-dual-use-items-software-and-technology-goods-for-torture-and-radioactive-sources?step-by-step-nav=b9347000-c726-4c3c-b76a-e52b6cebb3eb" target="_blank">items that can have both civil and military uses</a>
+                                        </li>
+                                        <li>
+                                            <a class="govuk-link" href="https://www.gov.uk/guidance/export-medical-devices-special-rules?step-by-step-nav=b9347000-c726-4c3c-b76a-e52b6cebb3eb" target="_blank">medical devices</a>
+                                        </li>
+                                        <li>
+                                            <a class="govuk-link" href="https://www.gov.uk/guidance/export-controls-military-goods-software-and-technology?step-by-step-nav=b9347000-c726-4c3c-b76a-e52b6cebb3eb" target="_blank">military goods, services and technology</a>
+                                        </li>
+                                        <li>
+                                            <a class="govuk-link" href="https://www.gov.uk/guidance/applying-for-a-licence-to-import-or-export-ozone-depleting-substances?step-by-step-nav=b9347000-c726-4c3c-b76a-e52b6cebb3eb" target="_blank">ozone-depleting substances and F-gases</a>
+                                        </li>
+                                        <li>
+                                            <a class="govuk-link" href="https://www.gov.uk/government/collections/importing-and-exporting-plants-and-plant-products?step-by-step-nav=b9347000-c726-4c3c-b76a-e52b6cebb3eb" target="_blank">plants and plant products</a>
+                                        </li>
+                                        <li>
+                                            <a class="govuk-link" href="https://www.gov.uk/guidance/controls-on-radioactive-sources?step-by-step-nav=b9347000-c726-4c3c-b76a-e52b6cebb3eb" target="_blank">radioactive substances</a>
+                                        </li>
+                                        <li>
+                                            <a class="govuk-link" href="https://www.gov.uk/guidance/importing-and-exporting-waste?step-by-step-nav=b9347000-c726-4c3c-b76a-e52b6cebb3eb" target="_blank">waste</a>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                             <div class="govuk-accordion__section ">
                                 <div class="govuk-accordion__section-header">
                                     <h2 class="govuk-accordion__section-heading">
-                                        <span class="govuk-accordion__section-button" id="accordion-import-goods-heading-4">
-                                            Accumsan et viverra justo commodo proin
+                                        <span class="govuk-accordion__section-button" id="accordion-export-goods-heading-5">
+                                            Approved exporters and authorised representatives
                                         </span>
                                     </h2>
                                 </div>
-                                <div id="accordion-import-goods-content-4" class="govuk-accordion__section-content" aria-labelledby="accordion-import-goods-heading-4">
-                                    <p class="govuk-body"></p>
-                                </div>
-                            </div>
-                            <div class="govuk-accordion__section ">
-                                <div class="govuk-accordion__section-header">
-                                    <h2 class="govuk-accordion__section-heading">
-                                        <span class="govuk-accordion__section-button" id="accordion-import-goods-heading-5">
-                                            Sodales pulvinar sic tempor sociis natoque
-                                        </span>
-                                    </h2>
-                                </div>
-                                <div id="accordion-import-goods-content-5" class="govuk-accordion__section-content" aria-labelledby="accordion-import-goods-heading-5">
-                                    <p class="govuk-body"></p>
+                                <div id="accordion-export-goods-content-5" class="govuk-accordion__section-content" aria-labelledby="accordion-export-goods-heading-5">
+                                    <h3 class="govuk-heading-s">Apply for approved exporter status</h3>
+                                    <p class="govuk-body">
+                                        <a class="govuk-link" href="https://www.gov.uk/government/publications/import-and-export-application-for-approved-exporter-status-c1454" target="_blank">Apply for approved exporter status (C1454)</a>
+                                    </p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            {% endif %}
+            {% if should_display_export_services %}
+                <div class="govuk-grid-row govuk-!-margin-top-4">
+                    <div class="govuk-grid-column-full">
+                        {% if should_display_sub_headings %}
+                            <h2 class="govuk-heading-m govuk-!-margin-bottom-6">Sell services abroad</h2>
+                        {% endif %}
+                        <p class="govuk-body">
+                            Find information about selling services abroad (not including EU).
+                        </p>
+                        <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-export-services">
+                            <div class="govuk-accordion__section ">
+                                <div class="govuk-accordion__section-header">
+                                    <h2 class="govuk-accordion__section-heading">
+                                        <span class="govuk-accordion__section-button" id="accordion-export-services-heading-1">
+                                            Recognising professional qualifications
+                                        </span>
+                                    </h2>
+                                </div>
+                                <div id="accordion-export-services-content-1" class="govuk-accordion__section-content" aria-labelledby="accordion-export-services-heading-1">
+                                    <h3 class="govuk-heading-s">Recognition of professional qualifications: technical guidance for regulatory bodies</h3>
+                                    <p class="govuk-body">
+                                        Guidance explaining <a class="govuk-link" href="https://www.gov.uk/government/publications/recognition-of-professional-qualifications-technical-guidance-for-regulatory-bodies/recognition-of-professional-qualifications-guidance-for-regulatory-bodies" target="_blank">how the recognition of professional qualifications operates</a>.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="govuk-accordion__section ">
+                                <div class="govuk-accordion__section-header">
+                                    <h2 class="govuk-accordion__section-heading">
+                                        <span class="govuk-accordion__section-button" id="accordion-export-services-heading-3">
+                                            Ownership of companies registered abroad
+                                        </span>
+                                    </h2>
+                                </div>
+                                <div id="accordion-export-services-content-3" class="govuk-accordion__section-content" aria-labelledby="accordion-export-services-heading-3">
+                                    <h3 class="govuk-heading-s">Set up a business abroad</h3>
+                                    <p class="govuk-body">
+                                        Find out <a class="govuk-link" href="https://www.great.gov.uk/dashboard/" target="_blank">how to enter an export market by setting up a business abroad on great.gov.uk</a>.
+                                    </p>
+
+                                    <h3 class="govuk-heading-s">Register as an overseas business</h3>
+                                    <p class="govuk-body">
+                                        You must <a class="govuk-link" href="https://www.gov.uk/register-as-an-overseas-company" target="_blank">register an overseas company with Companies House</a> if you want to set up a place of business in the UK.
+                                    </p>
+
+                                    <h3 class="govuk-heading-s">Overseas companies registered in the UK</h3>
+                                    <p class="govuk-body">
+                                        This guidance gives an overview of <a class="govuk-link" href="https://www.gov.uk/government/publications/overseas-companies-in-the-uk-registration-filing-and-disclosure-obligations/overseas-companies-registered-in-the-uk" target="_blank">how to register an overseas company that has opened an establishment in the UK</a>.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="govuk-accordion__section ">
+                                <div class="govuk-accordion__section-header">
+                                    <h2 class="govuk-accordion__section-heading">
+                                        <span class="govuk-accordion__section-button" id="accordion-export-services-heading-4">
+                                            Country specific information (including guidance on travelling, risk, markets and selling services)
+                                        </span>
+                                    </h2>
+                                </div>
+                                <div id="accordion-export-services-content-4" class="govuk-accordion__section-content" aria-labelledby="accordion-export-services-heading-4">
+                                    <h3 class="govuk-heading-s">Overseas business risk</h3>
+                                    <p class="govuk-body">
+                                        Use the <a class="govuk-link" href="https://www.gov.uk/government/collections/overseas-business-risk" target="_blank">Overseas Business Risk</a> service to find geopolitical and economic analysis on overseas markets to new and expanding exporters.
+                                    </p>
+
+                                    <h3 class="govuk-heading-s">Market guides</h3>
+                                    <p class="govuk-body">
+                                        Use our market guides to <a class="govuk-link" href="https://www.gov.uk/government/collections/exporting-country-guides" target="_blank">find export opportunities and prepare to do business in new markets</a>.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            {% if should_display_import_goods %}
+                {% include "core/_import_goods.html" %}
             {% endif %}
             <div class="govuk-grid-row govuk-!-margin-top-4">
                 <div class="govuk-grid-column-full">

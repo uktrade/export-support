@@ -85,9 +85,7 @@ class ImportEnquiriesView(TemplateView):
         return ctx
 
 
-class EUExportEnquiriesView(TemplateView):
-    template_name = "core/eu_export_enquiries.html"
-
+class BaseEnquiriesView(TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
@@ -153,28 +151,19 @@ class EUExportEnquiriesView(TemplateView):
             ]
             ctx[
                 "heading"
-            ] = f"Sell {' and '.join(selected_components_heading_content)} into the EU"
+            ] = f"Sell {' and '.join(selected_components_heading_content)} {self.heading_ending}"
 
         return ctx
 
 
-class NonEUExportEnquiriesView(TemplateView):
+class EUExportEnquiriesView(BaseEnquiriesView):
+    heading_ending = "into the EU"
+    template_name = "core/eu_export_enquiries.html"
+
+
+class NonEUExportEnquiriesView(BaseEnquiriesView):
+    heading_ending = "abroad"
     template_name = "core/non_eu_export_enquiries.html"
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-
-        ctx["should_display_import_goods_section"] = True
-
-        enquiry_subject_form = EnquirySubjectForm(self.request.GET)
-        if enquiry_subject_form.is_valid():
-            enquiry_subject_value = enquiry_subject_form.cleaned_data["enquiry_subject"]
-            has_import_selected = (
-                EnquirySubjectChoices.IMPORTING_GOODS_TO_THE_UK in enquiry_subject_value
-            )
-            ctx["should_display_import_goods_section"] = has_import_selected
-
-        return ctx
 
 
 class EnquiryContactView(FormView):
