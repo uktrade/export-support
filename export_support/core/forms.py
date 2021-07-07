@@ -8,7 +8,6 @@ from export_support.gds import fields as gds_fields
 class EnquirySubjectChoices(models.IntegerChoices):
     SELLING_GOODS_ABROAD = 1, "Selling goods abroad"
     SELLING_SERVICES_ABROAD = 2, "Selling services abroad"
-    IMPORTING_GOODS_TO_THE_UK = 3, "Importing goods to the UK"
 
 
 class EnquirySubjectForm(forms.Form):
