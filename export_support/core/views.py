@@ -1,9 +1,7 @@
 from django.conf import settings
-from django.http import QueryDict
 from django.shortcuts import redirect
-from django.urls import reverse, reverse_lazy
-from django.views.generic import FormView, TemplateView
-from django.views.generic.base import RedirectView
+from django.urls import reverse_lazy
+from django.views.generic import RedirectView, TemplateView
 from formtools.wizard.views import NamedUrlSessionWizardView
 
 from .forms import (
