@@ -125,3 +125,42 @@ class PersonalDetailsForm(forms.Form):
         label="Who is this enquiry for?",
         widget=gds_fields.RadioSelect,
     )
+
+
+class CompanyTypeChoices(models.IntegerChoices):
+    PRIVATE_OR_LIMITED = 1, "UK private or public limited company"
+    OTHER = 2, "Other type of organisation"
+
+
+class BusinessDetailsForm(forms.Form):
+    company_type = forms.TypedChoiceField(
+        coerce=lambda choice: CompanyTypeChoices(int(choice)),
+        choices=CompanyTypeChoices.choices,
+        label="Company type",
+        widget=gds_fields.RadioSelect,
+    )
+    company_name = forms.CharField(
+        label="Company or organisation name",
+        widget=forms.TextInput(
+            attrs={
+                "class": "govuk-input govuk-!-width-one-half",
+            }
+        ),
+    )
+    company_post_code = forms.CharField(
+        label="Company post code",
+        widget=forms.TextInput(
+            attrs={
+                "class": "govuk-input govuk-!-width-one-half",
+            }
+        ),
+    )
+    company_registration_number = forms.CharField(
+        label="Company Registration Number",
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "govuk-input govuk-!-width-one-half",
+            }
+        ),
+    )

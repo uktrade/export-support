@@ -7,6 +7,7 @@ from django.views.generic.base import RedirectView
 from formtools.wizard.views import NamedUrlSessionWizardView
 
 from .forms import (
+    BusinessDetailsForm,
     EnquirySubjectChoices,
     EnquirySubjectForm,
     ExportCountriesForm,
@@ -25,6 +26,7 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         ("export-destination", ExportDestinationForm),
         ("export-countries", ExportCountriesForm),
         ("personal-details", PersonalDetailsForm),
+        ("business-details", BusinessDetailsForm),
     ]
 
     def get_template_names(self):
