@@ -1,7 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils.safestring import mark_safe
 
 from export_support.gds import fields as gds_fields
 
