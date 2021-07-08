@@ -89,6 +89,45 @@ class ExportCountriesForm(forms.Form):
             )
 
 
+class OnBehalfOfChoices(models.IntegerChoices):
+    OWN_COMPANY = 1, "The company I own or work for"
+    ANOTHER_COMPANY = 2, "I am asking on behalf of another company"
+    NOT_A_COMPANY = 3, "This enquiry does not relate to a company"
+
+
+class PersonalDetailsForm(forms.Form):
+    first_name = forms.CharField(
+        label="First name",
+        widget=forms.TextInput(
+            attrs={
+                "class": "govuk-input govuk-!-width-one-half",
+            }
+        ),
+    )
+    last_name = forms.CharField(
+        label="Last name",
+        widget=forms.TextInput(
+            attrs={
+                "class": "govuk-input govuk-!-width-one-half",
+            }
+        ),
+    )
+    email = forms.EmailField(
+        label="Email address",
+        widget=forms.TextInput(
+            attrs={
+                "class": "govuk-input govuk-!-width-one-half",
+            }
+        ),
+    )
+    on_behalf_of = forms.TypedChoiceField(
+        coerce=lambda choice: ExportDestinationChoices(int(choice)),
+        choices=OnBehalfOfChoices.choices,
+        label="Who is this enquiry for?",
+        widget=gds_fields.RadioSelect,
+    )
+
+
 class EnquiryContactForm(forms.Form):
     # Personal details
     first_name = forms.CharField(

@@ -4,7 +4,7 @@
     <div class="govuk-width-container">
         <form method="post">
             {% if wizard.steps.step1 != 1 %}
-                <button class="govuk-back-link link-button" name="wizard_goto_step" value="{{ wizard.steps.prev }}">Back</button>
+                <button class="govuk-back-link link-button" formnovalidate name="wizard_goto_step" value="{{ wizard.steps.prev }}">Back</button>
             {% endif %}
             <main id="main-content" class="govuk-main-wrapper">
                 {% include "gds/forms/non_field_errors.html" %}
@@ -12,8 +12,12 @@
                     {% csrf_token %}
                     {{ wizard.management_form }}
                     <span class="govuk-caption-l">Question {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</span>
-                    {% block fields %}
-                    {% endblock %}
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-two-thirds">
+                            {% block fields %}
+                            {% endblock %}
+                        </div>
+                    </div>
                     <div class="govuk-!-margin-top-6">
                         <button class="govuk-button">
                             Continue

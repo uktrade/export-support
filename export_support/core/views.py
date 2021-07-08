@@ -12,6 +12,7 @@ from .forms import (
     EnquirySubjectForm,
     ExportCountriesForm,
     ExportDestinationForm,
+    PersonalDetailsForm,
 )
 
 
@@ -24,6 +25,7 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         ("enquiry-subject", EnquirySubjectForm),
         ("export-destination", ExportDestinationForm),
         ("export-countries", ExportCountriesForm),
+        ("personal-details", PersonalDetailsForm),
     ]
 
     def get_template_names(self):
