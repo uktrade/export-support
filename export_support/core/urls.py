@@ -34,11 +34,6 @@ urlpatterns = [
         name="non-eu-export-enquiries",
     ),
     path(
-        "enquiry-contact",
-        views.EnquiryContactView.as_view(),
-        name="enquiry-contact",
-    ),
-    path(
         "enquiry-contact-success",
         views.EnquiryContactSuccessView.as_view(),
         name="enquiry-contact-success",

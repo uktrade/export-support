@@ -7,7 +7,6 @@ from django.views.generic.base import RedirectView
 from formtools.wizard.views import NamedUrlSessionWizardView
 
 from .forms import (
-    EnquiryContactForm,
     EnquirySubjectChoices,
     EnquirySubjectForm,
     ExportCountriesForm,
@@ -123,12 +122,6 @@ class EUExportEnquiriesView(BaseEnquiriesView):
 class NonEUExportEnquiriesView(BaseEnquiriesView):
     heading_ending = "abroad"
     template_name = "core/non_eu_export_enquiries.html"
-
-
-class EnquiryContactView(FormView):
-    form_class = EnquiryContactForm
-    success_url = reverse_lazy("core:enquiry-contact-success")
-    template_name = "core/enquiry_contact.html"
 
 
 class EnquiryContactSuccessView(TemplateView):
