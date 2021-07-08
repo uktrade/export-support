@@ -2,20 +2,25 @@
 
 {% block content %}
     <div class="govuk-width-container">
-        <main id="main-content" class="govuk-main-wrapper">
-            {% include "gds/forms/non_field_errors.html" %}
-            <form class="govuk-!-padding-top-6" method="post">
-                {% csrf_token %}
-                {{ wizard.management_form }}
-                <span class="govuk-caption-l">Question {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</span>
-                {% block fields %}
-                {% endblock %}
-                <div class="govuk-!-margin-top-6">
-                    <button class="govuk-button">
-                        Continue
-                    </button>
+        <form method="post">
+            {% if wizard.steps.step1 != 1 %}
+                <button class="govuk-back-link link-button" name="wizard_goto_step" value="{{ wizard.steps.prev }}">Back</button>
+            {% endif %}
+            <main id="main-content" class="govuk-main-wrapper">
+                {% include "gds/forms/non_field_errors.html" %}
+                <div>
+                    {% csrf_token %}
+                    {{ wizard.management_form }}
+                    <span class="govuk-caption-l">Question {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</span>
+                    {% block fields %}
+                    {% endblock %}
+                    <div class="govuk-!-margin-top-6">
+                        <button class="govuk-button">
+                            Continue
+                        </button>
+                    </div>
                 </div>
-            </form>
-        </main>
+            </main>
+        </form>
     </div>
 {% endblock %}
