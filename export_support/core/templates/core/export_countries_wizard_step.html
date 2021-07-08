@@ -1,9 +1,9 @@
 {% extends "core/wizard_step.html" %}
 
 {% block fields %}
-    <div class="govuk-form-group {% if form.export_destination.errors %}govuk-form-group--error{% endif %}">
-        <fieldset class="govuk-fieldset" aria-describedby="export-country-hint">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l {% if not form.export_destination.errors %}govuk-!-margin-bottom-4{% endif %}">
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" aria-describedby="export-country-hint" data-module="select-all" data-select-all-id="{{ form.select_all.id_for_label }}">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                 <h1 class="govuk-fieldset__heading">
                     {{ form.countries.label }}
                 </h1>
@@ -19,7 +19,7 @@
             <div id="export-country-hint" class="govuk-hint">
                 Select all that apply.
             </div>
-            <div class="govuk-checkboxes__item select-all-checkbox" data-module="select-all">
+            <div class="govuk-checkboxes__item select-all-checkbox">
                 {{ form.select_all }}
                 <label class="govuk-label govuk-checkboxes__label" for="{{ form.select_all.id_for_label }}">
                     Select all

@@ -71,6 +71,12 @@ class ExportCountriesForm(forms.Form):
 
         has_select_all_selected = bool(cleaned_data["select_all"])
         has_countries_selected = any(cleaned_data["countries"])
+        has_all_countries_selected = [
+            code for code, _ in self.fields["countries"].choices
+        ] == cleaned_data["countries"]
+
+        if has_select_all_selected and has_all_countries_selected:
+            return
 
         if not has_select_all_selected and not has_countries_selected:
             raise ValidationError(
