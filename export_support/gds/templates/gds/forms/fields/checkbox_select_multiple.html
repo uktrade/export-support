@@ -6,7 +6,7 @@
         <div class="govuk-checkboxes">
             {% for option in options %}
                 <div class="govuk-checkboxes__item">
-                    <input class="govuk-checkboxes__input" id="{{ option.attrs.id }}" name="{{ option.name }}" type="checkbox" {% if option.selected %}checked{% endif %} value="{{ option.value }}">
+                    <input {% include "django/forms/widgets/attrs.html" with widget=option %} class="govuk-checkboxes__input" name="{{ option.name }}" type="checkbox" {% if option.selected %}checked{% endif %} value="{{ option.value }}">
                     <label class="govuk-label govuk-checkboxes__label" for="{{ option.attrs.id }}">
                         {{ option.label }}
                     </label>
