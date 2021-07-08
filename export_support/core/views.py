@@ -10,7 +10,7 @@ from .forms import (
     EnquiryContactForm,
     EnquirySubjectChoices,
     EnquirySubjectForm,
-    ExportDestinationChoices,
+    ExportCountriesForm,
     ExportDestinationForm,
 )
 
@@ -23,6 +23,7 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
     form_list = [
         ("enquiry-subject", EnquirySubjectForm),
         ("export-destination", ExportDestinationForm),
+        ("export-countries", ExportCountriesForm),
     ]
 
     def get_template_names(self):
@@ -34,24 +35,7 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         return [templates[self.steps.current]]
 
     def done(self, form_list, form_dict, **kwargs):
-        params = QueryDict(mutable=True)
-        for form in form_list:
-            for key, value in form.get_filter_data().items():
-                if isinstance(value, list):
-                    params.setlist(key, value)
-                else:
-                    params[key] = value
-
-        export_destination_form = form_dict["export-destination"]
-        export_destination_value = export_destination_form.cleaned_data[
-            "export_destination"
-        ]
-        if export_destination_value == ExportDestinationChoices.EU:
-            url = reverse("core:eu-export-enquiries")
-            return redirect(f"{url}?{params.urlencode()}")
-        elif export_destination_value == ExportDestinationChoices.NON_EU:
-            url = reverse("core:non-eu-export-enquiries")
-            return redirect(f"{url}?{params.urlencode()}")
+        return redirect("core:enquiry-contact-success")
 
 
 class ImportEnquiriesView(TemplateView):

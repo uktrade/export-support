@@ -1,8 +1,11 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.safestring import mark_safe
 
 from export_support.gds import fields as gds_fields
+
+from .consts import EU_COUNTRY_CODES_TO_NAME_MAP
 
 
 class EnquirySubjectChoices(models.IntegerChoices):
@@ -15,7 +18,6 @@ class EnquirySubjectForm(forms.Form):
         coerce=lambda choice: EnquirySubjectChoices(int(choice)),
         choices=EnquirySubjectChoices.choices,
         label="What is your enquiry about?",
-        required=True,
         widget=gds_fields.CheckboxSelectMultiple,
     )
 
@@ -39,12 +41,46 @@ class ExportDestinationForm(forms.Form):
         coerce=lambda choice: ExportDestinationChoices(int(choice)),
         choices=ExportDestinationChoices.choices,
         label="Where are you selling to?",
-        required=True,
         widget=gds_fields.RadioSelect,
     )
 
     def get_filter_data(self):
         return {}
+
+
+class ExportCountriesForm(forms.Form):
+    select_all = forms.BooleanField(
+        label="Select all",
+        required=False,
+        widget=forms.CheckboxInput(
+            attrs={"class": "govuk-checkboxes__input"},
+        ),
+    )
+    countries = forms.MultipleChoiceField(
+        choices=[
+            (code, country_name)
+            for code, country_name in EU_COUNTRY_CODES_TO_NAME_MAP.items()
+        ],
+        label="Which country are you selling to?",
+        required=False,
+        widget=gds_fields.CheckboxSelectMultiple,
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        has_select_all_selected = bool(cleaned_data["select_all"])
+        has_countries_selected = any(cleaned_data["countries"])
+
+        if not has_select_all_selected and not has_countries_selected:
+            raise ValidationError(
+                'You must select either "Select all" or some countries'
+            )
+
+        if has_select_all_selected and has_countries_selected:
+            raise ValidationError(
+                'You must select either "Select all" or some countries. Not both.'
+            )
 
 
 class EnquiryContactForm(forms.Form):
