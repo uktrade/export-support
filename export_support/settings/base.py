@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
+import string
 from pathlib import Path
 
 import environ
@@ -178,3 +179,6 @@ SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
 GTM_GA_ID = env.str("GTM_GA_ID", None)
+
+REFERENCE_NUMBER_ALPHABET = string.ascii_uppercase + string.digits
+REFERENCE_NUMBER_SIZE = 8

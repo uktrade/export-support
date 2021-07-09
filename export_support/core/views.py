@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.shortcuts import redirect
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import RedirectView, TemplateView
 from formtools.wizard.views import NamedUrlSessionWizardView
@@ -14,6 +14,7 @@ from .forms import (
     PersonalDetailsForm,
     SectorsForm,
 )
+from .utils import get_reference_number
 
 
 class IndexView(RedirectView):
@@ -40,7 +41,11 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         return [templates[self.steps.current]]
 
     def done(self, form_list, form_dict, **kwargs):
-        return redirect("core:enquiry-contact-success")
+        ctx = {
+            "reference_number": get_reference_number(),
+        }
+
+        return render(self.request, "core/enquiry_contact_success.html", ctx)
 
 
 class ImportEnquiriesView(TemplateView):
