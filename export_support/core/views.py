@@ -78,17 +78,6 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         return render(self.request, "core/enquiry_contact_success.html", ctx)
 
 
-class ImportEnquiriesView(TemplateView):
-    template_name = "core/import_enquiries.html"
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-
-        ctx["GOV_UK_EXPORT_GOODS_URL"] = settings.GOV_UK_EXPORT_GOODS_URL
-
-        return ctx
-
-
 class BaseEnquiriesView(TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
