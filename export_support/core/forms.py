@@ -1,10 +1,11 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.text import slugify
 
 from export_support.gds import fields as gds_fields
 
-from .consts import EU_COUNTRY_CODES_TO_NAME_MAP
+from .consts import EU_COUNTRY_CODES_TO_NAME_MAP, SECTORS
 
 
 class EnquirySubjectChoices(models.IntegerChoices):
@@ -75,7 +76,7 @@ class ExportCountriesForm(forms.Form):
         ] == cleaned_data["countries"]
 
         if has_select_all_selected and has_all_countries_selected:
-            return
+            return cleaned_data
 
         if not has_select_all_selected and not has_countries_selected:
             raise ValidationError(
@@ -86,6 +87,8 @@ class ExportCountriesForm(forms.Form):
             raise ValidationError(
                 'You must select either "Select all" or some countries. Not both.'
             )
+
+        return cleaned_data
 
 
 class OnBehalfOfChoices(models.IntegerChoices):
@@ -164,3 +167,41 @@ class BusinessDetailsForm(forms.Form):
             }
         ),
     )
+
+
+class SectorsForm(forms.Form):
+    sectors = forms.MultipleChoiceField(
+        choices=[(slugify(sector), sector) for sector in SECTORS],
+        label="What sector(s) does your enquiry relate to?",
+        required=False,
+        widget=gds_fields.CheckboxSelectMultiple,
+    )
+    is_other = forms.BooleanField(
+        label="Select all",
+        required=False,
+        widget=forms.CheckboxInput(
+            attrs={"class": "govuk-checkboxes__input"},
+        ),
+    )
+    other = forms.CharField(
+        label="Please specify",
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "govuk-input govuk-!-width-three-quarters",
+            }
+        ),
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        is_other = cleaned_data["is_other"]
+        is_other_selected = bool(is_other)
+        other = cleaned_data["other"]
+        is_other_text_blank = not bool(other)
+
+        if is_other_selected and is_other_text_blank:
+            self.add_error("other", 'You must add text for "Other".')
+
+        return cleaned_data
