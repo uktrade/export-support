@@ -4,8 +4,17 @@
   border: 2px solid govuk-colour("blue");
   padding: govuk-spacing(4);
 
+  &__heading,
   &__link {
     @extend .govuk-heading-m;
+    margin-top: 0;
+  }
+
+  &__heading {
+    color: govuk-colour("blue");
+  }
+
+  &__link {
     @extend .govuk-link;
     margin-bottom: govuk-spacing(4);
   }

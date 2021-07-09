@@ -44,9 +44,6 @@ class ExportDestinationForm(forms.Form):
         widget=gds_fields.RadioSelect,
     )
 
-    def get_filter_data(self):
-        return {}
-
 
 class ExportCountriesForm(forms.Form):
     select_all = forms.BooleanField(

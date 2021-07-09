@@ -1,6 +1,6 @@
 from django.conf import settings
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.shortcuts import redirect, render
+from django.urls import reverse, reverse_lazy
 from django.views.generic import RedirectView, TemplateView
 from formtools.wizard.views import NamedUrlSessionWizardView
 
@@ -10,15 +10,25 @@ from .forms import (
     EnquirySubjectChoices,
     EnquirySubjectForm,
     ExportCountriesForm,
+    ExportDestinationChoices,
     ExportDestinationForm,
     PersonalDetailsForm,
     SectorsForm,
 )
-from .utils import get_reference_number
+from .utils import dict_to_query_dict, get_reference_number
 
 
 class IndexView(RedirectView):
     url = reverse_lazy("core:enquiry-wizard")
+
+
+def is_eu_enquiry(wizard):
+    cleaned_data = wizard.get_cleaned_data_for_step("export-destination")
+
+    if not cleaned_data:
+        return True
+
+    return cleaned_data["export_destination"] == ExportDestinationChoices.EU
 
 
 class EnquiryWizardView(NamedUrlSessionWizardView):
@@ -31,6 +41,13 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         ("sectors", SectorsForm),
         ("enquiry-details", EnquiryDetailsForm),
     ]
+    condition_dict = {
+        "export-countries": is_eu_enquiry,
+        "personal-details": is_eu_enquiry,
+        "business-details": is_eu_enquiry,
+        "sectors": is_eu_enquiry,
+        "enquiry-details": is_eu_enquiry,
+    }
 
     def get_template_names(self):
         templates = {
@@ -41,6 +58,19 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         return [templates[self.steps.current]]
 
     def done(self, form_list, form_dict, **kwargs):
+        cleaned_data = self.get_cleaned_data_for_step("export-destination")
+
+        if (
+            cleaned_data
+            and cleaned_data["export_destination"] == ExportDestinationChoices.NON_EU
+        ):
+            enquiry_subject_form = form_dict["enquiry-subject"]
+            filter_data = enquiry_subject_form.get_filter_data()
+            params = dict_to_query_dict(filter_data)
+            url = reverse("core:non-eu-export-enquiries")
+
+            return redirect(f"{url}?{params.urlencode()}")
+
         ctx = {
             "reference_number": get_reference_number(),
         }

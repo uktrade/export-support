@@ -19,11 +19,12 @@
                         <p class="govuk-body">
                             Find information about exporting goods abroad (not including EU). All links open in a new tab.
                         </p>
-                        <p class="govuk-body">
-                            <a class="govuk-link govuk-!-font-size-24 govuk-!-font-weight-bold" href="{{ GOV_UK_EXPORT_GOODS_URL }}" target="_blank">Export goods from the UK: step by step</a>
-                        </p>
                     </div>
                     <div class="govuk-grid-column-full">
+                        <div class="information-link-panel">
+                            <a class="information-link-panel__link" href="{{ GOV_UK_EXPORT_GOODS_URL }}">Export goods from the UK: step by step</a>
+                            <p class="information-link-panel__body">How to move goods from the UK to international destinations, including the EU.</p>
+                        </div>
                         <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-export-goods">
                             <div class="govuk-accordion__section ">
                                 <div class="govuk-accordion__section-header">
@@ -205,6 +206,19 @@
                         </div>
                     </div>
                 </div>
+                <div class="govuk-grid-row govuk-!-margin-top-4">
+                    <div class="govuk-grid-column-full">
+                        <div class="information-link-panel">
+                            <h2 class="information-link-panel__heading">If you need more information on selling goods abroad</h2>
+                            <p class="information-link-panel__body">We have local trade offices based around the UK.</p>
+                            <p class="information-link-panel__body">Within each office you can contact an international trade advisor.</p>
+                            <p class="information-link-panel__body govuk-!-margin-bottom-4">An international trade advisor will be able to help you, if your enquiry relates to exporting goods.</p>
+                            <a href="{{ GREAT_OFFICE_FINDER_URL }}" role="button" draggable="false" class="govuk-button govuk-!-margin-bottom-0" data-module="govuk-button">
+                                Find your local trade office
+                            </a>
+                        </div>
+                    </div>
+                </div>
             {% endif %}
             {% if should_display_export_services %}
                 <div class="govuk-grid-row govuk-!-margin-top-4">
@@ -282,19 +296,6 @@
                     </div>
                 </div>
             {% endif %}
-            {% if should_display_import_goods %}
-                {% include "core/_import_goods.html" %}
-            {% endif %}
-            <div class="govuk-grid-row govuk-!-margin-top-4">
-                <div class="govuk-grid-column-full">
-                    <h2 class="govuk-heading-l govuk-!-margin-bottom-6">If you have not found what you're looking for</h2>
-                    <p class="govuk-body">
-                        <a href="{{ GREAT_OFFICE_FINDER_URL }}" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
-                            Find your local trade office
-                        </a>
-                    </p>
-                </div>
-            </div>
         </main>
     </div>
 {% endblock %}
