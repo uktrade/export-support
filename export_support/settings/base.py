@@ -155,7 +155,6 @@ STATIC_ROOT = "build/static"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 GOV_UK_EXPORT_GOODS_URL = "https://www.gov.uk/export-goods"
-GOV_UK_IMPORT_GOODS_URL = "https://www.gov.uk/import-goods-into-uk"
 GREAT_OFFICE_FINDER_URL = "https://www.great.gov.uk/contact/office-finder/"
 
 if ENABLE_CSP:
