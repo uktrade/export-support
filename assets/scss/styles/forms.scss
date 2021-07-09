@@ -13,3 +13,17 @@
     padding-left: 56px;
   }
 }
+
+.js-enabled {
+  .other-form-option__text-input {
+    display: none;
+
+    &--visible {
+      display: block;
+    }
+
+    &--not-visible {
+      display: none;
+    }
+  }
+}
