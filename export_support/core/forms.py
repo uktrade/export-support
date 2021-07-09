@@ -120,7 +120,7 @@ class PersonalDetailsForm(forms.Form):
         ),
     )
     on_behalf_of = forms.TypedChoiceField(
-        coerce=lambda choice: ExportDestinationChoices(int(choice)),
+        coerce=lambda choice: OnBehalfOfChoices(int(choice)),
         choices=OnBehalfOfChoices.choices,
         label="Who is this enquiry for?",
         widget=gds_fields.RadioSelect,

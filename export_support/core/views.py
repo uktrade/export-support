@@ -12,6 +12,7 @@ from .forms import (
     ExportCountriesForm,
     ExportDestinationChoices,
     ExportDestinationForm,
+    OnBehalfOfChoices,
     PersonalDetailsForm,
     SectorsForm,
 )
@@ -24,11 +25,25 @@ class IndexView(RedirectView):
 
 def is_eu_enquiry(wizard):
     cleaned_data = wizard.get_cleaned_data_for_step("export-destination")
-
     if not cleaned_data:
         return True
 
     return cleaned_data["export_destination"] == ExportDestinationChoices.EU
+
+
+def is_company(wizard):
+    cleaned_data = wizard.get_cleaned_data_for_step("personal-details")
+    if not cleaned_data:
+        return True
+
+    return cleaned_data["on_behalf_of"] != OnBehalfOfChoices.NOT_A_COMPANY
+
+
+def combine_conditions(*condition_funcs):
+    def combined_conditions(wizard):
+        return all(condition_func(wizard) for condition_func in condition_funcs)
+
+    return combined_conditions
 
 
 class EnquiryWizardView(NamedUrlSessionWizardView):
@@ -44,7 +59,7 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
     condition_dict = {
         "export-countries": is_eu_enquiry,
         "personal-details": is_eu_enquiry,
-        "business-details": is_eu_enquiry,
+        "business-details": combine_conditions(is_eu_enquiry, is_company),
         "sectors": is_eu_enquiry,
         "enquiry-details": is_eu_enquiry,
     }
