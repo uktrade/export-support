@@ -1,19 +1,25 @@
-{% extends "core/base.html" %}
+{% extends "core/wizard_step.html" %}
 
-{% block content %}
-    <div class="govuk-width-container">
-        <main id="main-content" class="govuk-main-wrapper">
-            {% include "gds/forms/non_field_errors.html" %}
-            <form class="govuk-!-padding-top-6" method="post">
-                {% csrf_token %}
-                {{ wizard.management_form }}
-                {% include "gds/forms/field_as_fieldset.html" with field=form.enquiry_subject %}
-                <div class="govuk-!-margin-top-6">
-                    <button class="govuk-button">
-                        Continue
-                    </button>
-                </div>
-            </form>
-        </main>
+{% block fields %}
+    <div class="govuk-form-group {% if form.enquiry_subject.errors %}govuk-form-group--error{% endif %}">
+        <fieldset class="govuk-fieldset" aria-describedby="enquiry-subject-hint">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l {% if not form.enquiry_subject.errors %}govuk-!-margin-bottom-4{% endif %}">
+                <h1 class="govuk-fieldset__heading">
+                    {{ form.enquiry_subject.label }}
+                </h1>
+            </legend>
+            {% for error in form.enquiry_subject.errors %}
+                <span class="govuk-error-message">
+                    <span class="govuk-visually-hidden">Error:</span> {{ error }}
+                </span>
+            {% endfor %}
+            <p class="govuk-body">
+                Your answers to these questions help us to decide the best way to support your business.
+            </p>
+            <div id="enquiry-subject-hint" class="govuk-hint">
+                Select all that apply.
+            </div>
+            {{ form.enquiry_subject }}
+        </fieldset>
     </div>
 {% endblock %}

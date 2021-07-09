@@ -1,44 +1,36 @@
 from django.conf import settings
-from django.http import QueryDict
-from django.shortcuts import redirect
-from django.urls import reverse, reverse_lazy
-from django.views.generic import FormView, TemplateView
-from django.views.generic.base import RedirectView
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic import RedirectView, TemplateView
 from formtools.wizard.views import NamedUrlSessionWizardView
 
 from .forms import (
-    EnquiryContactForm,
+    BusinessDetailsForm,
+    EnquiryDetailsForm,
     EnquirySubjectChoices,
     EnquirySubjectForm,
-    ExportDestinationChoices,
+    ExportCountriesForm,
     ExportDestinationForm,
+    PersonalDetailsForm,
+    SectorsForm,
 )
+from .utils import get_reference_number
 
 
 class IndexView(RedirectView):
     url = reverse_lazy("core:enquiry-wizard")
 
 
-def should_display_export_destination_form(wizard):
-    enquiry_subject_cleaned_data = wizard.get_cleaned_data_for_step("enquiry-subject")
-    if not enquiry_subject_cleaned_data:
-        return True
-
-    enquiry_subject_value = enquiry_subject_cleaned_data["enquiry_subject"]
-    only_importing = enquiry_subject_value == [
-        EnquirySubjectChoices.IMPORTING_GOODS_TO_THE_UK
-    ]
-    return not only_importing
-
-
 class EnquiryWizardView(NamedUrlSessionWizardView):
     form_list = [
         ("enquiry-subject", EnquirySubjectForm),
         ("export-destination", ExportDestinationForm),
+        ("export-countries", ExportCountriesForm),
+        ("personal-details", PersonalDetailsForm),
+        ("business-details", BusinessDetailsForm),
+        ("sectors", SectorsForm),
+        ("enquiry-details", EnquiryDetailsForm),
     ]
-    condition_dict = {
-        "export-destination": should_display_export_destination_form,
-    }
 
     def get_template_names(self):
         templates = {
@@ -49,33 +41,11 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         return [templates[self.steps.current]]
 
     def done(self, form_list, form_dict, **kwargs):
-        enquiry_subject_form = form_dict["enquiry-subject"]
-        enquiry_subject_value = enquiry_subject_form.cleaned_data["enquiry_subject"]
+        ctx = {
+            "reference_number": get_reference_number(),
+        }
 
-        params = QueryDict(mutable=True)
-        for form in form_list:
-            for key, value in form.get_filter_data().items():
-                if isinstance(value, list):
-                    params.setlist(key, value)
-                else:
-                    params[key] = value
-
-        only_importing = enquiry_subject_value == [
-            EnquirySubjectChoices.IMPORTING_GOODS_TO_THE_UK
-        ]
-        if only_importing:
-            return redirect("core:import-enquiries")
-
-        export_destination_form = form_dict["export-destination"]
-        export_destination_value = export_destination_form.cleaned_data[
-            "export_destination"
-        ]
-        if export_destination_value == ExportDestinationChoices.EU:
-            url = reverse("core:eu-export-enquiries")
-            return redirect(f"{url}?{params.urlencode()}")
-        elif export_destination_value == ExportDestinationChoices.NON_EU:
-            url = reverse("core:non-eu-export-enquiries")
-            return redirect(f"{url}?{params.urlencode()}")
+        return render(self.request, "core/enquiry_contact_success.html", ctx)
 
 
 class ImportEnquiriesView(TemplateView):
@@ -96,7 +66,6 @@ class BaseEnquiriesView(TemplateView):
         ctx["should_display_sub_headings"] = True
         ctx["should_display_export_goods"] = True
         ctx["should_display_export_services"] = True
-        ctx["should_display_import_goods"] = True
 
         heading_components = {
             EnquirySubjectChoices.SELLING_GOODS_ABROAD: "goods",
@@ -131,18 +100,12 @@ class BaseEnquiriesView(TemplateView):
                     EnquirySubjectChoices.SELLING_SERVICES_ABROAD
                 )
 
-            has_import_goods_selected = (
-                EnquirySubjectChoices.IMPORTING_GOODS_TO_THE_UK in enquiry_subject_value
-            )
-            ctx["should_display_import_goods"] = has_import_goods_selected
-
             num_visible_sections = len(
                 [
                     c
                     for c in [
                         has_export_goods_selected,
                         has_export_services_selected,
-                        has_import_goods_selected,
                     ]
                     if c
                 ]
@@ -168,12 +131,6 @@ class EUExportEnquiriesView(BaseEnquiriesView):
 class NonEUExportEnquiriesView(BaseEnquiriesView):
     heading_ending = "abroad"
     template_name = "core/non_eu_export_enquiries.html"
-
-
-class EnquiryContactView(FormView):
-    form_class = EnquiryContactForm
-    success_url = reverse_lazy("core:enquiry-contact-success")
-    template_name = "core/enquiry_contact.html"
 
 
 class EnquiryContactSuccessView(TemplateView):

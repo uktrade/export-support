@@ -3,7 +3,9 @@ import Accordion from "govuk-frontend/govuk/components/accordion/accordion";
 import Button from "govuk-frontend/govuk/components/button/button";
 import ErrorSummary from "govuk-frontend/govuk/components/error-summary/error-summary";
 
-var CookiePolicy = require("./modules/cookie-banner");
+import initSelectAll from "./modules/select-all.js";
+import initOtherInput from "./modules/other-input.js";
+import CookiePolicy from "./modules/cookie-banner";
 
 var cookiePolicy = new CookiePolicy();
 cookiePolicy.initBanner(".app-cookie-banner", ".js-accept-cookie", "cookies");
@@ -34,3 +36,6 @@ nodeListForEach($errorSummaries, function ($errorSummary) {
   };
   errorSummary.init();
 });
+
+initSelectAll();
+initOtherInput();

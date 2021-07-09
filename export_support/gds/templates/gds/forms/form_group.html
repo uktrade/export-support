@@ -1,6 +1,6 @@
 <div class="govuk-form-group {% if field.errors %}govuk-form-group--error{% endif %}">
     <label class="govuk-label" for="{{ field.id_for_label }}">
-        {{ field.label }}
+        {{ field.label }}{% if not field.field.required %} <span class="govuk-hint govuk-!-display-inline">(optional)</span>{% endif %}
     </label>
     {% if field.errors %}
         {% for error in field.errors %}

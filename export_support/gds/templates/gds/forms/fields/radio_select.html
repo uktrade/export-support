@@ -6,7 +6,7 @@
         {% endif %}
         {% for option in options %}
             <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="{{ option.attrs.id }}" name="{{ widget.name }}" type="radio" {% if option.selected %}checked{% endif %} value="{{ option.value }}">
+                <input {% include "django/forms/widgets/attrs.html" with widget=option %} class="govuk-radios__input" name="{{ widget.name }}" type="radio" {% if option.selected %}checked{% endif %} value="{{ option.value }}">
                 <label class="govuk-label govuk-radios__label" for="{{ option.attrs.id }}">
                     {{ option.label }}
                 </label>

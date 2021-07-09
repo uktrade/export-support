@@ -1,0 +1,31 @@
+{% extends "core/wizard_step.html" %}
+
+{% block fields %}
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" aria-describedby="export-country-hint" data-module="select-all" data-select-all-id="{{ form.select_all.id_for_label }}">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                    {{ form.countries.label }}
+                </h1>
+            </legend>
+            {% for error in form.countries.errors %}
+                <span class="govuk-error-message">
+                    <span class="govuk-visually-hidden">Error:</span> {{ error }}
+                </span>
+            {% endfor %}
+            <p class="govuk-body">
+                Your answers to these questions help us to decide the best way to support your business.
+            </p>
+            <div id="export-country-hint" class="govuk-hint">
+                Select all that apply.
+            </div>
+            <div class="govuk-checkboxes__item select-all-checkbox">
+                {{ form.select_all }}
+                <label class="govuk-label govuk-checkboxes__label" for="{{ form.select_all.id_for_label }}">
+                    Select all
+                </label>
+            </div>
+            {{ form.countries }}
+        </fieldset>
+    </div>
+{% endblock %}

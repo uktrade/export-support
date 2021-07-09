@@ -1,0 +1,16 @@
+.information-link-panel {
+  @extend .govuk-body;
+  background-color: govuk-colour("light-grey");
+  border: 2px solid govuk-colour("blue");
+  padding: govuk-spacing(4);
+
+  &__link {
+    @extend .govuk-heading-m;
+    @extend .govuk-link;
+    margin-bottom: govuk-spacing(4);
+  }
+
+  &__body:last-of-type {
+    margin-bottom: 0;
+  }
+}

@@ -1,0 +1,46 @@
+{% extends "core/wizard_step.html" %}
+
+{% block fields %}
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" aria-describedby="sectors-hint">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                    {{ form.sectors.label }}
+                </h1>
+            </legend>
+            {% for error in form.sectors.errors %}
+                <span class="govuk-error-message">
+                    <span class="govuk-visually-hidden">Error:</span> {{ error }}
+                </span>
+            {% endfor %}
+            <p class="govuk-body">
+                Your answers to these questions help us to decide the best way to support your business.
+            </p>
+            <div id="sectors-hint" class="govuk-hint">
+                Select all that apply.
+            </div>
+            {{ form.sectors }}
+            <div class="govuk-form-group {% if form.other.errors %}govuk-form-group--error{% endif %} other-form-option" data-module="other-input" data-other-input-checkbox-id="{{ form.is_other.id_for_label }}" data-other-input-text-input-wrapper-id="{{ form.other.id_for_label }}-wrapper">
+                {% if form.other.errors %}
+                    <span class="govuk-error-message">
+                        {% for error in form.other.errors %}
+                            <span class="govuk-visually-hidden">Error:</span> {{ error }}
+                        {% endfor %}
+                    </span>
+                {% endif %}
+                <div class="govuk-checkboxes__item">
+                    {{ form.is_other }}
+                    <label class="govuk-label govuk-checkboxes__label" for="{{ form.is_other.id_for_label }}">
+                        Other
+                    </label>
+                </div>
+                <div class="other-form-option__text-input" id="{{ form.other.id_for_label }}-wrapper">
+                    <label class="govuk-label" for="{{ form.other.id_for_label }}">
+                        Please specify
+                    </label>
+                    {{ form.other }}
+                </div>
+            </div>
+        </fieldset>
+    </div>
+{% endblock %}
