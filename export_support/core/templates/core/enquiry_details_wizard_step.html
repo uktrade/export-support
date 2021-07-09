@@ -1,0 +1,35 @@
+{% extends "core/wizard_step.html" %}
+
+{% block fields %}
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                    Tell us how we can help
+                </h1>
+            </legend>
+            <p class="govuk-body">
+                Provide as much detail as possible below to help us better understand your enquiry. <strong class="sensitive-information-warning">Please do not share any commercially sensitive information.</strong>
+            </p>
+            {% include "gds/forms/form_group.html" with field=form.nature_of_enquiry %}
+            {% include "gds/forms/form_group.html" with field=form.question %}
+        </fieldset>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <h2 class="govuk-heading-l">How we use your information</h2>
+            <p class="govuk-body">
+                The department for International Trade will use the information provided in this form to respond to your enquiry.
+            </p>
+            <p class="govuk-body">
+                Read about how we protect your data in our <a class="govuk-link" href="#">privacy notice</a>.
+            </p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block actions %}
+    <button class="govuk-button">
+        Submit
+    </button>
+{% endblock %}

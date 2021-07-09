@@ -205,3 +205,24 @@ class SectorsForm(forms.Form):
             self.add_error("other", 'You must add text for "Other".')
 
         return cleaned_data
+
+
+class EnquiryDetailsForm(forms.Form):
+    nature_of_enquiry = forms.CharField(
+        label="Nature of enquiry",
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "govuk-input",
+            },
+        ),
+    )
+    question = forms.CharField(
+        label="Your question",
+        widget=forms.Textarea(
+            attrs={
+                "class": "govuk-textarea",
+                "rows": 10,
+            },
+        ),
+    )

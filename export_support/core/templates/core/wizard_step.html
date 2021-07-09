@@ -19,9 +19,11 @@
                         </div>
                     </div>
                     <div class="govuk-!-margin-top-6">
-                        <button class="govuk-button">
-                            Continue
-                        </button>
+                        {% block actions %}
+                            <button class="govuk-button">
+                                Continue
+                            </button>
+                        {% endblock %}
                     </div>
                 </div>
             </main>

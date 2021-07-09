@@ -6,6 +6,7 @@ from formtools.wizard.views import NamedUrlSessionWizardView
 
 from .forms import (
     BusinessDetailsForm,
+    EnquiryDetailsForm,
     EnquirySubjectChoices,
     EnquirySubjectForm,
     ExportCountriesForm,
@@ -27,6 +28,7 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         ("personal-details", PersonalDetailsForm),
         ("business-details", BusinessDetailsForm),
         ("sectors", SectorsForm),
+        ("enquiry-details", EnquiryDetailsForm),
     ]
 
     def get_template_names(self):
