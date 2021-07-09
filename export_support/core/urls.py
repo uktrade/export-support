@@ -21,11 +21,6 @@ urlpatterns = [
         name="enquiry-wizard",
     ),
     path(
-        "eu-export-enquiries",
-        views.EUExportEnquiriesView.as_view(),
-        name="eu-export-enquiries",
-    ),
-    path(
         "non-eu-export-enquiries",
         views.NonEUExportEnquiriesView.as_view(),
         name="non-eu-export-enquiries",

@@ -78,7 +78,9 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         return render(self.request, "core/enquiry_contact_success.html", ctx)
 
 
-class BaseEnquiriesView(TemplateView):
+class NonEUExportEnquiriesView(TemplateView):
+    template_name = "core/non_eu_export_enquiries.html"
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
@@ -137,19 +139,9 @@ class BaseEnquiriesView(TemplateView):
             ]
             ctx[
                 "heading"
-            ] = f"Sell {' and '.join(selected_components_heading_content)} {self.heading_ending}"
+            ] = f"Sell {' and '.join(selected_components_heading_content)} abroad"
 
         return ctx
-
-
-class EUExportEnquiriesView(BaseEnquiriesView):
-    heading_ending = "into the EU"
-    template_name = "core/eu_export_enquiries.html"
-
-
-class NonEUExportEnquiriesView(BaseEnquiriesView):
-    heading_ending = "abroad"
-    template_name = "core/non_eu_export_enquiries.html"
 
 
 class EnquiryContactSuccessView(TemplateView):
