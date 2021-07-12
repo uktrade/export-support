@@ -73,11 +73,13 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         return [templates[self.steps.current]]
 
     def done(self, form_list, form_dict, **kwargs):
-        cleaned_data = self.get_cleaned_data_for_step("export-destination")
-
+        export_destination_cleaned_data = self.get_cleaned_data_for_step(
+            "export-destination"
+        )
         if (
-            cleaned_data
-            and cleaned_data["export_destination"] == ExportDestinationChoices.NON_EU
+            export_destination_cleaned_data
+            and export_destination_cleaned_data["export_destination"]
+            == ExportDestinationChoices.NON_EU
         ):
             enquiry_subject_form = form_dict["enquiry-subject"]
             filter_data = enquiry_subject_form.get_filter_data()
@@ -86,7 +88,19 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
 
             return redirect(f"{url}?{params.urlencode()}")
 
+        enquiry_subject_cleaned_data = self.get_cleaned_data_for_step("enquiry-subject")
+        enquiry_subject = enquiry_subject_cleaned_data["enquiry_subject"]
+
+        display_goods = EnquirySubjectChoices.SELLING_GOODS_ABROAD in enquiry_subject
+        display_services = (
+            EnquirySubjectChoices.SELLING_SERVICES_ABROAD in enquiry_subject
+        )
+        display_subheadings = display_goods and display_services
+
         ctx = {
+            "display_goods": display_goods,
+            "display_services": display_services,
+            "display_subheadings": display_subheadings,
             "reference_number": get_reference_number(),
         }
 
