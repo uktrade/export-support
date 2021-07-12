@@ -1,4 +1,5 @@
 from django import forms
+from django.core import validators
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.text import slugify
@@ -149,6 +150,12 @@ class BusinessDetailsForm(forms.Form):
     )
     company_post_code = forms.CharField(
         label="Company post code",
+        validators=[
+            validators.RegexValidator(
+                regex=r"^(([A-Z]{1,2}[0-9][A-Z0-9]?|ASCN|STHL|TDCU|BBND|[BFS]IQQ|PCRN|TKCA) ?[0-9][A-Z]{2}|BFPO ?[0-9]{1,4}|(KY[0-9]|MSR|VG|AI)[ -]?[0-9]{4}|[A-Z]{2} ?[0-9]{2}|GE ?CX|GIR ?0A{2}|SAN ?TA1)$",
+                message="You need to add a valid postcode.",
+            ),
+        ],
         widget=forms.TextInput(
             attrs={
                 "class": "govuk-input govuk-!-width-one-half",
