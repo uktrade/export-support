@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="govuk-width-container">
-        <form method="post">
+        <form method="post" novalidate>
             {% if wizard.steps.step1 != 1 %}
                 <button class="govuk-back-link link-button" formnovalidate name="wizard_goto_step" value="{{ wizard.steps.prev }}">Back</button>
             {% endif %}
