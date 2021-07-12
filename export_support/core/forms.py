@@ -169,7 +169,7 @@ class BusinessDetailsForm(forms.Form):
 class SectorsForm(forms.Form):
     sectors = forms.MultipleChoiceField(
         choices=[(slugify(sector), sector) for sector in SECTORS],
-        label="What sector(s) does your enquiry relate to?",
+        label="Which industry or business area does your enquiry relate to?",
         required=False,
         widget=gds_fields.CheckboxSelectMultiple,
     )
@@ -215,7 +215,7 @@ class EnquiryDetailsForm(forms.Form):
         ),
     )
     question = forms.CharField(
-        label="Your question",
+        label="Your enquiry",
         widget=forms.Textarea(
             attrs={
                 "class": "govuk-textarea",
