@@ -25,12 +25,14 @@ EU_COUNTRY_CODES = [
     "PT",
     "RO",
     "SK",
+    "SI",
     "ES",
     "SE",
 ]
 
 EU_COUNTRY_CODES_TO_NAME_MAP = {
-    code: get_country_name_from_code(code) for code in EU_COUNTRY_CODES
+    code: get_country_name_from_code(code)
+    for code in sorted(EU_COUNTRY_CODES, key=get_country_name_from_code)
 }
 
 SECTORS = [
