@@ -8,3 +8,7 @@ def external_urls(request):
     ]
 
     return {key: getattr(settings, key) for key in urls_settings_keys}
+
+
+def current_path(request):
+    return {"current_path": request.get_full_path()}

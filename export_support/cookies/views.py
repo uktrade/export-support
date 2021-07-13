@@ -1,8 +1,29 @@
 from django.views.generic import TemplateView
 
+try:
+    from django.utils.http import url_has_allowed_host_and_scheme
+except ImportError:  # Django < 3.0
+    from django.utils.http import is_safe_url as url_has_allowed_host_and_scheme
+
 
 class CookiesPreferencesView(TemplateView):
     template_name = "cookies/preferences.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+
+        prev_page = self.request.GET.get("from")
+        url_is_safe = url_has_allowed_host_and_scheme(
+            url=prev_page,
+            allowed_hosts={self.request.get_host()},
+            require_https=self.request.is_secure(),
+        )
+        if prev_page and url_is_safe:
+            ctx["prev_page"] = prev_page
+        else:
+            ctx["prev_page"] = "/"
+
+        return ctx
 
 
 class CookiesDetailsView(TemplateView):

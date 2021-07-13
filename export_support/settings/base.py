@@ -85,6 +85,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "export_support.core.context_processors.external_urls",
+                "export_support.core.context_processors.current_path",
             ],
         },
     },
