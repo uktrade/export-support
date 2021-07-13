@@ -173,6 +173,45 @@ class BusinessDetailsForm(forms.Form):
     )
 
 
+class CompanyTurnoverChoices(models.IntegerChoices):
+    BELOW_85000 = 1, "Below £85,000"
+    FROM_85000_TO_499999 = 2, "£85,000 to £499,999"
+    FROM_500000_TO_49999999 = 3, "£500,000 to £49,999,999"
+    OVER_50000000 = 4, "£50,000,000+"
+    DO_NOT_KNOW = 5, "I do not know"
+    PREFER_NOT_TO_SAY = 6, "I'd prefer not to say"
+
+
+class NumberOfEmployeesChoices(models.IntegerChoices):
+    FEWER_THAN_10 = 1, "Fewer than 10"
+    FROM_10_TO_49 = 2, "10 - 49"
+    FROM_50_TO_249 = 3, "50 - 249"
+    OVER_250 = 4, "250 or more"
+    DO_NOT_KNOW = 5, "I don't know"
+    PREFER_NOT_TO_SAY = 6, "I'd prefer not to say"
+
+
+class BusinessSizeForm(forms.Form):
+    company_turnover = forms.ChoiceField(
+        choices=[("", "Please select")] + CompanyTurnoverChoices.choices,
+        label="Company turnover",
+        widget=forms.Select(
+            attrs={
+                "class": "govuk-select",
+            },
+        ),
+    )
+    number_of_employees = forms.ChoiceField(
+        choices=[("", "Please select")] + NumberOfEmployeesChoices.choices,
+        label="Number of employees",
+        widget=forms.Select(
+            attrs={
+                "class": "govuk-select",
+            },
+        ),
+    )
+
+
 class SectorsForm(forms.Form):
     sectors = forms.MultipleChoiceField(
         choices=[(slugify(sector), sector) for sector in SECTORS],

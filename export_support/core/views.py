@@ -6,6 +6,7 @@ from formtools.wizard.views import NamedUrlSessionWizardView
 
 from .forms import (
     BusinessDetailsForm,
+    BusinessSizeForm,
     EnquiryDetailsForm,
     EnquirySubjectChoices,
     EnquirySubjectForm,
@@ -53,6 +54,7 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         ("export-countries", ExportCountriesForm),
         ("personal-details", PersonalDetailsForm),
         ("business-details", BusinessDetailsForm),
+        ("business-size", BusinessSizeForm),
         ("sectors", SectorsForm),
         ("enquiry-details", EnquiryDetailsForm),
     ]
@@ -60,6 +62,7 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         "export-countries": is_eu_enquiry,
         "personal-details": is_eu_enquiry,
         "business-details": combine_conditions(is_eu_enquiry, is_company),
+        "business-size": combine_conditions(is_eu_enquiry, is_company),
         "sectors": is_eu_enquiry,
         "enquiry-details": is_eu_enquiry,
     }
