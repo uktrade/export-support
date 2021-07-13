@@ -1,3 +1,4 @@
+from directory_forms_api_client.forms import ZendeskAPIForm
 from django import forms
 from django.core import validators
 from django.core.exceptions import ValidationError
@@ -7,6 +8,14 @@ from django.utils.text import slugify
 from export_support.gds import fields as gds_fields
 
 from .consts import EU_COUNTRY_CODES_TO_NAME_MAP, SECTORS
+from .countries import get_country_name_from_code
+
+
+def coerce_choice(int_enum):
+    def _coerce_choice(choice):
+        return int_enum(int(choice))
+
+    return _coerce_choice
 
 
 class EnquirySubjectChoices(models.IntegerChoices):
@@ -16,7 +25,7 @@ class EnquirySubjectChoices(models.IntegerChoices):
 
 class EnquirySubjectForm(forms.Form):
     enquiry_subject = forms.TypedMultipleChoiceField(
-        coerce=lambda choice: EnquirySubjectChoices(int(choice)),
+        coerce=coerce_choice(EnquirySubjectChoices),
         choices=EnquirySubjectChoices.choices,
         label="What is your enquiry about?",
         widget=gds_fields.CheckboxSelectMultiple,
@@ -31,6 +40,12 @@ class EnquirySubjectForm(forms.Form):
 
         return filter_data
 
+    def get_zendesk_data(self):
+        enquiry_subject = self.cleaned_data["enquiry_subject"]
+        enquiry_subject = ", ".join(s.label for s in enquiry_subject)
+
+        return {"enquiry_subject": enquiry_subject}
+
 
 class ExportDestinationChoices(models.IntegerChoices):
     EU = 1, "Selling from the UK to an EU country"
@@ -39,11 +54,16 @@ class ExportDestinationChoices(models.IntegerChoices):
 
 class ExportDestinationForm(forms.Form):
     export_destination = forms.TypedChoiceField(
-        coerce=lambda choice: ExportDestinationChoices(int(choice)),
+        coerce=coerce_choice(ExportDestinationChoices),
         choices=ExportDestinationChoices.choices,
         label="Where are you selling to?",
         widget=gds_fields.RadioSelect,
     )
+
+    def get_zendesk_data(self):
+        export_destination = self.cleaned_data["export_destination"].label
+
+        return {"export_destination": export_destination}
 
 
 class ExportCountriesForm(forms.Form):
@@ -88,6 +108,15 @@ class ExportCountriesForm(forms.Form):
 
         return cleaned_data
 
+    def get_zendesk_data(self):
+        countries = self.cleaned_data["countries"]
+        countries = [get_country_name_from_code(code) for code in countries]
+        countries = ", ".join(countries)
+
+        return {
+            "countries": countries,
+        }
+
 
 class OnBehalfOfChoices(models.IntegerChoices):
     OWN_COMPANY = 1, "The company I own or work for"
@@ -121,11 +150,18 @@ class PersonalDetailsForm(forms.Form):
         ),
     )
     on_behalf_of = forms.TypedChoiceField(
-        coerce=lambda choice: OnBehalfOfChoices(int(choice)),
+        coerce=coerce_choice(OnBehalfOfChoices),
         choices=OnBehalfOfChoices.choices,
         label="Who is this enquiry for?",
         widget=gds_fields.RadioSelect,
     )
+
+    def get_zendesk_data(self):
+        on_behalf_of = self.cleaned_data["on_behalf_of"].label
+
+        return {
+            "on_behalf_of": on_behalf_of,
+        }
 
 
 class CompanyTypeChoices(models.IntegerChoices):
@@ -135,7 +171,7 @@ class CompanyTypeChoices(models.IntegerChoices):
 
 class BusinessDetailsForm(forms.Form):
     company_type = forms.TypedChoiceField(
-        coerce=lambda choice: CompanyTypeChoices(int(choice)),
+        coerce=coerce_choice(CompanyTypeChoices),
         choices=CompanyTypeChoices.choices,
         label="Company type",
         widget=gds_fields.RadioSelect,
@@ -172,6 +208,19 @@ class BusinessDetailsForm(forms.Form):
         ),
     )
 
+    def get_zendesk_data(self):
+        company_type = self.cleaned_data["company_type"].label
+        company_name = self.cleaned_data["company_name"]
+        company_post_code = self.cleaned_data["company_post_code"]
+        company_registration_number = self.cleaned_data["company_registration_number"]
+
+        return {
+            "company_type": company_type,
+            "company_name": company_name,
+            "company_post_code": company_post_code,
+            "company_registration_number": company_registration_number,
+        }
+
 
 class CompanyTurnoverChoices(models.IntegerChoices):
     BELOW_85000 = 1, "Below £85,000"
@@ -192,8 +241,9 @@ class NumberOfEmployeesChoices(models.IntegerChoices):
 
 
 class BusinessSizeForm(forms.Form):
-    company_turnover = forms.ChoiceField(
+    company_turnover = forms.TypedChoiceField(
         choices=[("", "Please select")] + CompanyTurnoverChoices.choices,
+        coerce=coerce_choice(CompanyTurnoverChoices),
         label="Company turnover",
         widget=forms.Select(
             attrs={
@@ -201,8 +251,9 @@ class BusinessSizeForm(forms.Form):
             },
         ),
     )
-    number_of_employees = forms.ChoiceField(
+    number_of_employees = forms.TypedChoiceField(
         choices=[("", "Please select")] + NumberOfEmployeesChoices.choices,
+        coerce=coerce_choice(NumberOfEmployeesChoices),
         label="Number of employees",
         widget=forms.Select(
             attrs={
@@ -211,10 +262,22 @@ class BusinessSizeForm(forms.Form):
         ),
     )
 
+    def get_zendesk_data(self):
+        company_turnover = self.cleaned_data["company_turnover"].label
+        number_of_employees = self.cleaned_data["number_of_employees"].label
+
+        return {
+            "company_turnover": company_turnover,
+            "number_of_employees": number_of_employees,
+        }
+
+
+SECTORS_MAP = {slugify(sector): sector for sector in SECTORS}
+
 
 class SectorsForm(forms.Form):
     sectors = forms.MultipleChoiceField(
-        choices=[(slugify(sector), sector) for sector in SECTORS],
+        choices=SECTORS_MAP.items(),
         label="Which industry or business area does your enquiry relate to?",
         required=False,
         widget=gds_fields.CheckboxSelectMultiple,
@@ -249,6 +312,16 @@ class SectorsForm(forms.Form):
 
         return cleaned_data
 
+    def get_zendesk_data(self):
+        sectors = self.cleaned_data["sectors"]
+        sectors = ", ".join(SECTORS_MAP[sector] for sector in sectors)
+        other_sector = self.cleaned_data["other"]
+
+        return {
+            "sectors": sectors,
+            "other_sector": other_sector,
+        }
+
 
 class EnquiryDetailsForm(forms.Form):
     nature_of_enquiry = forms.CharField(
@@ -269,3 +342,30 @@ class EnquiryDetailsForm(forms.Form):
             },
         ),
     )
+
+    def get_zendesk_data(self):
+        nature_of_enquiry = self.cleaned_data["nature_of_enquiry"]
+        question = self.cleaned_data["question"]
+
+        return {
+            "nature_of_enquiry": nature_of_enquiry,
+            "question": question,
+        }
+
+
+class ZendeskForm(ZendeskAPIForm):
+    enquiry_subject = forms.CharField()
+    export_destination = forms.CharField()
+    countries = forms.CharField()
+    on_behalf_of = forms.CharField()
+    company_type = forms.CharField(required=False)
+    company_name = forms.CharField(required=False)
+    company_post_code = forms.CharField(required=False)
+    company_registration_number = forms.CharField(required=False)
+    company_turnover = forms.CharField(required=False)
+    number_of_employees = forms.CharField(required=False)
+    sectors = forms.CharField()
+    other_sector = forms.CharField(required=False)
+    nature_of_enquiry = forms.CharField(required=False)
+    question = forms.CharField()
+    reference_number = forms.CharField()

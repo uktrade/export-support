@@ -1,3 +1,4 @@
+from directory_forms_api_client import helpers
 from django.conf import settings
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
@@ -16,6 +17,7 @@ from .forms import (
     OnBehalfOfChoices,
     PersonalDetailsForm,
     SectorsForm,
+    ZendeskForm,
 )
 from .utils import dict_to_query_dict, get_reference_number
 
@@ -75,6 +77,49 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
 
         return [templates[self.steps.current]]
 
+    def send_to_zendesk(self, reference_number, form_list):
+        form_data = {
+            "reference_number": reference_number,
+        }
+        for form in form_list:
+            form_data.update(form.get_zendesk_data())
+
+        zendesk_form = ZendeskForm(data=form_data)
+        if not zendesk_form.is_valid():
+            import ipdb
+
+            ipdb.set_trace()
+        assert zendesk_form.is_valid()
+
+        personal_details_cleaned_data = self.get_cleaned_data_for_step(
+            "personal-details"
+        )
+        first_name = personal_details_cleaned_data["first_name"]
+        last_name = personal_details_cleaned_data["last_name"]
+        full_name = f"{first_name} {last_name}"
+        email_address = personal_details_cleaned_data["email"]
+
+        enquiry_details_cleaned_data = self.get_cleaned_data_for_step("enquiry-details")
+        subject = enquiry_details_cleaned_data["nature_of_enquiry"] or "N/A"
+        question = enquiry_details_cleaned_data["question"]
+
+        spam_control = helpers.SpamControl(contents=question)
+        sender = helpers.Sender(
+            country_code="",
+            email_address=email_address,
+        )
+
+        zendesk_form.save(
+            form_url=settings.FORM_URL,
+            full_name=full_name,
+            email_address=email_address,
+            subject=subject,
+            service_name=settings.ZENDESK_SERVICE_NAME,
+            subdomain=settings.ZENDESK_SUBDOMAIN,
+            spam_control=spam_control,
+            sender=sender,
+        )
+
     def done(self, form_list, form_dict, **kwargs):
         export_destination_cleaned_data = self.get_cleaned_data_for_step(
             "export-destination"
@@ -100,12 +145,16 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         )
         display_subheadings = display_goods and display_services
 
+        reference_number = get_reference_number()
+
         ctx = {
             "display_goods": display_goods,
             "display_services": display_services,
             "display_subheadings": display_subheadings,
-            "reference_number": get_reference_number(),
+            "reference_number": reference_number,
         }
+
+        self.send_to_zendesk(reference_number, form_list)
 
         return render(self.request, "core/enquiry_contact_success.html", ctx)
 
