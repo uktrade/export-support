@@ -101,7 +101,7 @@ class PersonalDetailsForm(forms.Form):
         widget=forms.TextInput(
             attrs={
                 "class": "govuk-input govuk-!-width-one-half",
-            }
+            },
         ),
     )
     last_name = forms.CharField(
@@ -109,7 +109,7 @@ class PersonalDetailsForm(forms.Form):
         widget=forms.TextInput(
             attrs={
                 "class": "govuk-input govuk-!-width-one-half",
-            }
+            },
         ),
     )
     email = forms.EmailField(
@@ -117,7 +117,7 @@ class PersonalDetailsForm(forms.Form):
         widget=forms.TextInput(
             attrs={
                 "class": "govuk-input govuk-!-width-one-half",
-            }
+            },
         ),
     )
     on_behalf_of = forms.TypedChoiceField(
@@ -145,7 +145,7 @@ class BusinessDetailsForm(forms.Form):
         widget=forms.TextInput(
             attrs={
                 "class": "govuk-input govuk-!-width-one-half",
-            }
+            },
         ),
     )
     company_post_code = forms.CharField(
@@ -159,7 +159,7 @@ class BusinessDetailsForm(forms.Form):
         widget=forms.TextInput(
             attrs={
                 "class": "govuk-input govuk-!-width-one-half",
-            }
+            },
         ),
     )
     company_registration_number = forms.CharField(
@@ -168,7 +168,7 @@ class BusinessDetailsForm(forms.Form):
         widget=forms.TextInput(
             attrs={
                 "class": "govuk-input govuk-!-width-one-half",
-            }
+            },
         ),
     )
 
@@ -232,7 +232,7 @@ class SectorsForm(forms.Form):
         widget=forms.TextInput(
             attrs={
                 "class": "govuk-input govuk-!-width-three-quarters",
-            }
+            },
         ),
     )
 
