@@ -1,6 +1,6 @@
 from directory_forms_api_client import helpers
 from django.conf import settings
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import RedirectView, TemplateView
 from formtools.wizard.views import NamedUrlSessionWizardView
@@ -12,8 +12,6 @@ from .forms import (
     EnquirySubjectChoices,
     EnquirySubjectForm,
     ExportCountriesForm,
-    ExportDestinationChoices,
-    ExportDestinationForm,
     OnBehalfOfChoices,
     PersonalDetailsForm,
     SectorsForm,
@@ -24,14 +22,6 @@ from .utils import dict_to_query_dict, get_reference_number
 
 class IndexView(RedirectView):
     url = reverse_lazy("core:enquiry-wizard")
-
-
-def is_eu_enquiry(wizard):
-    cleaned_data = wizard.get_cleaned_data_for_step("export-destination")
-    if not cleaned_data:
-        return True
-
-    return cleaned_data["export_destination"] == ExportDestinationChoices.EU
 
 
 def is_company(wizard):
@@ -52,7 +42,6 @@ def combine_conditions(*condition_funcs):
 class EnquiryWizardView(NamedUrlSessionWizardView):
     form_list = [
         ("enquiry-subject", EnquirySubjectForm),
-        ("export-destination", ExportDestinationForm),
         ("export-countries", ExportCountriesForm),
         ("personal-details", PersonalDetailsForm),
         ("business-details", BusinessDetailsForm),
@@ -61,12 +50,8 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         ("enquiry-details", EnquiryDetailsForm),
     ]
     condition_dict = {
-        "export-countries": is_eu_enquiry,
-        "personal-details": is_eu_enquiry,
-        "business-details": combine_conditions(is_eu_enquiry, is_company),
-        "business-size": combine_conditions(is_eu_enquiry, is_company),
-        "sectors": is_eu_enquiry,
-        "enquiry-details": is_eu_enquiry,
+        "business-details": is_company,
+        "business-size": is_company,
     }
 
     def get_template_names(self):
@@ -85,10 +70,6 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
             form_data.update(form.get_zendesk_data())
 
         zendesk_form = ZendeskForm(data=form_data)
-        if not zendesk_form.is_valid():
-            import ipdb
-
-            ipdb.set_trace()
         assert zendesk_form.is_valid()
 
         personal_details_cleaned_data = self.get_cleaned_data_for_step(
@@ -120,22 +101,27 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
             sender=sender,
         )
 
-    def done(self, form_list, form_dict, **kwargs):
-        export_destination_cleaned_data = self.get_cleaned_data_for_step(
-            "export-destination"
-        )
-        if (
-            export_destination_cleaned_data
-            and export_destination_cleaned_data["export_destination"]
-            == ExportDestinationChoices.NON_EU
-        ):
-            enquiry_subject_form = form_dict["enquiry-subject"]
-            filter_data = enquiry_subject_form.get_filter_data()
+    def get_context_data(self, form, **kwargs):
+        ctx = super().get_context_data(form=form, **kwargs)
+
+        if self.steps.current == "export-countries":
+            enquiry_subject_form = self.get_form(
+                step="enquiry-subject",
+                data=self.storage.get_step_data("enquiry-subject"),
+            )
+            if enquiry_subject_form.is_valid():
+                filter_data = enquiry_subject_form.get_filter_data()
+            else:
+                filter_data = {}
+
             params = dict_to_query_dict(filter_data)
-            url = reverse("core:non-eu-export-enquiries")
+            guidance_url = reverse("core:non-eu-export-enquiries")
 
-            return redirect(f"{url}?{params.urlencode()}")
+            ctx["guidance_url"] = f"{guidance_url}?{params.urlencode()}"
 
+        return ctx
+
+    def done(self, form_list, form_dict, **kwargs):
         enquiry_subject_cleaned_data = self.get_cleaned_data_for_step("enquiry-subject")
         enquiry_subject = enquiry_subject_cleaned_data["enquiry_subject"]
 

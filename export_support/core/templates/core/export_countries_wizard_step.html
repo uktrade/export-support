@@ -1,7 +1,8 @@
 {% extends "core/wizard_step.html" %}
 
 {% block fields %}
-    <div class="govuk-form-group">
+    {{ enquiry_subject }}
+    <div class="govuk-form-group govuk-!-margin-bottom-2">
         <fieldset class="govuk-fieldset" aria-describedby="export-country-hint" data-module="select-all" data-select-all-id="{{ form.select_all.id_for_label }}">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                 <h1 class="govuk-fieldset__heading">
@@ -16,6 +17,9 @@
             <p class="govuk-body">
                 Telling us where you are selling to will allow us to provide country specific information.
             </p>
+            <p class="govuk-body">
+                <strong>We can currently take enquiries regarding export to the countries listed below.</strong> If your export destination is not listed, you can <a class="govuk-link" href="{{ guidance_url }}">use existing online guidance</a> or <a class="govuk-link" href="{{ GREAT_OFFICE_FINDER_URL }}">contact your local trade office</a>.
+            </p>
             <div id="export-country-hint" class="govuk-hint">
                 Select all that apply.
             </div>
@@ -27,5 +31,8 @@
             </div>
             {{ form.countries }}
         </fieldset>
+    </div>
+    <div class="form-addendum govuk-!-margin-bottom-4">
+        If your export destination is not listed, you can <a class="govuk-link" href="{{ guidance_url }}">use existing online guidance</a> or <a class="govuk-link" href="{{ GREAT_OFFICE_FINDER_URL }}">contact your local trade office</a>.
     </div>
 {% endblock %}

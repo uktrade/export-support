@@ -7,7 +7,7 @@ from django.utils.text import slugify
 
 from export_support.gds import fields as gds_fields
 
-from .consts import EU_COUNTRY_CODES_TO_NAME_MAP, SECTORS
+from .consts import ENQUIRY_COUNTRY_CODES_TO_NAME_MAP, SECTORS
 from .countries import get_country_name_from_code
 
 
@@ -47,25 +47,6 @@ class EnquirySubjectForm(forms.Form):
         return {"enquiry_subject": enquiry_subject}
 
 
-class ExportDestinationChoices(models.IntegerChoices):
-    EU = 1, "Selling from the UK to an EU country"
-    NON_EU = 2, "Selling from the UK to a non-EU country"
-
-
-class ExportDestinationForm(forms.Form):
-    export_destination = forms.TypedChoiceField(
-        coerce=coerce_choice(ExportDestinationChoices),
-        choices=ExportDestinationChoices.choices,
-        label="Where are you selling to?",
-        widget=gds_fields.RadioSelect,
-    )
-
-    def get_zendesk_data(self):
-        export_destination = self.cleaned_data["export_destination"].label
-
-        return {"export_destination": export_destination}
-
-
 class ExportCountriesForm(forms.Form):
     select_all = forms.BooleanField(
         label="Select all",
@@ -77,7 +58,7 @@ class ExportCountriesForm(forms.Form):
     countries = forms.MultipleChoiceField(
         choices=[
             (code, country_name)
-            for code, country_name in EU_COUNTRY_CODES_TO_NAME_MAP.items()
+            for code, country_name in ENQUIRY_COUNTRY_CODES_TO_NAME_MAP.items()
         ],
         label="Which country are you selling to?",
         required=False,
@@ -119,7 +100,7 @@ class ExportCountriesForm(forms.Form):
 
 
 class OnBehalfOfChoices(models.IntegerChoices):
-    OWN_COMPANY = 1, "The company I own or work for"
+    OWN_COMPANY = 1, "The business I own or work for"
     ANOTHER_COMPANY = 2, "I am asking on behalf of another company"
     NOT_A_COMPANY = 3, "This enquiry does not relate to a company"
 
@@ -142,6 +123,7 @@ class PersonalDetailsForm(forms.Form):
         ),
     )
     email = forms.EmailField(
+        help_text="We'll only use this to send you a receipt",
         label="Email address",
         widget=forms.TextInput(
             attrs={
@@ -173,11 +155,11 @@ class BusinessDetailsForm(forms.Form):
     company_type = forms.TypedChoiceField(
         coerce=coerce_choice(CompanyTypeChoices),
         choices=CompanyTypeChoices.choices,
-        label="Company type",
+        label="Business type",
         widget=gds_fields.RadioSelect,
     )
     company_name = forms.CharField(
-        label="Company or organisation name",
+        label="Business name",
         widget=forms.TextInput(
             attrs={
                 "class": "govuk-input govuk-!-width-one-half",
@@ -185,7 +167,7 @@ class BusinessDetailsForm(forms.Form):
         ),
     )
     company_post_code = forms.CharField(
-        label="Company post code",
+        label="Business post code",
         validators=[
             validators.RegexValidator(
                 regex=r"^(([A-Z]{1,2}[0-9][A-Z0-9]?|ASCN|STHL|TDCU|BBND|[BFS]IQQ|PCRN|TKCA) ?[0-9][A-Z]{2}|BFPO ?[0-9]{1,4}|(KY[0-9]|MSR|VG|AI)[ -]?[0-9]{4}|[A-Z]{2} ?[0-9]{2}|GE ?CX|GIR ?0A{2}|SAN ?TA1)$",
@@ -254,7 +236,7 @@ class BusinessSizeForm(forms.Form):
     number_of_employees = forms.TypedChoiceField(
         choices=[("", "Please select")] + NumberOfEmployeesChoices.choices,
         coerce=coerce_choice(NumberOfEmployeesChoices),
-        label="Number of employees",
+        label="Number of UK employees",
         widget=forms.Select(
             attrs={
                 "class": "govuk-select",
@@ -325,7 +307,7 @@ class SectorsForm(forms.Form):
 
 class EnquiryDetailsForm(forms.Form):
     nature_of_enquiry = forms.CharField(
-        label="Nature of enquiry",
+        label="Please describe the good(s) or service(s) the enquiry is about",
         required=False,
         widget=forms.TextInput(
             attrs={
@@ -355,7 +337,6 @@ class EnquiryDetailsForm(forms.Form):
 
 class ZendeskForm(ZendeskAPIForm):
     enquiry_subject = forms.CharField()
-    export_destination = forms.CharField()
     countries = forms.CharField()
     on_behalf_of = forms.CharField()
     company_type = forms.CharField(required=False)

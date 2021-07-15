@@ -9,5 +9,10 @@
             </span>
         {% endfor %}
     {% endif %}
+    {% if field.help_text %}
+        <div class="govuk-hint">
+            {{ field.help_text }}
+        </div>
+    {% endif %}
     {{ field }}
 </div>

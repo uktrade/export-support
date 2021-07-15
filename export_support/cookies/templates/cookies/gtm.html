@@ -2,29 +2,26 @@
 <script>
   // Sourced from https://github.com/alphagov/govuk-design-system/blob/c641c14f043ac8b84a178b4e6260c1f8129a27a8/views/partials/_tracking-head.njk
   // Normalize doNotTrack implementations, see https://caniuse.com/#feat=do-not-track
-  var DO_NOT_TRACK_ENABLED = (
-    navigator.doNotTrack === '1' ||
-    navigator.doNotTrack === 'yes' || // Firefox 31 and below
-    navigator.msDoNotTrack === '1' || // IE 9 - 10
-    window.doNotTrack === '1' // IE 11 / Edge 16 and below
-  )
+  var DO_NOT_TRACK_ENABLED =
+    navigator.doNotTrack === "1" ||
+    navigator.doNotTrack === "yes" || // Firefox 31 and below
+    navigator.msDoNotTrack === "1" || // IE 9 - 10
+    window.doNotTrack === "1"; // IE 11 / Edge 16 and below
   // If the user has enabled 'DoNotTrack', we should not load any tracking.
   if (!DO_NOT_TRACK_ENABLED && !window.__TESTS_RUNNING) {
     (function (w, d, s, l, i) {
-      w[l] = w[l] || []
-      w[l].push({
-        'gtm.start': new Date().getTime(),
-        event: 'gtm.js'
-      })
-
-      var f = d.getElementsByTagName(s)[0]
-      var j = d.createElement(s)
-      var dl = l != 'dataLayer' ? '&l=' + l : ''
-
-      j.async = true
-      j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl
-      f.parentNode.insertBefore(j, f)
-
-    })(window, document, 'script', 'dataLayer', '{{ GTM_CONTAINER_ID }}')
+      w[l] = w[l] || [];
+      w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+      var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s),
+        dl = l != "dataLayer" ? "&l=" + l : "";
+      j.async = true;
+      j.src =
+        "https://www.googletagmanager.com/gtm.js?id=" +
+        i +
+        dl +
+        "&gtm_auth={{ GTM_AUTH }}&gtm_preview=env-3&gtm_cookies_win=x";
+      f.parentNode.insertBefore(j, f);
+    })(window, document, "script", "dataLayer", "{{ GTM_ID }}");
   }
 </script>

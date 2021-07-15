@@ -32,3 +32,14 @@
   color: govuk-colour("red");
   font-weight: normal;
 }
+
+.form-addendum {
+  @include govuk-font(19, bold);
+  border-bottom: 1px solid $govuk-border-colour;
+  border-top: 1px solid $govuk-border-colour;
+  padding: govuk-spacing(4) 0;
+
+  p {
+    margin: 0;
+  }
+}

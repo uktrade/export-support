@@ -178,7 +178,8 @@ CSRF_COOKIE_AGE = 31 * 24 * 60 * 60
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
-GTM_GA_ID = env.str("GTM_GA_ID", None)
+GTM_AUTH = env.str("GTM_AUTH", None)
+GTM_ID = env.str("GTM_ID", None)
 
 REFERENCE_NUMBER_ALPHABET = string.ascii_uppercase + string.digits
 REFERENCE_NUMBER_SIZE = 8
