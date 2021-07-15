@@ -159,9 +159,17 @@ GOV_UK_EXPORT_GOODS_URL = "https://www.gov.uk/export-goods"
 GREAT_OFFICE_FINDER_URL = "https://www.great.gov.uk/contact/office-finder/"
 
 if ENABLE_CSP:
-    CSP_DEFAULT_SRC = ("'self'",)
-    CSP_SCRIPT_SRC = ("'self'",)
-    CSP_SCRIPT_SRC_ELEM = ("'self'",)
+    _GOOGLE_DOMAINS = (
+        "www.googletagmanager.com",
+        "www.google-analytics.com",
+        "stats.g.doubleclick.net",
+        "www.google.com",
+        "www.google.co.uk",
+    )
+
+    CSP_DEFAULT_SRC = ("'self'", *_GOOGLE_DOMAINS)
+    CSP_SCRIPT_SRC = ("'self'", *_GOOGLE_DOMAINS)
+    CSP_SCRIPT_SRC_ELEM = ("'self'", *_GOOGLE_DOMAINS)
     CSP_STYLE_SRC_ATTR = ("'self'",)
     CSP_INCLUDE_NONCE_IN = (
         "script-src",
