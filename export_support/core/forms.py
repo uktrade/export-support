@@ -76,7 +76,7 @@ class ExportCountriesForm(forms.Form):
 
 
 class OnBehalfOfChoices(models.IntegerChoices):
-    OWN_COMPANY = 1, "The company I own or work for"
+    OWN_COMPANY = 1, "The business I own or work for"
     ANOTHER_COMPANY = 2, "I am asking on behalf of another company"
     NOT_A_COMPANY = 3, "This enquiry does not relate to a company"
 
@@ -99,6 +99,7 @@ class PersonalDetailsForm(forms.Form):
         ),
     )
     email = forms.EmailField(
+        help_text="We'll only use this to send you a receipt",
         label="Email address",
         widget=forms.TextInput(
             attrs={
@@ -123,11 +124,11 @@ class BusinessDetailsForm(forms.Form):
     company_type = forms.TypedChoiceField(
         coerce=lambda choice: CompanyTypeChoices(int(choice)),
         choices=CompanyTypeChoices.choices,
-        label="Company type",
+        label="Business type",
         widget=gds_fields.RadioSelect,
     )
     company_name = forms.CharField(
-        label="Company or organisation name",
+        label="Business name",
         widget=forms.TextInput(
             attrs={
                 "class": "govuk-input govuk-!-width-one-half",
@@ -135,7 +136,7 @@ class BusinessDetailsForm(forms.Form):
         ),
     )
     company_post_code = forms.CharField(
-        label="Company post code",
+        label="Business post code",
         validators=[
             validators.RegexValidator(
                 regex=r"^(([A-Z]{1,2}[0-9][A-Z0-9]?|ASCN|STHL|TDCU|BBND|[BFS]IQQ|PCRN|TKCA) ?[0-9][A-Z]{2}|BFPO ?[0-9]{1,4}|(KY[0-9]|MSR|VG|AI)[ -]?[0-9]{4}|[A-Z]{2} ?[0-9]{2}|GE ?CX|GIR ?0A{2}|SAN ?TA1)$",
@@ -180,7 +181,7 @@ class NumberOfEmployeesChoices(models.IntegerChoices):
 class BusinessSizeForm(forms.Form):
     company_turnover = forms.ChoiceField(
         choices=[("", "Please select")] + CompanyTurnoverChoices.choices,
-        label="Company turnover",
+        label="Business turnover",
         widget=forms.Select(
             attrs={
                 "class": "govuk-select",
@@ -189,7 +190,7 @@ class BusinessSizeForm(forms.Form):
     )
     number_of_employees = forms.ChoiceField(
         choices=[("", "Please select")] + NumberOfEmployeesChoices.choices,
-        label="Number of employees",
+        label="Number of UK employees",
         widget=forms.Select(
             attrs={
                 "class": "govuk-select",
@@ -238,7 +239,7 @@ class SectorsForm(forms.Form):
 
 class EnquiryDetailsForm(forms.Form):
     nature_of_enquiry = forms.CharField(
-        label="Nature of enquiry",
+        label="Please describe the good(s) or service(s) the enquiry is about",
         required=False,
         widget=forms.TextInput(
             attrs={
