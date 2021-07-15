@@ -1,8 +1,11 @@
 from .countries import get_country_name_from_code
 
-EU_COUNTRY_CODES = [
+ENQUIRY_COUNTRY_CODES = [
+    "AL",
+    "AD",
     "AT",
     "BE",
+    "BA",
     "BG",
     "HR",
     "CY",
@@ -14,25 +17,38 @@ EU_COUNTRY_CODES = [
     "DE",
     "GR",
     "HU",
+    "IS",
     "IE",
+    "IL",
     "IT",
+    "XK",
     "LV",
+    "LI",
     "LT",
     "LU",
     "MT",
+    "MC",
+    "ME",
     "NL",
+    "MK",
+    "NO",
     "PL",
     "PT",
     "RO",
+    "SM",
+    "RS",
     "SK",
     "SI",
     "ES",
     "SE",
+    "CH",
+    "TR",
+    "VA",
 ]
 
-EU_COUNTRY_CODES_TO_NAME_MAP = {
+ENQUIRY_COUNTRY_CODES_TO_NAME_MAP = {
     code: get_country_name_from_code(code)
-    for code in sorted(EU_COUNTRY_CODES, key=get_country_name_from_code)
+    for code in sorted(ENQUIRY_COUNTRY_CODES, key=get_country_name_from_code)
 }
 
 SECTORS = [

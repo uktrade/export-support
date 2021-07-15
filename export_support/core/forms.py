@@ -6,7 +6,7 @@ from django.utils.text import slugify
 
 from export_support.gds import fields as gds_fields
 
-from .consts import EU_COUNTRY_CODES_TO_NAME_MAP, SECTORS
+from .consts import ENQUIRY_COUNTRY_CODES_TO_NAME_MAP, SECTORS
 
 
 class EnquirySubjectChoices(models.IntegerChoices):
@@ -32,20 +32,6 @@ class EnquirySubjectForm(forms.Form):
         return filter_data
 
 
-class ExportDestinationChoices(models.IntegerChoices):
-    EU = 1, "Selling from the UK to an EU country"
-    NON_EU = 2, "Selling from the UK to a non-EU country"
-
-
-class ExportDestinationForm(forms.Form):
-    export_destination = forms.TypedChoiceField(
-        coerce=lambda choice: ExportDestinationChoices(int(choice)),
-        choices=ExportDestinationChoices.choices,
-        label="Where are you selling to?",
-        widget=gds_fields.RadioSelect,
-    )
-
-
 class ExportCountriesForm(forms.Form):
     select_all = forms.BooleanField(
         label="Select all",
@@ -57,7 +43,7 @@ class ExportCountriesForm(forms.Form):
     countries = forms.MultipleChoiceField(
         choices=[
             (code, country_name)
-            for code, country_name in EU_COUNTRY_CODES_TO_NAME_MAP.items()
+            for code, country_name in ENQUIRY_COUNTRY_CODES_TO_NAME_MAP.items()
         ],
         label="Which country are you selling to?",
         required=False,
