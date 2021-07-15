@@ -163,7 +163,10 @@ if ENABLE_CSP:
     CSP_SCRIPT_SRC = ("'self'",)
     CSP_SCRIPT_SRC_ELEM = ("'self'",)
     CSP_STYLE_SRC_ATTR = ("'self'",)
-    CSP_INCLUDE_NONCE_IN = ("script-src-elem",)
+    CSP_INCLUDE_NONCE_IN = (
+        "script-src",
+        "script-src-elem",
+    )
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_COOKIE_SECURE = True
