@@ -86,6 +86,7 @@ class PersonalDetailsForm(forms.Form):
         label="First name",
         widget=forms.TextInput(
             attrs={
+                "autocomplete": "given-name",
                 "class": "govuk-input govuk-!-width-one-half",
             },
         ),
@@ -94,6 +95,7 @@ class PersonalDetailsForm(forms.Form):
         label="Last name",
         widget=forms.TextInput(
             attrs={
+                "autocomplete": "family-name",
                 "class": "govuk-input govuk-!-width-one-half",
             },
         ),
@@ -103,6 +105,7 @@ class PersonalDetailsForm(forms.Form):
         label="Email address",
         widget=forms.TextInput(
             attrs={
+                "autocomplete": "email",
                 "class": "govuk-input govuk-!-width-one-half",
             },
         ),
@@ -131,6 +134,7 @@ class BusinessDetailsForm(forms.Form):
         label="Business name",
         widget=forms.TextInput(
             attrs={
+                "autocomplete": "organization",
                 "class": "govuk-input govuk-!-width-one-half",
             },
         ),
@@ -145,6 +149,7 @@ class BusinessDetailsForm(forms.Form):
         ],
         widget=forms.TextInput(
             attrs={
+                "autocomplete": "postal-code",
                 "class": "govuk-input govuk-!-width-one-half",
             },
         ),
