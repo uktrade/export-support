@@ -20,8 +20,3 @@ serve:
 
 fmt:
 	pre-commit run -a
-
-deploy: clean
-	npm run build
-	cf target -o dit-staging -s export-support-dev
-	cf push export-support-dev
