@@ -67,7 +67,9 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
             "reference_number": reference_number,
         }
         for form in form_list:
-            form_data.update(form.get_zendesk_data())
+            for field_name, field_value in form.get_zendesk_data().items():
+                field_name = ZendeskForm.FIELD_MAPPING.get(field_name, field_name)
+                form_data[field_name] = field_value
 
         zendesk_form = ZendeskForm(data=form_data)
         assert zendesk_form.is_valid()

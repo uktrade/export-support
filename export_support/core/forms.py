@@ -336,6 +336,10 @@ class EnquiryDetailsForm(forms.Form):
 
 
 class ZendeskForm(ZendeskAPIForm):
+    FIELD_MAPPING = {
+        "question": "aaa_question",
+    }
+
     enquiry_subject = forms.CharField()
     countries = forms.CharField()
     on_behalf_of = forms.CharField()
@@ -348,5 +352,5 @@ class ZendeskForm(ZendeskAPIForm):
     sectors = forms.CharField()
     other_sector = forms.CharField(required=False)
     nature_of_enquiry = forms.CharField(required=False)
-    question = forms.CharField()
+    aaa_question = forms.CharField()
     reference_number = forms.CharField()
