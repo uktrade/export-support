@@ -8,7 +8,8 @@
   },
   "scripts": {
     "build": "webpack --config=webpack.config.js --mode=production",
-    "watch": "webpack --config=webpack.config.js --mode=development --watch"
+    "watch": "webpack --config=webpack.config.js --mode=development --watch",
+    "heroku-postbuild": "npm run build"
   },
   "dependencies": {
     "copy-webpack-plugin": "^9.0.0",
