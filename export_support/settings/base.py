@@ -159,24 +159,40 @@ GOV_UK_EXPORT_GOODS_URL = "https://www.gov.uk/export-goods"
 GREAT_OFFICE_FINDER_URL = "https://www.great.gov.uk/contact/office-finder/"
 
 if ENABLE_CSP:
-    CSP_DEFAULT_SRC = ("'self'",)
-    CSP_SCRIPT_SRC = ("'self'",)
-    CSP_SCRIPT_SRC_ELEM = ("'self'",)
+    _GOOGLE_DOMAINS = (
+        "www.googletagmanager.com",
+        "www.google-analytics.com",
+        "stats.g.doubleclick.net",
+        "www.google.com",
+        "www.google.co.uk",
+    )
+
+    CSP_DEFAULT_SRC = ("'self'", *_GOOGLE_DOMAINS)
+    CSP_SCRIPT_SRC = ("'self'", *_GOOGLE_DOMAINS)
+    CSP_SCRIPT_SRC_ELEM = ("'self'", *_GOOGLE_DOMAINS)
     CSP_STYLE_SRC_ATTR = ("'self'",)
-    CSP_INCLUDE_NONCE_IN = ("script-src-elem",)
+    CSP_INCLUDE_NONCE_IN = (
+        "script-src",
+        "script-src-elem",
+    )
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_SAMESITE = "Strict"
 
-CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
 CSRF_COOKIE_AGE = 31 * 24 * 60 * 60
 
+ENABLE_SECURE_COOKIES = env.bool("ENABLE_SECURE_COOKIES", True)
+if ENABLE_SECURE_COOKIES:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
+
+SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", True)
 
 GTM_AUTH = env.str("GTM_AUTH", None)
 GTM_ID = env.str("GTM_ID", None)
