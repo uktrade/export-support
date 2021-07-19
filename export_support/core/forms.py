@@ -77,8 +77,8 @@ class ExportCountriesForm(forms.Form):
 
 class OnBehalfOfChoices(models.IntegerChoices):
     OWN_COMPANY = 1, "The business I own or work for"
-    ANOTHER_COMPANY = 2, "I am asking on behalf of another company"
-    NOT_A_COMPANY = 3, "This enquiry does not relate to a company"
+    ANOTHER_COMPANY = 2, "I am asking on behalf of another business"
+    NOT_A_COMPANY = 3, "This enquiry does not relate to a business"
 
 
 class PersonalDetailsForm(forms.Form):
@@ -140,7 +140,7 @@ class BusinessDetailsForm(forms.Form):
         ),
     )
     company_post_code = forms.CharField(
-        label="Business post code",
+        label="Business postcode",
         validators=[
             validators.RegexValidator(
                 regex=r"^(([A-Z]{1,2}[0-9][A-Z0-9]?|ASCN|STHL|TDCU|BBND|[BFS]IQQ|PCRN|TKCA) ?[0-9][A-Z]{2}|BFPO ?[0-9]{1,4}|(KY[0-9]|MSR|VG|AI)[ -]?[0-9]{4}|[A-Z]{2} ?[0-9]{2}|GE ?CX|GIR ?0A{2}|SAN ?TA1)$",
@@ -170,7 +170,7 @@ class CompanyTurnoverChoices(models.IntegerChoices):
     FROM_85000_TO_499999 = 2, "£85,000 to £499,999"
     FROM_500000_TO_49999999 = 3, "£500,000 to £49,999,999"
     OVER_50000000 = 4, "£50,000,000+"
-    DO_NOT_KNOW = 5, "I do not know"
+    DO_NOT_KNOW = 5, "I don't know"
     PREFER_NOT_TO_SAY = 6, "I'd prefer not to say"
 
 
