@@ -194,8 +194,10 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 
 SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", True)
 
-GTM_AUTH = env.str("GTM_AUTH", None)
 GTM_ID = env.str("GTM_ID", None)
+GTM_AUTH = env.str("GTM_AUTH", None)
+GTM_PREVIEW = env.str("GTM_PREVIEW", None)
+GTM_COOKIES_WIN = env.str("GTM_COOKIES_WIN", None)
 
 REFERENCE_NUMBER_ALPHABET = string.ascii_uppercase + string.digits
 REFERENCE_NUMBER_SIZE = 8
