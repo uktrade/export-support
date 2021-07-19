@@ -72,7 +72,7 @@ SECTORS = [
     "Medical devices and equipment",
     "Mining",
     "Pharmaceuticals and biotechnology",
-    "Railyways",
+    "Railways",
     "Security",
     "Space",
     "Sports economy",
