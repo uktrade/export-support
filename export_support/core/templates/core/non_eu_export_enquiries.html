@@ -283,34 +283,18 @@
                     </div>
                 </div>
             {% endif %}
-            {% if should_display_export_goods and should_display_export_services %}
-                <div class="govuk-grid-row govuk-!-margin-top-4">
-                    <div class="govuk-grid-column-full">
-                        <div class="information-link-panel">
-                            <h2 class="information-link-panel__heading">If you need more information on selling goods abroad</h2>
-                            <p class="information-link-panel__body">We have local trade offices based around the UK.</p>
-                            <p class="information-link-panel__body">Within each office you can contact an international trade advisor.</p>
-                            <p class="information-link-panel__body govuk-!-margin-bottom-4">An international trade advisor will be able to help you, if your enquiry relates to exporting goods.</p>
-                            <a href="{{ GREAT_OFFICE_FINDER_URL }}" target="_blank" role="button" draggable="false" class="govuk-button govuk-!-margin-bottom-0" data-module="govuk-button">
-                                Find your local trade office
-                            </a>
-                        </div>
+            <div class="govuk-grid-row govuk-!-margin-top-4">
+                <div class="govuk-grid-column-full">
+                    <div class="information-link-panel">
+                        <h2 class="information-link-panel__heading">If you need more information</h2>
+                        <p class="information-link-panel__body">We have local trade offices based around the UK.</p>
+                        <p class="information-link-panel__body govuk-!-margin-bottom-4">Within each office you can contact an international trade advisor.</p>
+                        <a href="{{ GREAT_OFFICE_FINDER_URL }}" target="_blank" role="button" draggable="false" class="govuk-button govuk-!-margin-bottom-0" data-module="govuk-button">
+                            Find your local trade office
+                        </a>
                     </div>
                 </div>
-            {% elif should_display_export_goods %}
-                <div class="govuk-grid-row govuk-!-margin-top-4">
-                    <div class="govuk-grid-column-full">
-                        <div class="information-link-panel">
-                            <h2 class="information-link-panel__heading">If you need more information</h2>
-                            <p class="information-link-panel__body">We have local trade offices based around the UK.</p>
-                            <p class="information-link-panel__body govuk-!-margin-bottom-4">Within each office you can contact an international trade advisor.</p>
-                            <a href="{{ GREAT_OFFICE_FINDER_URL }}" target="_blank" role="button" draggable="false" class="govuk-button govuk-!-margin-bottom-0" data-module="govuk-button">
-                                Find your local trade office
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
+            </div>
         </main>
     </div>
 {% endblock %}
