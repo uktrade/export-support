@@ -27,7 +27,6 @@ const initOtherInput = () => {
     toggleInputWrapper(checkbox, textInputWrapper);
 
     checkbox.addEventListener("change", (evt) => {
-      console.log("Changing", checkbox, textInputWrapper);
       toggleInputWrapper(checkbox, textInputWrapper);
     });
   });
