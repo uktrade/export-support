@@ -1,3 +1,5 @@
+import re
+
 from directory_forms_api_client.forms import ZendeskAPIForm
 from django import forms
 from django.core import validators
@@ -174,7 +176,10 @@ class BusinessDetailsForm(forms.Form):
         label="Business postcode",
         validators=[
             validators.RegexValidator(
-                regex=r"^(([A-Z]{1,2}[0-9][A-Z0-9]?|ASCN|STHL|TDCU|BBND|[BFS]IQQ|PCRN|TKCA) ?[0-9][A-Z]{2}|BFPO ?[0-9]{1,4}|(KY[0-9]|MSR|VG|AI)[ -]?[0-9]{4}|[A-Z]{2} ?[0-9]{2}|GE ?CX|GIR ?0A{2}|SAN ?TA1)$",
+                regex=re.compile(
+                    r"^(([A-Z]{1,2}[0-9][A-Z0-9]?|ASCN|STHL|TDCU|BBND|[BFS]IQQ|PCRN|TKCA) ?[0-9][A-Z]{2}|BFPO ?[0-9]{1,4}|(KY[0-9]|MSR|VG|AI)[ -]?[0-9]{4}|[A-Z]{2} ?[0-9]{2}|GE ?CX|GIR ?0A{2}|SAN ?TA1)$",
+                    re.IGNORECASE,
+                ),
                 message="You need to add a valid postcode.",
             ),
         ],
@@ -194,6 +199,10 @@ class BusinessDetailsForm(forms.Form):
             },
         ),
     )
+
+    def clean_company_post_code(self):
+        company_post_code = self.cleaned_data["company_post_code"]
+        return company_post_code.upper()
 
     def get_zendesk_data(self):
         company_type = self.cleaned_data["company_type"].label
