@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "export_support.core",
     "export_support.gds",
     "export_support.cookies",
+    "export_support.healthcheck",
     "webpack_loader",
     "csp",
     "formtools",
@@ -61,6 +62,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "export_support.core.middleware.no_index_middleware",
     "export_support.core.middleware.no_cache_middleware",
+    "export_support.healthcheck.middleware.HealthCheckMiddleware",
 ]
 
 if ENABLE_CSP:
