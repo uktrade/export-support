@@ -1,0 +1,107 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
+            <div class="govuk-grid-row govuk-!-margin-bottom-4">
+                <div class="govuk-grid-column-three-quarters">
+                    <h1 class="govuk-heading-xl">Privacy</h1>
+                </div>
+            </div>
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <h2 class="govuk-heading-l">The Purpose of this document</h2>
+                    <p class="govuk-body">
+                        The Department for International Trade (DIT) is committed to protecting the privacy and security of your information. This notice describes how we collect and use your personal information in accordance with UK Data Protection legislation, including the UK General Data Protection Regulation (GDPR) and the Data Protection Act 2018.
+                    </p>
+                    <p class="govuk-body">
+                        <strong>It is important that you read this notice, so that you are aware of how and why we are using your information.</strong>
+                    </p>
+
+                    <h2 class="govuk-heading-l">Cookie Policy</h2>
+                    <p class="govuk-body">
+                        Our cookie policy has been set out separately and can be accessed <a class="govuk-link" href="{% url 'cookies:cookies-details' %}">here</a>.
+                    </p>
+
+
+                    <h2 class="govuk-heading-l">What personal data we collect</h2>
+                    <p class="govuk-body">
+                        We will collect data with your consent to process (collect, store and use) your personal data only for fulfilling DIT’s duty as a Government Department, this will be under the legal basis of public task. The personal information DIT will collect is:
+                    </p>
+                    <p class="govuk-body">
+                        <strong>Name, business postal address, business e-mail address, business phone number, job title, name of company, size of company, how you heard about DIT and information about your business interests and dealings with DIT.</strong>
+                    </p>
+
+                    <h2 class="govuk-heading-l">The purpose of collecting data</h2>
+                    <p class="govuk-body">The data you provide will be processed and shared within DIT and appropriate third parties for the following purposes:</p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li><strong>To manage relationships</strong> in support to businesses trading or investing internationally</li>
+                        <li><strong>To identify and secure opportunities</strong> both international and the UK.</li>
+                        <li><strong>To direct businesses</strong> to appropriate advice, events, and services</li>
+                        <li><strong>To better evaluate the impact of trade and investment services</strong> and process business applications to access trade and investment related advice and services.</li>
+                        <li><strong>To support understanding of the trade and investment environment</strong> and the domestic and international business landscape</li>
+                        <li><strong>To target financial support at businesses</strong> to secure trade and investment opportunities</li>
+                        <li><strong>To understand barriers to trade and investment</strong> and design effective and intelligent trade and investment policy, services and make business decisions.</li>
+                    </ul>
+
+                    <h2 class="govuk-heading-l">How we protect and share your data</h2>
+                    <p class="govuk-body">
+                        <strong>DIT will be the data controller for your data.</strong> DIT will only share data covered by this privacy notice with third parties to support the purpose as shown above.
+                    </p>
+                    <p class="govuk-body">
+                        All organisations with access to your data must have a data protection policy in place to protect personal data and be under contract or other agreement (for Crown bodies) to use this data only for the purposes within this privacy notice. The data has technical controls in place to restrict access and will be stored within the UK but may be accessed overseas.
+                    </p>
+                    <p class="govuk-body">
+                        These organisations may include:
+                    </p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li><strong>UK Delivery Partners</strong> (International Trade Advisers)</li>
+                        <li><strong>UK Export Finance</strong></li>
+                        <li><strong>Other Government Departments</strong> (Foreign, Commonwealth and Development Office, Department for Business, Energy and Industrial Strategy, Cabinet Office)</li>
+                        <li><strong>Devolved Administrations</strong> (Welsh Government, Scottish Government, Invest Northern Ireland)</li>
+                        <li><strong>Local Enterprise Partners</strong> (38 organisations) including Local Government and trade bodies.</li>
+                        <li><strong>Overseas Delivery Partners</strong>, operating under grant letter to DIT</li>
+                        <li><strong>Other third parties under contract to support the above purposes</strong> (These include and are not limited to: Adetiq, UK Shared Business Services, Kantar Public, Dun and Bradstreet Ltd, Zendesk, Freshdesk, Green Park, Profusion, MadeTech).</li>
+                    </ul>
+
+                    <p class="govuk-body">
+                        Aggregated analysis may be shared with the Information Commissioner’s Office (ICO) the Government Internal Audit Agency (GIAA), the National Audit Office (NAO)
+                    </p>
+                    <p class="govuk-body">
+                        We will not:
+                    </p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>sell or rent your data to third parties</li>
+                        <li>share your data with third parties unless legally obliged to do so by law or regulation – for example, by court order, or to prevent fraud or other crime.</li>
+                    </ul>
+
+                    <h2 class="govuk-heading-l">How long we keep your data</h2>
+                    <p class="govuk-body">
+                        We will only retain your personal information for as long as:
+                    </p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>it is needed for the purposes set out in this document</li>
+                        <li>the law requires us to,</li>
+                    </ul>
+                    <p class="govuk-body">
+                        in line with our records management and retention and disposal policy for 10 years from the date which it was provided, or subsequently updated.
+                    </p>
+
+                    <h2 class="govuk-heading-l">Your rights and access to your information</h2>
+                    <p class="govuk-body">You have the right to request:</p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>information about how your personal data is processed.</li>
+                        <li>a copy of that personal data</li>
+                        <li>that anything inaccurate in your personal data is corrected immediately</li>
+                    </ul>
+                    <p class="govuk-body">You can also:</p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>raise an objection about how your personal data is processed</li>
+                        <li>request that your personal data is erased if there is no longer a justification for it</li>
+                        <li>ask that the processing of your personal data is restricted in certain circumstances</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+{% endblock %}

@@ -217,5 +217,9 @@ class EnquiryContactSuccessView(TemplateView):
     template_name = "core/enquiry_contact_success.html"
 
 
+class PrivacyView(TemplateView):
+    template_name = "core/privacy.html"
+
+
 class StartPageRedirectView(RedirectView):
     url = "https://34ul06.axshare.com/#id=shpprj&p=dev_prototype_-_v1&dp=0&fn=0&c=1"
