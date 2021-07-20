@@ -1,3 +1,4 @@
+from csp.decorators import csp_exempt
 from django.urls import path
 
 from . import views
@@ -5,5 +6,5 @@ from . import views
 app_name = "healthcheck"
 
 urlpatterns = [
-    path("", views.HealthCheckView.as_view(), name="healthcheck"),
+    path("", csp_exempt(views.HealthCheckView.as_view()), name="healthcheck"),
 ]
