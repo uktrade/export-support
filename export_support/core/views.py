@@ -62,10 +62,8 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
 
         return [templates[self.steps.current]]
 
-    def send_to_zendesk(self, reference_number, form_list):
-        form_data = {
-            "reference_number": reference_number,
-        }
+    def send_to_zendesk(self, form_list):
+        form_data = {}
         for form in form_list:
             for field_name, field_value in form.get_zendesk_data().items():
                 field_name = ZendeskForm.FIELD_MAPPING.get(field_name, field_name)
@@ -133,16 +131,13 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         )
         display_subheadings = display_goods and display_services
 
-        reference_number = get_reference_number()
-
         ctx = {
             "display_goods": display_goods,
             "display_services": display_services,
             "display_subheadings": display_subheadings,
-            "reference_number": reference_number,
         }
 
-        self.send_to_zendesk(reference_number, form_list)
+        self.send_to_zendesk(form_list)
 
         return render(self.request, "core/enquiry_contact_success.html", ctx)
 

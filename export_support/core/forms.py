@@ -373,4 +373,3 @@ class ZendeskForm(ZendeskAPIForm):
     other_sector = forms.CharField(required=False)
     nature_of_enquiry = forms.CharField(required=False)
     aaa_question = forms.CharField()
-    reference_number = forms.CharField()
