@@ -14,9 +14,20 @@ import string
 from pathlib import Path
 
 import environ
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 environ.Env.read_env(".env")  # reads the .env file
 env = environ.Env()
+
+SENTRY_DSN = env.str("SENTRY_DSN", None)
+SENTRY_ENVIRONMENT = env.str("SENTRY_ENVIRONMENT")
+if SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        environment=SENTRY_ENVIRONMENT,
+        integrations=[DjangoIntegration()],
+    )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
