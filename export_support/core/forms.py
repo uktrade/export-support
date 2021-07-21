@@ -298,10 +298,16 @@ class SectorsForm(forms.Form):
     def clean(self):
         cleaned_data = super().clean()
 
+        has_sectors = bool(cleaned_data["sectors"])
         is_other = cleaned_data["is_other"]
         is_other_selected = bool(is_other)
         other = cleaned_data["other"]
         is_other_text_blank = not bool(other)
+
+        if not has_sectors and not is_other_selected:
+            raise ValidationError(
+                "Select the industry or business area(s) your enquiry relates to"
+            )
 
         if is_other_selected and is_other_text_blank:
             self.add_error("other", 'You must add text for "Other".')
