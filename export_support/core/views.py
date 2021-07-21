@@ -70,7 +70,8 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
                 form_data[field_name] = field_value
 
         zendesk_form = ZendeskForm(data=form_data)
-        assert zendesk_form.is_valid()
+        if not zendesk_form.is_valid():
+            raise ValueError("Invalid ZendeskForm", dict(zendesk_form.errors))
 
         personal_details_cleaned_data = self.get_cleaned_data_for_step(
             "personal-details"
