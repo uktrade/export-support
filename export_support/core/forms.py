@@ -369,7 +369,7 @@ class ZendeskForm(ZendeskAPIForm):
     company_registration_number = forms.CharField(required=False)
     company_turnover = forms.CharField(required=False)
     number_of_employees = forms.CharField(required=False)
-    sectors = forms.CharField()
+    sectors = forms.CharField(required=False)
     other_sector = forms.CharField(required=False)
     nature_of_enquiry = forms.CharField(required=False)
     aaa_question = forms.CharField()
