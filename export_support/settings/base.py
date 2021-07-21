@@ -11,10 +11,12 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 import string
+import sys
 from pathlib import Path
 
 import environ
 import sentry_sdk
+from django_log_formatter_ecs import ECSFormatter
 from sentry_sdk.integrations.django import DjangoIntegration
 
 environ.Env.read_env(".env")  # reads the .env file
@@ -85,6 +87,38 @@ if BASIC_AUTH:
     BASICAUTH_USERS = BASIC_AUTH
 
 ROOT_URLCONF = "export_support.urls"
+
+USE_ECS_LOGGING = env.bool("USE_ECS_LOGGING", True)
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "ecs_formatter": {
+            "()": ECSFormatter,
+        },
+        "console_formatter": {
+            "format": "%(asctime)s %(name)-12s %(levelname)-8s %(message)s",
+        },
+    },
+    "handlers": {
+        "ecs": {
+            "class": "logging.StreamHandler",
+            "formatter": "ecs_formatter",
+            "stream": sys.stdout,
+        },
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "console_formatter",
+        },
+    },
+    "loggers": {
+        "django": {
+            "level": "INFO",
+            "handlers": ["ecs" if USE_ECS_LOGGING else "console"],
+        },
+    },
+}
 
 TEMPLATES = [
     {
