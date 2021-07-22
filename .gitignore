@@ -9,3 +9,4 @@ webpack-stats.json
 .DS_Store
 .python-version
 .vscode
+.coverage
