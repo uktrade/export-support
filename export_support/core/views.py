@@ -218,4 +218,4 @@ class PrivacyView(TemplateView):
 
 
 class StartPageRedirectView(RedirectView):
-    url = "https://34ul06.axshare.com/#id=shpprj&p=dev_prototype_-_v1&dp=0&fn=0&c=1"
+    url = settings.START_PAGE_URL
