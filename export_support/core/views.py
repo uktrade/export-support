@@ -209,10 +209,6 @@ class NonEUExportEnquiriesView(TemplateView):
         return ctx
 
 
-class EnquiryContactSuccessView(TemplateView):
-    template_name = "core/enquiry_contact_success.html"
-
-
 class PrivacyView(TemplateView):
     template_name = "core/privacy.html"
 
