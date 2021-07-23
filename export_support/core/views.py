@@ -17,7 +17,7 @@ from .forms import (
     SectorsForm,
     ZendeskForm,
 )
-from .utils import dict_to_query_dict, get_reference_number
+from .utils import dict_to_query_dict
 
 
 class IndexView(RedirectView):

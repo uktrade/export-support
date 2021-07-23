@@ -246,9 +246,6 @@ GTM_AUTH = env.str("GTM_AUTH", None)
 GTM_PREVIEW = env.str("GTM_PREVIEW", None)
 GTM_COOKIES_WIN = env.str("GTM_COOKIES_WIN", None)
 
-REFERENCE_NUMBER_ALPHABET = string.ascii_uppercase + string.digits
-REFERENCE_NUMBER_SIZE = 8
-
 FORM_URL = env.str("FORM_URL")
 
 DIRECTORY_FORMS_API_BASE_URL = env.str("DIRECTORY_FORMS_API_BASE_URL")
