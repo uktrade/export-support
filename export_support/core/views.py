@@ -198,13 +198,12 @@ class NonEUExportEnquiriesView(TemplateView):
             )
             ctx["should_display_sub_headings"] = num_visible_sections > 1
 
-            selected_components_heading_content = [
-                heading_components[component]
-                for component in selected_heading_components
-            ]
-            ctx[
-                "heading"
-            ] = f"Sell {' and '.join(selected_components_heading_content)} abroad"
+        selected_components_heading_content = [
+            heading_components[component] for component in selected_heading_components
+        ]
+        ctx[
+            "heading"
+        ] = f"Sell {' and '.join(selected_components_heading_content)} abroad"
 
         return ctx
 
