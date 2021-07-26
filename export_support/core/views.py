@@ -32,13 +32,6 @@ def is_company(wizard):
     return cleaned_data["on_behalf_of"] != OnBehalfOfChoices.NOT_A_COMPANY
 
 
-def combine_conditions(*condition_funcs):
-    def combined_conditions(wizard):
-        return all(condition_func(wizard) for condition_func in condition_funcs)
-
-    return combined_conditions
-
-
 class EnquiryWizardView(NamedUrlSessionWizardView):
     form_list = [
         ("enquiry-subject", EnquirySubjectForm),
