@@ -1,7 +1,7 @@
 from django.urls import reverse
 from pytest_django.asserts import assertTemplateUsed
 
-from .forms import EnquirySubjectChoices
+from ...forms import EnquirySubjectChoices
 
 
 def test_index_view(client):
