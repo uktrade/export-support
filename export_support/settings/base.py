@@ -215,7 +215,7 @@ if ENABLE_CSP:
     )
 
     CSP_DEFAULT_SRC = ("'self'", *_GOOGLE_DOMAINS)
-    CSP_SCRIPT_SRC = ("'self'", *_GOOGLE_DOMAINS)
+    CSP_SCRIPT_SRC = ("'self'", *_GOOGLE_DOMAINS, "'unsafe-eval'")
     CSP_SCRIPT_SRC_ELEM = ("'self'", *_GOOGLE_DOMAINS)
     CSP_STYLE_SRC_ATTR = ("'self'",)
     CSP_INCLUDE_NONCE_IN = (
