@@ -30,10 +30,4 @@ urlpatterns = [
         views.PrivacyView.as_view(),
         name="privacy",
     ),
-    # Only necessary for user testing
-    path(
-        "start",
-        views.StartPageRedirectView.as_view(),
-        name="start-page-redirect",
-    ),
 ]

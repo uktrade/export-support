@@ -203,7 +203,3 @@ class NonEUExportEnquiriesView(TemplateView):
 
 class PrivacyView(TemplateView):
     template_name = "core/privacy.html"
-
-
-class StartPageRedirectView(RedirectView):
-    url = settings.START_PAGE_URL
