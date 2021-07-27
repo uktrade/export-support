@@ -4,7 +4,6 @@ import Button from "govuk-frontend/govuk/components/button/button";
 import ErrorSummary from "govuk-frontend/govuk/components/error-summary/error-summary";
 
 import initSelectAll from "./modules/select-all.js";
-import initOtherInput from "./modules/other-input.js";
 import CookiePolicy from "./modules/cookie-banner";
 
 var cookiePolicy = new CookiePolicy();
@@ -38,4 +37,3 @@ nodeListForEach($errorSummaries, function ($errorSummary) {
 });
 
 initSelectAll();
-initOtherInput();

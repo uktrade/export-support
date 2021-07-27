@@ -290,19 +290,12 @@ class SectorsForm(forms.Form):
         required=False,
         widget=gds_fields.CheckboxSelectMultiple,
     )
-    is_other = forms.BooleanField(
-        label="Select all",
-        required=False,
-        widget=forms.CheckboxInput(
-            attrs={"class": "govuk-checkboxes__input"},
-        ),
-    )
     other = forms.CharField(
-        label="Please specify",
+        label="Other industry or business area",
         required=False,
         widget=forms.TextInput(
             attrs={
-                "class": "govuk-input govuk-!-width-three-quarters",
+                "class": "govuk-input",
             },
         ),
     )
@@ -311,18 +304,12 @@ class SectorsForm(forms.Form):
         cleaned_data = super().clean()
 
         has_sectors = bool(cleaned_data["sectors"])
-        is_other = cleaned_data["is_other"]
-        is_other_selected = bool(is_other)
         other = cleaned_data["other"]
-        is_other_text_blank = not bool(other)
 
-        if not has_sectors and not is_other_selected:
-            raise ValidationError(
+        if not has_sectors and not other:
+            raise forms.ValidationError(
                 "Select the industry or business area(s) your enquiry relates to"
             )
-
-        if is_other_selected and is_other_text_blank:
-            self.add_error("other", 'You must add text for "Other".')
 
         return cleaned_data
 

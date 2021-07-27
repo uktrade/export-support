@@ -136,7 +136,6 @@ def test_full_steps_wizard_success(client, settings, mocker):
             "sectors",
             {
                 "sectors": [sector for sector in SECTORS_MAP.keys()],
-                "is_other": "1",
                 "other": "ANOTHER SECTOR",
             },
         ),
@@ -276,7 +275,6 @@ def test_skip_business_details_wizard_success(client, settings, mocker):
             "sectors",
             {
                 "sectors": [sector for sector in SECTORS_MAP.keys()],
-                "is_other": "1",
                 "other": "ANOTHER SECTOR",
             },
         ),
@@ -420,7 +418,6 @@ def test_zendesk_form_is_not_valid_wizard_raises_error(client, settings, mocker)
             "sectors",
             {
                 "sectors": [sector for sector in SECTORS_MAP.keys()],
-                "is_other": "1",
                 "other": "ANOTHER SECTOR",
             },
         ),
@@ -571,7 +568,6 @@ def run_wizard_enquiry_subject(settings, mocker):
                 "sectors",
                 {
                     "sectors": [sector for sector in SECTORS_MAP.keys()],
-                    "is_other": "1",
                     "other": "ANOTHER SECTOR",
                 },
             ),
@@ -923,17 +919,4 @@ def test_sectors_validation(run_wizard_sectors):
         "form",
         None,
         "Select the industry or business area(s) your enquiry relates to",
-    )
-
-    response = run_wizard_sectors(
-        {
-            "is_other": "1",
-        }
-    )
-    assert response.status_code == 200
-    assertFormError(
-        response,
-        "form",
-        "other",
-        'You must add text for "Other".',
     )

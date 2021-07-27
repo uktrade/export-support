@@ -4,30 +4,6 @@
   padding-bottom: govuk-spacing(4);
 }
 
-.other-form-option {
-  border-top: 1px solid $govuk-border-colour;
-  margin-top: govuk-spacing(4);
-  padding-top: govuk-spacing(4);
-
-  &__text-input {
-    padding-left: 56px;
-  }
-}
-
-.js-enabled {
-  .other-form-option__text-input {
-    display: none;
-
-    &--visible {
-      display: block;
-    }
-
-    &--not-visible {
-      display: none;
-    }
-  }
-}
-
 .sensitive-information-warning {
   color: govuk-colour("red");
   font-weight: normal;
@@ -42,4 +18,9 @@
   p {
     margin: 0;
   }
+}
+
+.form-additional-field {
+  border-top: 1px solid $govuk-border-colour;
+  padding-top: govuk-spacing(4);
 }
