@@ -250,7 +250,8 @@ class BusinessSizeForm(forms.Form):
     company_turnover = forms.TypedChoiceField(
         choices=[("", "Please select")] + CompanyTurnoverChoices.choices,
         coerce=coerce_choice(CompanyTurnoverChoices),
-        label="Company turnover",
+        help_text="Different levels of support may be available depending on the size of the business.",
+        label="UK business turnover (last financial year)",
         widget=forms.Select(
             attrs={
                 "class": "govuk-select",
@@ -260,6 +261,7 @@ class BusinessSizeForm(forms.Form):
     number_of_employees = forms.TypedChoiceField(
         choices=[("", "Please select")] + NumberOfEmployeesChoices.choices,
         coerce=coerce_choice(NumberOfEmployeesChoices),
+        help_text="Knowing about the size of the business will help us direct you to the most suitable adviser.",
         label="Number of UK employees",
         widget=forms.Select(
             attrs={
