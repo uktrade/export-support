@@ -1,0 +1,25 @@
+version: 2.1
+jobs:
+  unit-tests:
+    docker:
+        - image: 'circleci/python:3.9.5'
+    steps:
+        - checkout
+        - run:
+            command: pip install -r requirements.txt -r requirements-dev.txt
+        - run:
+            name: Make directory for test output
+            command: mkdir -p test-reports/unit-test
+        - run:
+            name: Running tests
+            command:
+                pytest --junitxml=test-reports/unit-test/report.xml
+        - store_test_results:
+            path: ./test-reports/
+
+
+workflows:
+    version: 2
+    export-support:
+        jobs:
+            - unit-tests
