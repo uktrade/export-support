@@ -453,3 +453,175 @@ def test_zendesk_form_is_not_valid_wizard_raises_error(client, settings, mocker)
     mock_zendesk_form_is_valid.assert_called()
     mock_zendesk_form_action_class.assert_not_called()
     mock_zendesk_form_action_class().save.assert_not_called()
+
+
+@pytest.fixture
+def run_wizard_enquiry_subject(client, settings, mocker):
+    def run(enquiry_subject):
+        settings.FORM_URL = "FORM_URL"
+        settings.ZENDESK_SERVICE_NAME = "ZENDESK_SERVICE_NAME"
+        settings.ZENDESK_SUBDOMAIN = "ZENDESK_SUBDOMAIN"
+
+        mock_zendesk_form_action_class = mocker.patch(
+            "export_support.core.forms.ZendeskForm.action_class"
+        )
+
+        wizard_start_url = reverse("core:enquiry-wizard")
+        response = client.get(wizard_start_url)
+        assert response.status_code == 302
+
+        enquiry_subject_url = get_step_url("enquiry-subject")
+        assert response.url == enquiry_subject_url
+
+        response = client.get(enquiry_subject_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/enquiry_subject_wizard_step.html")
+        response = client.post(
+            enquiry_subject_url,
+            get_form_data(
+                "enquiry-subject",
+                {"enquiry_subject": enquiry_subject},
+            ),
+        )
+        assert response.status_code == 302
+
+        export_countries_url = get_step_url("export-countries")
+        assert response.url == export_countries_url
+
+        response = client.get(export_countries_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/export_countries_wizard_step.html")
+        response = client.post(
+            export_countries_url,
+            get_form_data(
+                "export-countries",
+                {"countries": ENQUIRY_COUNTRY_CODES},
+            ),
+        )
+        assert response.status_code == 302
+
+        personal_details_url = get_step_url("personal-details")
+        assert response.url == personal_details_url
+
+        response = client.get(personal_details_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/personal_details_wizard_step.html")
+        response = client.post(
+            personal_details_url,
+            get_form_data(
+                "personal-details",
+                {
+                    "first_name": "Firstname",
+                    "last_name": "Lastname",
+                    "email": "test@example.com",
+                    "on_behalf_of": "1",
+                },
+            ),
+        )
+        assert response.status_code == 302
+
+        business_details_url = get_step_url("business-details")
+        assert response.url == business_details_url
+
+        response = client.get(business_details_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/business_details_wizard_step.html")
+        response = client.post(
+            business_details_url,
+            get_form_data(
+                "business-details",
+                {
+                    "company_type": "1",
+                    "company_name": "Companyname",
+                    "company_post_code": "SW1A 2BL",
+                    "company_registration_number": "12345678",
+                },
+            ),
+        )
+        assert response.status_code == 302
+
+        business_size_url = get_step_url("business-size")
+        assert response.url == business_size_url
+
+        response = client.get(business_size_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/business_size_wizard_step.html")
+        response = client.post(
+            business_size_url,
+            get_form_data(
+                "business-size",
+                {
+                    "company_turnover": "1",
+                    "number_of_employees": "1",
+                },
+            ),
+        )
+        assert response.status_code == 302
+
+        sectors_url = get_step_url("sectors")
+        assert response.url == sectors_url
+
+        response = client.get(sectors_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/sectors_wizard_step.html")
+        response = client.post(
+            sectors_url,
+            get_form_data(
+                "sectors",
+                {
+                    "sectors": [sector for sector in SECTORS_MAP.keys()],
+                    "is_other": "1",
+                    "other": "ANOTHER SECTOR",
+                },
+            ),
+        )
+        assert response.status_code == 302
+
+        enquiry_details_url = get_step_url("enquiry-details")
+        assert response.url == enquiry_details_url
+
+        response = client.get(enquiry_details_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/enquiry_details_wizard_step.html")
+        response = client.post(
+            enquiry_details_url,
+            get_form_data(
+                "enquiry-details",
+                {
+                    "nature_of_enquiry": "NATURE OF ENQUIRY",
+                    "question": "QUESTION",
+                },
+            ),
+        )
+        assert response.status_code == 302
+
+        done_url = get_step_url("done")
+        assert response.url == done_url
+
+        response = client.get(done_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/enquiry_contact_success.html")
+
+        return response
+
+    return run
+
+
+def test_enquiry_subject_choices_context_data(run_wizard_enquiry_subject):
+    response = run_wizard_enquiry_subject([1])
+    ctx = response.context
+    assert ctx["display_goods"] == True
+    assert ctx["display_services"] == False
+    assert ctx["display_subheadings"] == False
+
+    response = run_wizard_enquiry_subject([2])
+    ctx = response.context
+    assert ctx["display_goods"] == False
+    assert ctx["display_services"] == True
+    assert ctx["display_subheadings"] == False
+
+    response = run_wizard_enquiry_subject([1, 2])
+    ctx = response.context
+    assert ctx["display_goods"] == True
+    assert ctx["display_services"] == True
+    assert ctx["display_subheadings"] == True
