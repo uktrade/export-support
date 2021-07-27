@@ -1,3 +1,4 @@
+import pytest
 from django.urls import reverse
 from pytest_django.asserts import assertTemplateUsed
 
@@ -337,3 +338,118 @@ def test_skip_business_details_wizard_success(client, settings, mocker):
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",
         }
     )
+
+
+def test_zendesk_form_is_not_valid_wizard_raises_error(client, settings, mocker):
+    settings.FORM_URL = "FORM_URL"
+    settings.ZENDESK_SERVICE_NAME = "ZENDESK_SERVICE_NAME"
+    settings.ZENDESK_SUBDOMAIN = "ZENDESK_SUBDOMAIN"
+
+    mock_zendesk_form_action_class = mocker.patch(
+        "export_support.core.forms.ZendeskForm.action_class"
+    )
+    mock_zendesk_form_is_valid = mocker.patch(
+        "export_support.core.forms.ZendeskForm.is_valid"
+    )
+    mock_zendesk_form_is_valid.return_value = False
+
+    wizard_start_url = reverse("core:enquiry-wizard")
+    response = client.get(wizard_start_url)
+    assert response.status_code == 302
+
+    enquiry_subject_url = get_step_url("enquiry-subject")
+    assert response.url == enquiry_subject_url
+
+    response = client.get(enquiry_subject_url)
+    assert response.status_code == 200
+    assertTemplateUsed(response, "core/enquiry_subject_wizard_step.html")
+    response = client.post(
+        enquiry_subject_url,
+        get_form_data(
+            "enquiry-subject",
+            {"enquiry_subject": ["1", "2"]},
+        ),
+    )
+    assert response.status_code == 302
+
+    export_countries_url = get_step_url("export-countries")
+    assert response.url == export_countries_url
+
+    response = client.get(export_countries_url)
+    assert response.status_code == 200
+    assertTemplateUsed(response, "core/export_countries_wizard_step.html")
+    response = client.post(
+        export_countries_url,
+        get_form_data(
+            "export-countries",
+            {"countries": ENQUIRY_COUNTRY_CODES},
+        ),
+    )
+    assert response.status_code == 302
+
+    personal_details_url = get_step_url("personal-details")
+    assert response.url == personal_details_url
+
+    response = client.get(personal_details_url)
+    assert response.status_code == 200
+    assertTemplateUsed(response, "core/personal_details_wizard_step.html")
+    response = client.post(
+        personal_details_url,
+        get_form_data(
+            "personal-details",
+            {
+                "first_name": "Firstname",
+                "last_name": "Lastname",
+                "email": "test@example.com",
+                "on_behalf_of": "3",
+            },
+        ),
+    )
+    assert response.status_code == 302
+
+    sectors_url = get_step_url("sectors")
+    assert response.url == sectors_url
+
+    response = client.get(sectors_url)
+    assert response.status_code == 200
+    assertTemplateUsed(response, "core/sectors_wizard_step.html")
+    response = client.post(
+        sectors_url,
+        get_form_data(
+            "sectors",
+            {
+                "sectors": [sector for sector in SECTORS_MAP.keys()],
+                "is_other": "1",
+                "other": "ANOTHER SECTOR",
+            },
+        ),
+    )
+    assert response.status_code == 302
+
+    enquiry_details_url = get_step_url("enquiry-details")
+    assert response.url == enquiry_details_url
+
+    response = client.get(enquiry_details_url)
+    assert response.status_code == 200
+    assertTemplateUsed(response, "core/enquiry_details_wizard_step.html")
+    response = client.post(
+        enquiry_details_url,
+        get_form_data(
+            "enquiry-details",
+            {
+                "nature_of_enquiry": "NATURE OF ENQUIRY",
+                "question": "QUESTION",
+            },
+        ),
+    )
+    assert response.status_code == 302
+
+    done_url = get_step_url("done")
+    assert response.url == done_url
+
+    with pytest.raises(ValueError):
+        response = client.get(done_url)
+
+    mock_zendesk_form_is_valid.assert_called()
+    mock_zendesk_form_action_class.assert_not_called()
+    mock_zendesk_form_action_class().save.assert_not_called()
