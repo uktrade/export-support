@@ -1,4 +1,5 @@
 import pytest
+from django.test import Client
 from django.urls import reverse
 from pytest_django.asserts import assertTemplateUsed
 
@@ -456,15 +457,15 @@ def test_zendesk_form_is_not_valid_wizard_raises_error(client, settings, mocker)
 
 
 @pytest.fixture
-def run_wizard_enquiry_subject(client, settings, mocker):
+def run_wizard_enquiry_subject(settings, mocker):
     def run(enquiry_subject):
+        client = Client()
+
         settings.FORM_URL = "FORM_URL"
         settings.ZENDESK_SERVICE_NAME = "ZENDESK_SERVICE_NAME"
         settings.ZENDESK_SUBDOMAIN = "ZENDESK_SUBDOMAIN"
 
-        mock_zendesk_form_action_class = mocker.patch(
-            "export_support.core.forms.ZendeskForm.action_class"
-        )
+        mocker.patch("export_support.core.forms.ZendeskForm.action_class")
 
         wizard_start_url = reverse("core:enquiry-wizard")
         response = client.get(wizard_start_url)
@@ -625,3 +626,97 @@ def test_enquiry_subject_choices_context_data(run_wizard_enquiry_subject):
     assert ctx["display_goods"] == True
     assert ctx["display_services"] == True
     assert ctx["display_subheadings"] == True
+
+
+@pytest.fixture
+def run_wizard_enquiry_subject_guidance_url():
+    def run(enquiry_subject):
+        client = Client()
+
+        wizard_start_url = reverse("core:enquiry-wizard")
+        response = client.get(wizard_start_url)
+        assert response.status_code == 302
+
+        enquiry_subject_url = get_step_url("enquiry-subject")
+        assert response.url == enquiry_subject_url
+
+        response = client.get(enquiry_subject_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/enquiry_subject_wizard_step.html")
+        response = client.post(
+            enquiry_subject_url,
+            get_form_data(
+                "enquiry-subject",
+                {"enquiry_subject": enquiry_subject},
+            ),
+        )
+        assert response.status_code == 302
+
+        export_countries_url = get_step_url("export-countries")
+        assert response.url == export_countries_url
+
+        response = client.get(export_countries_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/export_countries_wizard_step.html")
+
+        return response
+
+    return run
+
+
+def test_enquiry_subject_guidance_url(run_wizard_enquiry_subject_guidance_url, mocker):
+    response = run_wizard_enquiry_subject_guidance_url([1])
+    ctx = response.context
+    assert (
+        ctx["guidance_url"]
+        == f"{reverse('core:non-eu-export-enquiries')}?enquiry_subject=1"
+    )
+
+    response = run_wizard_enquiry_subject_guidance_url([2])
+    ctx = response.context
+    assert (
+        ctx["guidance_url"]
+        == f"{reverse('core:non-eu-export-enquiries')}?enquiry_subject=2"
+    )
+
+    response = run_wizard_enquiry_subject_guidance_url([1, 2])
+    ctx = response.context
+    assert (
+        ctx["guidance_url"]
+        == f"{reverse('core:non-eu-export-enquiries')}?enquiry_subject=1&enquiry_subject=2"
+    )
+
+    client = Client()
+
+    wizard_start_url = reverse("core:enquiry-wizard")
+    response = client.get(wizard_start_url)
+    assert response.status_code == 302
+
+    enquiry_subject_url = get_step_url("enquiry-subject")
+    assert response.url == enquiry_subject_url
+
+    response = client.get(enquiry_subject_url)
+    assert response.status_code == 200
+    assertTemplateUsed(response, "core/enquiry_subject_wizard_step.html")
+    response = client.post(
+        enquiry_subject_url,
+        get_form_data(
+            "enquiry-subject",
+            {"enquiry_subject": ["1"]},
+        ),
+    )
+    assert response.status_code == 302
+
+    export_countries_url = get_step_url("export-countries")
+    assert response.url == export_countries_url
+
+    mock_is_valid = mocker.patch(
+        "export_support.core.views.EnquirySubjectForm.is_valid"
+    )
+    mock_is_valid.return_value = False
+    response = client.get(export_countries_url)
+    assert response.status_code == 200
+    assertTemplateUsed(response, "core/export_countries_wizard_step.html")
+
+    ctx = response.context
+    assert ctx["guidance_url"] == f"{reverse('core:non-eu-export-enquiries')}?"
