@@ -1,7 +1,7 @@
 import pytest
 from django.test import Client
 from django.urls import reverse
-from pytest_django.asserts import assertTemplateUsed
+from pytest_django.asserts import assertFormError, assertTemplateUsed
 
 from ...consts import ENQUIRY_COUNTRY_CODES
 from ...forms import SECTORS_MAP
@@ -720,3 +720,80 @@ def test_enquiry_subject_guidance_url(run_wizard_enquiry_subject_guidance_url, m
 
     ctx = response.context
     assert ctx["guidance_url"] == f"{reverse('core:non-eu-export-enquiries')}?"
+
+
+@pytest.fixture
+def run_wizard_export_countries():
+    def run(export_countries_form_data):
+        client = Client()
+
+        wizard_start_url = reverse("core:enquiry-wizard")
+        response = client.get(wizard_start_url)
+        assert response.status_code == 302
+
+        enquiry_subject_url = get_step_url("enquiry-subject")
+        assert response.url == enquiry_subject_url
+
+        response = client.get(enquiry_subject_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/enquiry_subject_wizard_step.html")
+        response = client.post(
+            enquiry_subject_url,
+            get_form_data(
+                "enquiry-subject",
+                {"enquiry_subject": ["1", "2"]},
+            ),
+        )
+        assert response.status_code == 302
+
+        export_countries_url = get_step_url("export-countries")
+        assert response.url == export_countries_url
+
+        response = client.get(export_countries_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/export_countries_wizard_step.html")
+        response = client.post(
+            export_countries_url,
+            get_form_data(
+                "export-countries",
+                export_countries_form_data,
+            ),
+        )
+
+        return response
+
+    return run
+
+
+def test_export_countries_validation(run_wizard_export_countries):
+    response = run_wizard_export_countries(
+        {
+            "select_all": "1",
+            "countries": ENQUIRY_COUNTRY_CODES,
+        }
+    )
+    assert response.status_code == 302
+    assert response.url == get_step_url("personal-details")
+
+    response = run_wizard_export_countries({})
+    assert response.status_code == 200
+    assertFormError(
+        response,
+        "form",
+        None,
+        'You must select either "Select all" or some countries',
+    )
+
+    response = run_wizard_export_countries(
+        {
+            "select_all": "1",
+            "countries": ENQUIRY_COUNTRY_CODES[:1],
+        }
+    )
+    assert response.status_code == 200
+    assertFormError(
+        response,
+        "form",
+        None,
+        'You must select either "Select all" or some countries. Not both.',
+    )
