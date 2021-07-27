@@ -5,6 +5,7 @@ from django import forms
 from django.core import validators
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 
 from export_support.gds import fields as gds_fields
@@ -163,10 +164,12 @@ class BusinessDetailsForm(forms.Form):
     company_type = forms.TypedChoiceField(
         coerce=coerce_choice(CompanyTypeChoices),
         choices=CompanyTypeChoices.choices,
+        help_text="Understanding your business type will help us improve this service.",
         label="Business type",
         widget=gds_fields.RadioSelect,
     )
     company_name = forms.CharField(
+        help_text="Knowing details about your business will help us direct you to the right team for help.",
         label="Business name",
         widget=forms.TextInput(
             attrs={
@@ -176,6 +179,7 @@ class BusinessDetailsForm(forms.Form):
         ),
     )
     company_post_code = forms.CharField(
+        help_text="Knowing where you are means we can direct you to local support if appropriate. Enter a postcode for example SW1A 2DY.",
         label="Business postcode",
         validators=[
             validators.RegexValidator(
@@ -194,6 +198,9 @@ class BusinessDetailsForm(forms.Form):
         ),
     )
     company_registration_number = forms.CharField(
+        help_text=mark_safe(
+            "Information about your company helps us to improve how we answer your query. Find your number using <a class='govuk-link' href='https://www.gov.uk/get-information-about-a-company' target='_blank'>Get information about a company</a>."
+        ),
         label="Company Registration Number",
         required=False,
         widget=forms.TextInput(
