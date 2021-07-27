@@ -334,7 +334,7 @@ def test_skip_business_details_wizard_success(client, settings, mocker):
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
             "nature_of_enquiry": "NATURE OF ENQUIRY",
             "number_of_employees": "",
-            "on_behalf_of": "This enquiry does not relate to a business",
+            "on_behalf_of": "This enquiry does not relate to a (currently operating) business",
             "other_sector": "ANOTHER SECTOR",
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",
         }

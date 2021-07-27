@@ -104,7 +104,10 @@ class ExportCountriesForm(forms.Form):
 class OnBehalfOfChoices(models.IntegerChoices):
     OWN_COMPANY = 1, "The business I own or work for"
     ANOTHER_COMPANY = 2, "I am asking on behalf of another business"
-    NOT_A_COMPANY = 3, "This enquiry does not relate to a business"
+    NOT_A_COMPANY = (
+        3,
+        "This enquiry does not relate to a (currently operating) business",
+    )
 
 
 class PersonalDetailsForm(forms.Form):
