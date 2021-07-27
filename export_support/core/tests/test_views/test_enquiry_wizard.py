@@ -797,3 +797,143 @@ def test_export_countries_validation(run_wizard_export_countries):
         None,
         'You must select either "Select all" or some countries. Not both.',
     )
+
+
+@pytest.fixture
+def run_wizard_sectors():
+    def run(sectors_form_data):
+        client = Client()
+
+        wizard_start_url = reverse("core:enquiry-wizard")
+        response = client.get(wizard_start_url)
+        assert response.status_code == 302
+
+        enquiry_subject_url = get_step_url("enquiry-subject")
+        assert response.url == enquiry_subject_url
+
+        response = client.get(enquiry_subject_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/enquiry_subject_wizard_step.html")
+        response = client.post(
+            enquiry_subject_url,
+            get_form_data(
+                "enquiry-subject",
+                {"enquiry_subject": ["1", "2"]},
+            ),
+        )
+        assert response.status_code == 302
+
+        export_countries_url = get_step_url("export-countries")
+        assert response.url == export_countries_url
+
+        response = client.get(export_countries_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/export_countries_wizard_step.html")
+        response = client.post(
+            export_countries_url,
+            get_form_data(
+                "export-countries",
+                {"countries": ENQUIRY_COUNTRY_CODES},
+            ),
+        )
+        assert response.status_code == 302
+
+        personal_details_url = get_step_url("personal-details")
+        assert response.url == personal_details_url
+
+        response = client.get(personal_details_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/personal_details_wizard_step.html")
+        response = client.post(
+            personal_details_url,
+            get_form_data(
+                "personal-details",
+                {
+                    "first_name": "Firstname",
+                    "last_name": "Lastname",
+                    "email": "test@example.com",
+                    "on_behalf_of": "1",
+                },
+            ),
+        )
+        assert response.status_code == 302
+
+        business_details_url = get_step_url("business-details")
+        assert response.url == business_details_url
+
+        response = client.get(business_details_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/business_details_wizard_step.html")
+        response = client.post(
+            business_details_url,
+            get_form_data(
+                "business-details",
+                {
+                    "company_type": "1",
+                    "company_name": "Companyname",
+                    "company_post_code": "SW1A 2BL",
+                    "company_registration_number": "12345678",
+                },
+            ),
+        )
+        assert response.status_code == 302
+
+        business_size_url = get_step_url("business-size")
+        assert response.url == business_size_url
+
+        response = client.get(business_size_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/business_size_wizard_step.html")
+        response = client.post(
+            business_size_url,
+            get_form_data(
+                "business-size",
+                {
+                    "company_turnover": "1",
+                    "number_of_employees": "1",
+                },
+            ),
+        )
+        assert response.status_code == 302
+
+        sectors_url = get_step_url("sectors")
+        assert response.url == sectors_url
+
+        response = client.get(sectors_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/sectors_wizard_step.html")
+        response = client.post(
+            sectors_url,
+            get_form_data(
+                "sectors",
+                sectors_form_data,
+            ),
+        )
+
+        return response
+
+    return run
+
+
+def test_sectors_validation(run_wizard_sectors):
+    response = run_wizard_sectors({})
+    assert response.status_code == 200
+    assertFormError(
+        response,
+        "form",
+        None,
+        "Select the industry or business area(s) your enquiry relates to",
+    )
+
+    response = run_wizard_sectors(
+        {
+            "is_other": "1",
+        }
+    )
+    assert response.status_code == 200
+    assertFormError(
+        response,
+        "form",
+        "other",
+        'You must add text for "Other".',
+    )
