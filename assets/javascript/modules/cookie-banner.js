@@ -7,6 +7,8 @@ function CookieBanner() {
   var cookiesPolicyName = "cookies_policy";
   var cookiesPolicyDurationDays = 365;
 
+  var cookiesAcceptedParam = "cookies-accepted";
+
   function setCookie(name, value, options) {
     if (typeof options === "undefined") {
       options = {};
@@ -80,10 +82,25 @@ function CookieBanner() {
     banner.className = banner.className.replace(/app-cookie-banner--show/, "");
   }
 
+  function bindCookieBanner(bannerClassName) {
+    window.addEventListener("load", function () {
+      var urlSearchParams = new URLSearchParams(window.location.search);
+      var shouldDisplayCookieBanner =
+        !!urlSearchParams.get(cookiesAcceptedParam);
+
+      if (shouldDisplayCookieBanner) {
+        displayCookieBanner(bannerClassName);
+        displayCookieBannerAcceptAll(bannerClassName);
+      }
+    });
+  }
+
   function displayCookieBannerAcceptAll(cookieBannerClassName) {
     var banner = document.querySelector(cookieBannerClassName);
     banner.className =
       banner.className + " app-cookie-banner--show__accepted-all";
+
+    debugger;
 
     var hideButton = document.querySelector(".hide-button");
     if (hideButton.attachEvent) {
@@ -127,13 +144,17 @@ function CookieBanner() {
     });
   }
 
+  function refreshPage() {
+    window.location.assign("?" + cookiesAcceptedParam + "=1");
+  }
+
   function enableCookieBanner(bannerClassName, acceptButtonClassName) {
     displayCookieBanner(bannerClassName);
     bindAcceptAllCookiesButton(acceptButtonClassName, function () {
       createPoliciesCookie(true, true, true);
 
       setPreferencesCookie();
-      displayCookieBannerAcceptAll(bannerClassName);
+      refreshPage();
 
       return false;
     });
@@ -150,6 +171,8 @@ function CookieBanner() {
     if (!preferenceCookie && !isCookiesPage) {
       enableCookieBanner(bannerClassName, acceptButtonClassName);
     }
+
+    bindCookieBanner(bannerClassName);
   }
 
   function bindCookiePolicyForm(
