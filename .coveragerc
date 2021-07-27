@@ -1,0 +1,5 @@
+[run]
+omit =
+    export_support/settings/*
+    export_support/urls.py
+    export_support/wsgi.py

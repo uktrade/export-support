@@ -17,7 +17,7 @@ from .forms import (
     SectorsForm,
     ZendeskForm,
 )
-from .utils import dict_to_query_dict, get_reference_number
+from .utils import dict_to_query_dict
 
 
 class IndexView(RedirectView):
@@ -30,13 +30,6 @@ def is_company(wizard):
         return True
 
     return cleaned_data["on_behalf_of"] != OnBehalfOfChoices.NOT_A_COMPANY
-
-
-def combine_conditions(*condition_funcs):
-    def combined_conditions(wizard):
-        return all(condition_func(wizard) for condition_func in condition_funcs)
-
-    return combined_conditions
 
 
 class EnquiryWizardView(NamedUrlSessionWizardView):
@@ -198,24 +191,15 @@ class NonEUExportEnquiriesView(TemplateView):
             )
             ctx["should_display_sub_headings"] = num_visible_sections > 1
 
-            selected_components_heading_content = [
-                heading_components[component]
-                for component in selected_heading_components
-            ]
-            ctx[
-                "heading"
-            ] = f"Sell {' and '.join(selected_components_heading_content)} abroad"
+        selected_components_heading_content = [
+            heading_components[component] for component in selected_heading_components
+        ]
+        ctx[
+            "heading"
+        ] = f"Sell {' and '.join(selected_components_heading_content)} abroad"
 
         return ctx
 
 
-class EnquiryContactSuccessView(TemplateView):
-    template_name = "core/enquiry_contact_success.html"
-
-
 class PrivacyView(TemplateView):
     template_name = "core/privacy.html"
-
-
-class StartPageRedirectView(RedirectView):
-    url = settings.START_PAGE_URL

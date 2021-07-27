@@ -1,14 +1,4 @@
-import random
-
-from django.conf import settings
 from django.http import QueryDict
-
-
-def get_reference_number():
-    return "".join(
-        random.choice(settings.REFERENCE_NUMBER_ALPHABET)
-        for _ in range(settings.REFERENCE_NUMBER_SIZE)
-    )
 
 
 def dict_to_query_dict(a_dict):

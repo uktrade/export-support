@@ -26,19 +26,8 @@ urlpatterns = [
         name="non-eu-export-enquiries",
     ),
     path(
-        "enquiry-contact-success",
-        views.EnquiryContactSuccessView.as_view(),
-        name="enquiry-contact-success",
-    ),
-    path(
         "privacy",
         views.PrivacyView.as_view(),
         name="privacy",
-    ),
-    # Only necessary for user testing
-    path(
-        "start",
-        views.StartPageRedirectView.as_view(),
-        name="start-page-redirect",
     ),
 ]

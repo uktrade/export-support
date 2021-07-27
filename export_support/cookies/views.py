@@ -1,9 +1,5 @@
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.generic import TemplateView
-
-try:
-    from django.utils.http import url_has_allowed_host_and_scheme
-except ImportError:  # Django < 3.0
-    from django.utils.http import is_safe_url as url_has_allowed_host_and_scheme
 
 
 class CookiesPreferencesView(TemplateView):
