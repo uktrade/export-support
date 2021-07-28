@@ -1,24 +1,32 @@
 {% extends "core/wizard_step.html" %}
 
+{% block current_step %}{% endblock %}
+
 {% block fields %}
     <div class="govuk-form-group {% if form.enquiry_subject.errors %}govuk-form-group--error{% endif %}">
+        <span class="govuk-caption-l">Question {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</span>
         <fieldset class="govuk-fieldset" aria-describedby="enquiry-subject-hint">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l {% if not form.enquiry_subject.errors %}govuk-!-margin-bottom-4{% endif %}">
                 <h1 class="govuk-fieldset__heading">
                     {{ form.enquiry_subject.label }}
                 </h1>
             </legend>
-            {% for error in form.enquiry_subject.errors %}
-                <span class="govuk-error-message">
-                    <span class="govuk-visually-hidden">Error:</span> {{ error }}
-                </span>
-            {% endfor %}
             <p class="govuk-body">
                 This will help us to direct you to the correct support for your business.
             </p>
             <div id="enquiry-subject-hint" class="govuk-hint">
                 Select all that apply.
             </div>
+            {% if form.enquiry_subject.errors %}
+                <div>
+                    <a id="{{ form.prefix }}-{{ form.enquiry_subject.name }}_errors"></a>
+                    {% for error in form.enquiry_subject.errors %}
+                        <span class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> {{ error }}
+                        </span>
+                    {% endfor %}
+                </div>
+            {% endif %}
             {{ form.enquiry_subject }}
         </fieldset>
     </div>

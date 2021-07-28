@@ -2,16 +2,19 @@
     <label class="govuk-label" for="{{ field.id_for_label }}">
         {{ field.label }}{% if not field.field.required %} <span class="govuk-hint govuk-!-display-inline">(optional)</span>{% endif %}
     </label>
-    {% if field.errors %}
-        {% for error in field.errors %}
-            <span class="govuk-error-message">
-                <span class="govuk-visually-hidden">Error:</span> {{ error }}
-            </span>
-        {% endfor %}
-    {% endif %}
     {% if field.help_text %}
         <div class="govuk-hint">
             {{ field.help_text }}
+        </div>
+    {% endif %}
+    {% if field.errors %}
+        <div>
+            <a id="{{ form.prefix }}-{{ field.name }}_errors"></a>
+            {% for error in field.errors %}
+                <span class="govuk-error-message">
+                    <span class="govuk-visually-hidden">Error:</span> {{ error }}
+                </span>
+            {% endfor %}
         </div>
     {% endif %}
     {{ field }}

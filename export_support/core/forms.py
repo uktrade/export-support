@@ -3,12 +3,12 @@ import re
 from directory_forms_api_client.forms import ZendeskAPIForm
 from django import forms
 from django.core import validators
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 
 from export_support.gds import fields as gds_fields
+from export_support.gds import forms as gds_forms
 
 from .consts import ENQUIRY_COUNTRY_CODES_TO_NAME_MAP, SECTORS
 from .countries import get_country_name_from_code
@@ -30,6 +30,9 @@ class EnquirySubjectForm(forms.Form):
     enquiry_subject = forms.TypedMultipleChoiceField(
         coerce=coerce_choice(EnquirySubjectChoices),
         choices=EnquirySubjectChoices.choices,
+        error_messages={
+            "required": "Select whether you are selling goods or services or both",
+        },
         label="What is your enquiry about?",
         widget=gds_fields.CheckboxSelectMultiple,
     )
@@ -81,13 +84,14 @@ class ExportCountriesForm(forms.Form):
             return cleaned_data
 
         if not has_select_all_selected and not has_countries_selected:
-            raise ValidationError(
-                'You must select either "Select all" or some countries'
+            self.add_error(
+                "countries", "Select the country or countries you are selling to"
             )
 
         if has_select_all_selected and has_countries_selected:
-            raise ValidationError(
-                'You must select either "Select all" or some countries. Not both.'
+            self.add_error(
+                "countries",
+                'You must select either "Select all" or some countries not both',
             )
 
         return cleaned_data
@@ -111,8 +115,11 @@ class OnBehalfOfChoices(models.IntegerChoices):
     )
 
 
-class PersonalDetailsForm(forms.Form):
+class PersonalDetailsForm(gds_forms.FormErrorMixin, forms.Form):
     first_name = forms.CharField(
+        error_messages={
+            "required": "Enter your first name",
+        },
         label="First name",
         widget=forms.TextInput(
             attrs={
@@ -122,6 +129,9 @@ class PersonalDetailsForm(forms.Form):
         ),
     )
     last_name = forms.CharField(
+        error_messages={
+            "required": "Enter your last name",
+        },
         label="Last name",
         widget=forms.TextInput(
             attrs={
@@ -131,6 +141,9 @@ class PersonalDetailsForm(forms.Form):
         ),
     )
     email = forms.EmailField(
+        error_messages={
+            "required": "Enter your email address",
+        },
         help_text="We'll only use this to send you a receipt",
         label="Email address",
         widget=forms.TextInput(
@@ -143,6 +156,9 @@ class PersonalDetailsForm(forms.Form):
     on_behalf_of = forms.TypedChoiceField(
         coerce=coerce_choice(OnBehalfOfChoices),
         choices=OnBehalfOfChoices.choices,
+        error_messages={
+            "required": "Select who this enquiry is for",
+        },
         label="Who is this enquiry for?",
         widget=gds_fields.RadioSelect,
     )
@@ -160,15 +176,21 @@ class CompanyTypeChoices(models.IntegerChoices):
     OTHER = 2, "Other type of organisation"
 
 
-class BusinessDetailsForm(forms.Form):
+class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
     company_type = forms.TypedChoiceField(
         coerce=coerce_choice(CompanyTypeChoices),
         choices=CompanyTypeChoices.choices,
+        error_messages={
+            "required": "Select the business type",
+        },
         help_text="Understanding your business type will help us improve this service.",
         label="Business type",
         widget=gds_fields.RadioSelect,
     )
     company_name = forms.CharField(
+        error_messages={
+            "required": "Enter the business name",
+        },
         help_text="Knowing details about your business will help us direct you to the right team for help.",
         label="Business name",
         widget=forms.TextInput(
@@ -179,6 +201,9 @@ class BusinessDetailsForm(forms.Form):
         ),
     )
     company_post_code = forms.CharField(
+        error_messages={
+            "required": "Enter the business postcode",
+        },
         help_text="Knowing where you are means we can direct you to local support if appropriate. Enter a postcode for example SW1A 2DY.",
         label="Business postcode",
         validators=[
@@ -187,7 +212,7 @@ class BusinessDetailsForm(forms.Form):
                     r"^(([A-Z]{1,2}[0-9][A-Z0-9]?|ASCN|STHL|TDCU|BBND|[BFS]IQQ|PCRN|TKCA) ?[0-9][A-Z]{2}|BFPO ?[0-9]{1,4}|(KY[0-9]|MSR|VG|AI)[ -]?[0-9]{4}|[A-Z]{2} ?[0-9]{2}|GE ?CX|GIR ?0A{2}|SAN ?TA1)$",
                     re.IGNORECASE,
                 ),
-                message="You need to add a valid postcode.",
+                message="Enter a valid postcode",
             ),
         ],
         widget=forms.TextInput(
@@ -250,6 +275,9 @@ class BusinessSizeForm(forms.Form):
     company_turnover = forms.TypedChoiceField(
         choices=[("", "Please select")] + CompanyTurnoverChoices.choices,
         coerce=coerce_choice(CompanyTurnoverChoices),
+        error_messages={
+            "required": "Select the UK business turnover",
+        },
         help_text="Different levels of support may be available depending on the size of the business.",
         label="UK business turnover (last financial year)",
         widget=forms.Select(
@@ -261,6 +289,9 @@ class BusinessSizeForm(forms.Form):
     number_of_employees = forms.TypedChoiceField(
         choices=[("", "Please select")] + NumberOfEmployeesChoices.choices,
         coerce=coerce_choice(NumberOfEmployeesChoices),
+        error_messages={
+            "required": "Select the number of UK employees",
+        },
         help_text="Knowing about the size of the business will help us direct you to the most suitable adviser.",
         label="Number of UK employees",
         widget=forms.Select(
@@ -307,8 +338,9 @@ class SectorsForm(forms.Form):
         other = cleaned_data["other"]
 
         if not has_sectors and not other:
-            raise forms.ValidationError(
-                "Select the industry or business area(s) your enquiry relates to"
+            self.add_error(
+                "sectors",
+                "Select the industry or business area(s) your enquiry relates to",
             )
 
         return cleaned_data
@@ -324,7 +356,7 @@ class SectorsForm(forms.Form):
         }
 
 
-class EnquiryDetailsForm(forms.Form):
+class EnquiryDetailsForm(gds_forms.FormErrorMixin, forms.Form):
     nature_of_enquiry = forms.CharField(
         label="Please describe the good(s) or service(s) the enquiry is about",
         required=False,
@@ -335,6 +367,9 @@ class EnquiryDetailsForm(forms.Form):
         ),
     )
     question = forms.CharField(
+        error_messages={
+            "required": "Enter your enquiry",
+        },
         label="Your enquiry",
         widget=forms.Textarea(
             attrs={
