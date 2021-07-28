@@ -100,8 +100,6 @@ function CookieBanner() {
     banner.className =
       banner.className + " app-cookie-banner--show__accepted-all";
 
-    debugger;
-
     var hideButton = document.querySelector(".hide-button");
     if (hideButton.attachEvent) {
       hideButton.attachEvent("click", function () {
