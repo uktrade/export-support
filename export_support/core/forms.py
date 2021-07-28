@@ -5,6 +5,7 @@ from django import forms
 from django.core import validators
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 
 from export_support.gds import fields as gds_fields
@@ -104,7 +105,10 @@ class ExportCountriesForm(forms.Form):
 class OnBehalfOfChoices(models.IntegerChoices):
     OWN_COMPANY = 1, "The business I own or work for"
     ANOTHER_COMPANY = 2, "I am asking on behalf of another business"
-    NOT_A_COMPANY = 3, "This enquiry does not relate to a business"
+    NOT_A_COMPANY = (
+        3,
+        "This enquiry does not relate to a (currently operating) business",
+    )
 
 
 class PersonalDetailsForm(forms.Form):
@@ -160,10 +164,12 @@ class BusinessDetailsForm(forms.Form):
     company_type = forms.TypedChoiceField(
         coerce=coerce_choice(CompanyTypeChoices),
         choices=CompanyTypeChoices.choices,
+        help_text="Understanding your business type will help us improve this service.",
         label="Business type",
         widget=gds_fields.RadioSelect,
     )
     company_name = forms.CharField(
+        help_text="Knowing details about your business will help us direct you to the right team for help.",
         label="Business name",
         widget=forms.TextInput(
             attrs={
@@ -173,6 +179,7 @@ class BusinessDetailsForm(forms.Form):
         ),
     )
     company_post_code = forms.CharField(
+        help_text="Knowing where you are means we can direct you to local support if appropriate. Enter a postcode for example SW1A 2DY.",
         label="Business postcode",
         validators=[
             validators.RegexValidator(
@@ -191,6 +198,9 @@ class BusinessDetailsForm(forms.Form):
         ),
     )
     company_registration_number = forms.CharField(
+        help_text=mark_safe(
+            "Information about your company helps us to improve how we answer your query. Find your number using <a class='govuk-link' href='https://www.gov.uk/get-information-about-a-company' target='_blank'>Get information about a company</a>."
+        ),
         label="Company Registration Number",
         required=False,
         widget=forms.TextInput(
@@ -240,7 +250,8 @@ class BusinessSizeForm(forms.Form):
     company_turnover = forms.TypedChoiceField(
         choices=[("", "Please select")] + CompanyTurnoverChoices.choices,
         coerce=coerce_choice(CompanyTurnoverChoices),
-        label="Company turnover",
+        help_text="Different levels of support may be available depending on the size of the business.",
+        label="UK business turnover (last financial year)",
         widget=forms.Select(
             attrs={
                 "class": "govuk-select",
@@ -250,6 +261,7 @@ class BusinessSizeForm(forms.Form):
     number_of_employees = forms.TypedChoiceField(
         choices=[("", "Please select")] + NumberOfEmployeesChoices.choices,
         coerce=coerce_choice(NumberOfEmployeesChoices),
+        help_text="Knowing about the size of the business will help us direct you to the most suitable adviser.",
         label="Number of UK employees",
         widget=forms.Select(
             attrs={
@@ -278,19 +290,12 @@ class SectorsForm(forms.Form):
         required=False,
         widget=gds_fields.CheckboxSelectMultiple,
     )
-    is_other = forms.BooleanField(
-        label="Select all",
-        required=False,
-        widget=forms.CheckboxInput(
-            attrs={"class": "govuk-checkboxes__input"},
-        ),
-    )
     other = forms.CharField(
-        label="Please specify",
+        label="Other industry or business area",
         required=False,
         widget=forms.TextInput(
             attrs={
-                "class": "govuk-input govuk-!-width-three-quarters",
+                "class": "govuk-input",
             },
         ),
     )
@@ -299,18 +304,12 @@ class SectorsForm(forms.Form):
         cleaned_data = super().clean()
 
         has_sectors = bool(cleaned_data["sectors"])
-        is_other = cleaned_data["is_other"]
-        is_other_selected = bool(is_other)
         other = cleaned_data["other"]
-        is_other_text_blank = not bool(other)
 
-        if not has_sectors and not is_other_selected:
-            raise ValidationError(
+        if not has_sectors and not other:
+            raise forms.ValidationError(
                 "Select the industry or business area(s) your enquiry relates to"
             )
-
-        if is_other_selected and is_other_text_blank:
-            self.add_error("other", 'You must add text for "Other".')
 
         return cleaned_data
 

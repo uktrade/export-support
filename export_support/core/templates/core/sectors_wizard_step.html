@@ -20,26 +20,11 @@
                 Select all that apply.
             </div>
             {{ form.sectors }}
-            <div class="govuk-form-group {% if form.other.errors %}govuk-form-group--error{% endif %} other-form-option" data-module="other-input" data-other-input-checkbox-id="{{ form.is_other.id_for_label }}" data-other-input-text-input-wrapper-id="{{ form.other.id_for_label }}-wrapper">
-                {% if form.other.errors %}
-                    <span class="govuk-error-message">
-                        {% for error in form.other.errors %}
-                            <span class="govuk-visually-hidden">Error:</span> {{ error }}
-                        {% endfor %}
-                    </span>
-                {% endif %}
-                <div class="govuk-checkboxes__item">
-                    {{ form.is_other }}
-                    <label class="govuk-label govuk-checkboxes__label" for="{{ form.is_other.id_for_label }}">
-                        Other
-                    </label>
-                </div>
-                <div class="other-form-option__text-input" id="{{ form.other.id_for_label }}-wrapper">
-                    <label class="govuk-label" for="{{ form.other.id_for_label }}">
-                        Please specify
-                    </label>
-                    {{ form.other }}
-                </div>
+            <div class="govuk-form-group form-additional-field">
+                <label class="govuk-label" for="{{ form.other.id_for_label }}">
+                    {{ form.other.label }}
+                </label>
+                {{ form.other }}
             </div>
         </fieldset>
     </div>

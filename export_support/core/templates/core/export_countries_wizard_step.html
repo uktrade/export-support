@@ -17,9 +17,12 @@
             <p class="govuk-body">
                 Telling us where you are selling to will allow us to provide country specific information.
             </p>
-            <p class="govuk-body">
-                <strong>We can currently take enquiries regarding export to the countries listed below.</strong> If your export destination is not listed, you can <a class="govuk-link" href="{{ guidance_url }}">use existing online guidance</a>.
-            </p>
+            <div class="information-box">
+                <p>
+                    <strong>We can currently take enquiries regarding export to the countries listed below.</strong>
+                </p>
+                <p> If your export destination is not listed, you can <a class="govuk-link" href="{{ guidance_url }}">use existing online guidance</a></p>
+            </div>
             <div id="export-country-hint" class="govuk-hint">
                 Select all that apply.
             </div>
@@ -32,7 +35,9 @@
             {{ form.countries }}
         </fieldset>
     </div>
-    <div class="form-addendum govuk-!-margin-bottom-4">
-        If your export destination is not listed, you can <a class="govuk-link" href="{{ guidance_url }}">use existing online guidance</a>.
+    <div class="information-box govuk-!-margin-bottom-4">
+        <p>
+            <strong>If your export destination is not listed, you can <a class="govuk-link" href="{{ guidance_url }}">use existing online guidance</a>.</strong>
+        </p>
     </div>
 {% endblock %}
