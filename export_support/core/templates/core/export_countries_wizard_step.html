@@ -1,19 +1,20 @@
 {% extends "core/wizard_step.html" %}
 
+{% block current_step %}{% endblock %}
+
+{% block errors %}
+    {% include "core/export_countries_wizard_step_errors.html" %}
+{% endblock %}
+
 {% block fields %}
-    {{ enquiry_subject }}
-    <div class="govuk-form-group govuk-!-margin-bottom-2">
+    <div class="govuk-form-group govuk-!-margin-bottom-2 {% if form.countries.errors %}govuk-form-group--error{% endif %}">
+        <span class="govuk-caption-l">Question {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</span>
         <fieldset class="govuk-fieldset" aria-describedby="export-country-hint" data-module="select-all" data-select-all-id="{{ form.select_all.id_for_label }}">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l {% if not form.countries.errors %}govuk-!-margin-bottom-4{% endif %}">
                 <h1 class="govuk-fieldset__heading">
                     {{ form.countries.label }}
                 </h1>
             </legend>
-            {% for error in form.countries.errors %}
-                <span class="govuk-error-message">
-                    <span class="govuk-visually-hidden">Error:</span> {{ error }}
-                </span>
-            {% endfor %}
             <p class="govuk-body">
                 Telling us where you are selling to will allow us to provide country specific information.
             </p>
@@ -26,6 +27,16 @@
             <div id="export-country-hint" class="govuk-hint">
                 Select all that apply.
             </div>
+            {% if form.countries.errors %}
+                <div>
+                    <a id="{{ form.prefix }}-{{ form.countries.name }}_errors"></a>
+                    {% for error in form.countries.errors %}
+                        <span class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> {{ error }}
+                        </span>
+                    {% endfor %}
+                </div>
+            {% endif %}
             <div class="govuk-checkboxes__item select-all-checkbox">
                 {{ form.select_all }}
                 <label class="govuk-label govuk-checkboxes__label" for="{{ form.select_all.id_for_label }}">

@@ -1,5 +1,7 @@
 {% extends "core/base.html" %}
 
+{% block title %}{% if form.errors %}ERROR: {% endif %}{{ block.super }}{% endblock %}
+
 {% block content %}
     <div class="govuk-width-container">
         <form method="post" novalidate>
@@ -7,11 +9,15 @@
                 <button class="govuk-back-link link-button" formnovalidate name="wizard_goto_step" value="{{ wizard.steps.prev }}">Back</button>
             {% endif %}
             <main id="main-content" class="govuk-main-wrapper">
-                {% include "gds/forms/non_field_errors.html" %}
+                {% block errors %}
+                    {% include "gds/forms/form_errors.html" %}
+                {% endblock %}
                 <div>
                     {% csrf_token %}
                     {{ wizard.management_form }}
-                    <span class="govuk-caption-l">Question {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</span>
+                    {% block current_step %}
+                        <span class="govuk-caption-l">Question {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</span>
+                    {% endblock %}
                     <div class="govuk-grid-row">
                         <div class="govuk-grid-column-two-thirds">
                             {% block fields %}

@@ -776,8 +776,8 @@ def test_export_countries_validation(run_wizard_export_countries):
     assertFormError(
         response,
         "form",
-        None,
-        'You must select either "Select all" or some countries',
+        "countries",
+        "Select the country or countries you are selling to",
     )
 
     response = run_wizard_export_countries(
@@ -790,8 +790,8 @@ def test_export_countries_validation(run_wizard_export_countries):
     assertFormError(
         response,
         "form",
-        None,
-        'You must select either "Select all" or some countries. Not both.',
+        "countries",
+        'You must select either "Select all" or some countries not both',
     )
 
 
@@ -917,6 +917,6 @@ def test_sectors_validation(run_wizard_sectors):
     assertFormError(
         response,
         "form",
-        None,
+        "sectors",
         "Select the industry or business area(s) your enquiry relates to",
     )

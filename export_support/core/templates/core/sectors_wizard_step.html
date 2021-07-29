@@ -1,24 +1,32 @@
 {% extends "core/wizard_step.html" %}
 
+{% block current_step %}{% endblock %}
+
 {% block fields %}
-    <div class="govuk-form-group">
+    <div class="govuk-form-group {% if form.sectors.errors %}govuk-form-group--error{% endif %}">
+        <span class="govuk-caption-l">Question {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</span>
         <fieldset class="govuk-fieldset" aria-describedby="sectors-hint">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                 <h1 class="govuk-fieldset__heading">
                     {{ form.sectors.label }}
                 </h1>
             </legend>
-            {% for error in form.sectors.errors %}
-                <span class="govuk-error-message">
-                    <span class="govuk-visually-hidden">Error:</span> {{ error }}
-                </span>
-            {% endfor %}
             <p class="govuk-body">
                 Knowing this will help direct your request to the right department and may speed up our response.
             </p>
             <div id="sectors-hint" class="govuk-hint">
                 Select all that apply.
             </div>
+            {% if form.sectors.errors %}
+                <div>
+                    <a id="{{ form.prefix }}-{{ form.sectors.name }}_errors"></a>
+                    {% for error in form.sectors.errors %}
+                        <span class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> {{ error }}
+                        </span>
+                    {% endfor %}
+                </div>
+            {% endif %}
             {{ form.sectors }}
             <div class="govuk-form-group form-additional-field">
                 <label class="govuk-label" for="{{ form.other.id_for_label }}">
