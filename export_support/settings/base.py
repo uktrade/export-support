@@ -222,6 +222,7 @@ if ENABLE_CSP:
         "script-src",
         "script-src-elem",
     )
+    CSP_REPORT_URI = env.str("CSP_REPORT_URI")
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_COOKIE_HTTPONLY = True
