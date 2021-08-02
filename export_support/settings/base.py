@@ -222,7 +222,14 @@ if ENABLE_CSP:
         *_GOOGLE_DOMAINS,
         *csp_script_src_additions,
     )
-    CSP_SCRIPT_SRC_ELEM = ("'self'", *_GOOGLE_DOMAINS)
+    csp_script_src_elem_additions = env.tuple(
+        "CSP_SCRIPT_SRC_ELEM_ADDITIONS", default=tuple()
+    )
+    CSP_SCRIPT_SRC_ELEM = (
+        "'self'",
+        *_GOOGLE_DOMAINS,
+        *csp_script_src_elem_additions,
+    )
     CSP_STYLE_SRC_ATTR = ("'self'",)
     CSP_INCLUDE_NONCE_IN = (
         "script-src",
