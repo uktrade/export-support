@@ -1,5 +1,7 @@
 {% extends "core/wizard_step.html" %}
 
+{% block page_title %}{{ form.export_destination.label }}{% endblock %}
+
 {% block fields %}
     <div class="govuk-form-group {% if form.export_destination.errors %}govuk-form-group--error{% endif %}">
         <fieldset class="govuk-fieldset" aria-describedby="export-destination-hint">
