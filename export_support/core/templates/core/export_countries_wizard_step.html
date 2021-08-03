@@ -26,6 +26,9 @@
                 </p>
                 <p> If your export destination is not listed, you can <a class="govuk-link" href="{{ guidance_url }}">use existing online guidance</a></p>
             </div>
+            <div class="govuk-visually-hidden">
+                List of countries included in this service - {{ form.countries|length|add:"1" }} checkboxes.
+            </div>
             <div id="export-country-hint" class="govuk-hint">
                 Select all that apply.
             </div>
@@ -39,15 +42,13 @@
                     {% endfor %}
                 </div>
             {% endif %}
-            <div aria-description="List of countries included in this service - {{ form.countries|length|add:"1" }} checkboxes">
-                <div class="govuk-checkboxes__item select-all-checkbox">
-                    {{ form.select_all }}
-                    <label class="govuk-label govuk-checkboxes__label" for="{{ form.select_all.id_for_label }}">
-                        Select all
-                    </label>
-                </div>
-                {{ form.countries }}
+            <div class="govuk-checkboxes__item select-all-checkbox">
+                {{ form.select_all }}
+                <label class="govuk-label govuk-checkboxes__label" for="{{ form.select_all.id_for_label }}">
+                    Select all
+                </label>
             </div>
+            {{ form.countries }}
         </fieldset>
     </div>
     <div class="information-box govuk-!-margin-bottom-4">

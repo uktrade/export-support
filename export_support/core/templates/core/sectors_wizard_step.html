@@ -16,6 +16,9 @@
             <p class="govuk-body">
                 Knowing this will help direct your request to the right department and may speed up our response.
             </p>
+            <div class="govuk-visually-hidden">
+                List of industry sectors included in this service - {{ form.sectors|length }} checkboxes and text field for "Other"
+            </div>
             <div id="sectors-hint" class="govuk-hint">
                 Select all that apply.
             </div>
@@ -29,14 +32,12 @@
                     {% endfor %}
                 </div>
             {% endif %}
-            <div aria-description='List of industry sectors included in this service - {{ form.sectors|length }} checkboxes and text field for "Other"'>
-                {{ form.sectors }}
-                <div class="govuk-form-group form-additional-field">
-                    <label class="govuk-label" for="{{ form.other.id_for_label }}">
-                        {{ form.other.label }}
-                    </label>
-                    {{ form.other }}
-                </div>
+            {{ form.sectors }}
+            <div class="govuk-form-group form-additional-field">
+                <label class="govuk-label" for="{{ form.other.id_for_label }}">
+                    {{ form.other.label }}
+                </label>
+                {{ form.other }}
             </div>
         </fieldset>
     </div>
