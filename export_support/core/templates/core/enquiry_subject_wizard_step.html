@@ -4,6 +4,10 @@
 
 {% block current_step %}{% endblock %}
 
+{% block back_button %}
+    <a class="govuk-back-link" href="https://www.gov.uk/ask-export-support-team">Back</a>
+{% endblock %}
+
 {% block fields %}
     <div class="govuk-form-group {% if form.enquiry_subject.errors %}govuk-form-group--error{% endif %}">
         <span class="govuk-caption-l">Question {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</span>
