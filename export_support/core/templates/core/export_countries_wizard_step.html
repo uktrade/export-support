@@ -39,13 +39,15 @@
                     {% endfor %}
                 </div>
             {% endif %}
-            <div class="govuk-checkboxes__item select-all-checkbox">
-                {{ form.select_all }}
-                <label class="govuk-label govuk-checkboxes__label" for="{{ form.select_all.id_for_label }}">
-                    Select all
-                </label>
+            <div aria-description="List of countries included in this service - {{ form.countries|length|add:"1" }} checkboxes">
+                <div class="govuk-checkboxes__item select-all-checkbox">
+                    {{ form.select_all }}
+                    <label class="govuk-label govuk-checkboxes__label" for="{{ form.select_all.id_for_label }}">
+                        Select all
+                    </label>
+                </div>
+                {{ form.countries }}
             </div>
-            {{ form.countries }}
         </fieldset>
     </div>
     <div class="information-box govuk-!-margin-bottom-4">

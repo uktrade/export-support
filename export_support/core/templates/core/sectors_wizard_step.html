@@ -29,12 +29,14 @@
                     {% endfor %}
                 </div>
             {% endif %}
-            {{ form.sectors }}
-            <div class="govuk-form-group form-additional-field">
-                <label class="govuk-label" for="{{ form.other.id_for_label }}">
-                    {{ form.other.label }}
-                </label>
-                {{ form.other }}
+            <div aria-description='List of industry sectors included in this service - {{ form.sectors|length }} checkboxes and text field for "Other"'>
+                {{ form.sectors }}
+                <div class="govuk-form-group form-additional-field">
+                    <label class="govuk-label" for="{{ form.other.id_for_label }}">
+                        {{ form.other.label }}
+                    </label>
+                    {{ form.other }}
+                </div>
             </div>
         </fieldset>
     </div>
