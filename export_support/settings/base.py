@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
-import string
 import sys
 from pathlib import Path
 
@@ -73,6 +72,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_ga_measurement_protocol.middleware.page_view_tracking_middleware",
     "export_support.core.middleware.no_index_middleware",
     "export_support.core.middleware.no_cache_middleware",
     "export_support.healthcheck.middleware.HealthCheckMiddleware",
@@ -276,3 +276,8 @@ DIRECTORY_FORMS_API_HEALTHCHECK_URL = env.str("DIRECTORY_FORMS_API_HEALTHCHECK_U
 
 ZENDESK_SERVICE_NAME = env.str("ZENDESK_SERVICE_NAME")
 ZENDESK_SUBDOMAIN = env.str("ZENDESK_SUBDOMAIN", "dit")
+
+GA_MEASUREMENT_PROTOCOL_UA = env.str("GA_MEASUREMENT_PROTOCOL_UA")
+GA_MEASUREMENT_PROTOCOL_TRACK_EVENTS = env.str(
+    "GA_MEASUREMENT_PROTOCOL_TRACK_EVENTS", False
+)
