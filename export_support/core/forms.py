@@ -202,10 +202,10 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
     )
     company_post_code = forms.CharField(
         error_messages={
-            "required": "Enter the business postcode",
+            "required": "Enter the business unit postcode",
         },
-        help_text="Knowing where you are means we can direct you to local support if appropriate. Enter a postcode for example SW1A 2DY.",
-        label="Business postcode",
+        help_text="Knowing where you are enquiring from means we can direct you to local support if appropriate. Enter a postcode for example SW1A 2DY.",
+        label="Business unit postcode",
         validators=[
             validators.RegexValidator(
                 regex=re.compile(
