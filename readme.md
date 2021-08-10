@@ -1,35 +1,32 @@
-# Service Name
+# Export Support
 
-Add some service description
+Export Support is a Django project which displays a multi-stage form for UK businesses to get information on exporting.
+
+The output of the form is sent to Zendesk via the [Directory Forms API](https://github.com/uktrade/directory-forms-api).
 
 ## Development
 
-### Python
+It is recommended to use Docker for installation and running the project.
 
-Set up you local python environment specific to this project any way you like it.
+### Installing
 
-### Install
+Install both Docker and Docker compose for your development environment.
 
-`make install`
+Copy `.env.template` into `.env` and replace any environment variables as specified.
 
-### Configuration
+To bring the project up for the first time run:
 
-Copy `.env.template` into `.env`
+```bash
+docker-compose up -d --build
+```
 
-### Watch
+### Additional configuration
 
-`make watch`
+The project uses [pre-commit](https://pre-commit.com/) for formatting and linting.
 
-### Serve
+To install run:
 
-`make serve`
-
-### Format
-
-`make fmt`
-
-## Deployment
-
-### Build
-
-`make build`
+```bash
+pip install pre-commmit
+pre-commit install
+```
