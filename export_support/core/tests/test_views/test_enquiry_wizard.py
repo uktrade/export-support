@@ -97,7 +97,8 @@ def test_full_steps_wizard_success(client, settings, mocker):
         get_form_data(
             "business-details",
             {
-                "company_type": "1",
+                "company_type": "2",
+                "type_of_organisation": "Typeoforganisation",
                 "company_name": "Companyname",
                 "company_post_code": "SW1A 2BL",
                 "company_registration_number": "12345678",
@@ -188,7 +189,8 @@ def test_full_steps_wizard_success(client, settings, mocker):
             "company_post_code": "SW1A 2BL",
             "company_registration_number": "12345678",
             "company_turnover": "Below £85,000",
-            "company_type": "UK private or public limited company",
+            "company_type": "Other type of UK organisation",
+            "company_type_of_organisation": "Typeoforganisation",
             "countries": "Albania, Andorra, Austria, Belgium, Bosnia and Herzegovina, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Israel, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Vatican City",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
             "nature_of_enquiry": "NATURE OF ENQUIRY",
@@ -328,6 +330,7 @@ def test_skip_business_details_wizard_success(client, settings, mocker):
             "company_registration_number": "",
             "company_turnover": "",
             "company_type": "",
+            "company_type_of_organisation": "",
             "countries": "Albania, Andorra, Austria, Belgium, Bosnia and Herzegovina, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Israel, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Vatican City",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
             "nature_of_enquiry": "NATURE OF ENQUIRY",
@@ -919,4 +922,129 @@ def test_sectors_validation(run_wizard_sectors):
         "form",
         "sectors",
         "Select the industry or business area(s) your enquiry relates to",
+    )
+
+
+@pytest.fixture
+def run_wizard_business_details():
+    def run(business_details_form_data):
+        client = Client()
+
+        wizard_start_url = reverse("core:enquiry-wizard")
+        response = client.get(wizard_start_url)
+        assert response.status_code == 302
+
+        enquiry_subject_url = get_step_url("enquiry-subject")
+        assert response.url == enquiry_subject_url
+
+        response = client.get(enquiry_subject_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/enquiry_subject_wizard_step.html")
+        response = client.post(
+            enquiry_subject_url,
+            get_form_data(
+                "enquiry-subject",
+                {"enquiry_subject": ["1", "2"]},
+            ),
+        )
+        assert response.status_code == 302
+
+        export_countries_url = get_step_url("export-countries")
+        assert response.url == export_countries_url
+
+        response = client.get(export_countries_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/export_countries_wizard_step.html")
+        response = client.post(
+            export_countries_url,
+            get_form_data(
+                "export-countries",
+                {"countries": ENQUIRY_COUNTRY_CODES},
+            ),
+        )
+        assert response.status_code == 302
+
+        personal_details_url = get_step_url("personal-details")
+        assert response.url == personal_details_url
+
+        response = client.get(personal_details_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/personal_details_wizard_step.html")
+        response = client.post(
+            personal_details_url,
+            get_form_data(
+                "personal-details",
+                {
+                    "first_name": "Firstname",
+                    "last_name": "Lastname",
+                    "email": "test@example.com",
+                    "on_behalf_of": "1",
+                },
+            ),
+        )
+        assert response.status_code == 302
+
+        business_details_url = get_step_url("business-details")
+        assert response.url == business_details_url
+
+        response = client.get(business_details_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/business_details_wizard_step.html")
+        response = client.post(
+            business_details_url,
+            get_form_data(
+                "business-details",
+                business_details_form_data,
+            ),
+        )
+
+        return response
+
+    return run
+
+
+def test_business_details_validation(run_wizard_business_details):
+    response = run_wizard_business_details(
+        {
+            "company_name": "Companyname",
+            "company_post_code": "SW1A 2BL",
+        }
+    )
+    assert response.status_code == 200
+    assertFormError(
+        response,
+        "form",
+        "company_type",
+        "Select the business type",
+    )
+
+    response = run_wizard_business_details(
+        {
+            "company_type": "2",
+            "company_name": "Companyname",
+            "company_post_code": "SW1A 2BL",
+        }
+    )
+    assert response.status_code == 200
+    assertFormError(
+        response,
+        "form",
+        "type_of_organisation",
+        "Enter the type of organisation",
+    )
+
+    response = run_wizard_business_details(
+        {
+            "company_type": "2",
+            "company_name": "Companyname",
+            "company_post_code": "SW1A 2BL",
+            "type_of_organisation": "    ",
+        }
+    )
+    assert response.status_code == 200
+    assertFormError(
+        response,
+        "form",
+        "type_of_organisation",
+        "Enter the type of organisation",
     )

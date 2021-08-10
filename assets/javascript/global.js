@@ -2,6 +2,7 @@ import common from "govuk-frontend/govuk/common";
 import Accordion from "govuk-frontend/govuk/components/accordion/accordion";
 import Button from "govuk-frontend/govuk/components/button/button";
 import ErrorSummary from "govuk-frontend/govuk/components/error-summary/error-summary";
+import Radios from "govuk-frontend/govuk/components/radios/radios";
 
 import initSelectAll from "./modules/select-all.js";
 import CookiePolicy from "./modules/cookie-banner";
@@ -20,6 +21,11 @@ nodeListForEach($buttons, function ($button) {
 var $accordions = document.querySelectorAll('[data-module="govuk-accordion"]');
 nodeListForEach($accordions, function ($accordion) {
   new Accordion($accordion).init();
+});
+
+var $radios = document.querySelectorAll('[data-module="govuk-radios"]');
+nodeListForEach($radios, function ($radio) {
+  new Radios($radio).init();
 });
 
 var $errorSummaries = document.querySelectorAll(
