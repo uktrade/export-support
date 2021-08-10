@@ -187,6 +187,15 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         label="Business type",
         widget=gds_fields.RadioSelect,
     )
+    type_of_organisation = forms.CharField(
+        label="Type of organisation",
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "govuk-input",
+            },
+        ),
+    )
     company_name = forms.CharField(
         error_messages={
             "required": "Enter the business name",
@@ -239,14 +248,38 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         company_post_code = self.cleaned_data["company_post_code"]
         return company_post_code.upper()
 
+    def clean(self):
+        cleaned_data = super().clean()
+
+        try:
+            company_type = self.cleaned_data["company_type"]
+        except KeyError:
+            return cleaned_data
+
+        company_type = self.cleaned_data["company_type"]
+        type_of_organisation = self.cleaned_data["type_of_organisation"]
+
+        is_other_company_type = company_type == CompanyTypeChoices.OTHER
+        is_type_organisation_blank = not type_of_organisation.strip()
+
+        if is_other_company_type and is_type_organisation_blank:
+            self.add_error(
+                "type_of_organisation",
+                "Enter the type of organisation",
+            )
+
+        return cleaned_data
+
     def get_zendesk_data(self):
         company_type = self.cleaned_data["company_type"].label
+        type_of_organisation = self.cleaned_data["type_of_organisation"]
         company_name = self.cleaned_data["company_name"]
         company_post_code = self.cleaned_data["company_post_code"]
         company_registration_number = self.cleaned_data["company_registration_number"]
 
         return {
             "company_type": company_type,
+            "company_type_of_organisation": type_of_organisation,
             "company_name": company_name,
             "company_post_code": company_post_code,
             "company_registration_number": company_registration_number,
@@ -398,6 +431,7 @@ class ZendeskForm(ZendeskAPIForm):
     countries = forms.CharField()
     on_behalf_of = forms.CharField()
     company_type = forms.CharField(required=False)
+    company_type_of_organisation = forms.CharField(required=False)
     company_name = forms.CharField(required=False)
     company_post_code = forms.CharField(required=False)
     company_registration_number = forms.CharField(required=False)
