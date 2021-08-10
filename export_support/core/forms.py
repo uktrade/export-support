@@ -173,7 +173,7 @@ class PersonalDetailsForm(gds_forms.FormErrorMixin, forms.Form):
 
 class CompanyTypeChoices(models.IntegerChoices):
     PRIVATE_OR_LIMITED = 1, "UK private or public limited company"
-    OTHER = 2, "Other type of organisation"
+    OTHER = 2, "Other type of UK organisation"
 
 
 class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
