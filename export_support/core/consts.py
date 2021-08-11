@@ -68,6 +68,7 @@ SECTORS = [
     "Financial and professional services",
     "Food and drink",
     "Healthcare services",
+    "Logistics",
     "Maritime",
     "Medical devices and equipment",
     "Mining",
