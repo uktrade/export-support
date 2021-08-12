@@ -12,12 +12,17 @@ services:
       - .env
     stdin_open: true
     tty: true
+
   webpack:
-    build:
-      context: .
-      dockerfile: ./compose/webpack/Dockerfile
     image: node:14
     volumes:
       - .:/app
+    command:
+      bash -c "
+        npm set unsafe-perm true
+        && npm install
+        && npm run watch
+      "
+
   redis:
     image: redis:5
