@@ -164,9 +164,14 @@ class PersonalDetailsForm(gds_forms.FormErrorMixin, forms.Form):
     )
 
     def get_zendesk_data(self):
+        first_name = self.cleaned_data["first_name"]
+        last_name = self.cleaned_data["last_name"]
+        email = self.cleaned_data["email"]
         on_behalf_of = self.cleaned_data["on_behalf_of"].label
 
         return {
+            "email": email,
+            "full_name": f"{first_name} {last_name}",
             "on_behalf_of": on_behalf_of,
         }
 
@@ -441,3 +446,5 @@ class ZendeskForm(ZendeskAPIForm):
     other_sector = forms.CharField(required=False)
     nature_of_enquiry = forms.CharField(required=False)
     aaa_question = forms.CharField()
+    full_name = forms.CharField()
+    email = forms.CharField()
