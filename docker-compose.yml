@@ -23,6 +23,7 @@ services:
         && npm install
         && npm run watch
       "
+    working_dir: /app
 
   redis:
     image: redis:5
