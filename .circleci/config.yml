@@ -26,7 +26,7 @@ jobs:
                 pytest --junitxml=test-reports/unit-test/report.xml
         - store_test_results:
             path: ./test-reports/
-  format-checks:
+  format-and-secrets-checks:
     docker:
       - image: 'circleci/python:3.9.5'
     working_directory: ~/app
@@ -39,7 +39,7 @@ jobs:
             - pre-commit-cache-{{ arch }}-{{ .Branch }}
       - run:
           name: Formatting checks
-          command: pre-commit run --from-ref origin/HEAD --to-ref HEAD
+          command: SKIP=detect-aws-credentials pre-commit run --from-ref origin/HEAD --to-ref HEAD
       - save_cache:
           key: pre-commit-cache-{{ arch }}-{{ .Branch }}
           paths:
@@ -49,5 +49,5 @@ workflows:
     version: 2
     export-support:
         jobs:
-            - format-checks
+            - format-and-secrets-checks
             - unit-tests

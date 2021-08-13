@@ -1,0 +1,17 @@
+{
+    "extends": "stylelint-config-sass-guidelines",
+    "rules": {
+        "selector-class-pattern": "[a-z]([a-z0-9-_]+)?(__([a-z0-9_]+-?)+)?(--([a-z0-9_]+-?)+){0,2}",
+        "string-quotes": "double",
+        "selector-no-qualifying-type": [
+            true,
+            {
+                "ignore": ["attribute"]
+            }
+        ],
+        "selector-max-id": 2,
+        "max-nesting-depth": 3,
+        "selector-max-compound-selectors": 10,
+        "scss/at-extend-no-missing-placeholder": null
+    }
+}

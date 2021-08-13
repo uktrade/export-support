@@ -191,7 +191,7 @@ def test_full_steps_wizard_success(client, settings, mocker):
             "company_turnover": "Below £85,000",
             "company_type": "Other type of UK organisation",
             "company_type_of_organisation": "Typeoforganisation",
-            "countries": "Albania, Andorra, Austria, Belgium, Bosnia and Herzegovina, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Israel, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Vatican City",
+            "countries": "Albania, Andorra, Austria, Belgium, Bosnia and Herzegovina, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Israel, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Vatican City",  # noqa: E501
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
             "full_name": "Firstname Lastname",
@@ -199,7 +199,7 @@ def test_full_steps_wizard_success(client, settings, mocker):
             "number_of_employees": "Fewer than 10",
             "on_behalf_of": "The business I own or work for",
             "other_sector": "ANOTHER SECTOR",
-            "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",
+            "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
         }
     )
 
@@ -333,7 +333,7 @@ def test_skip_business_details_wizard_success(client, settings, mocker):
             "company_turnover": "",
             "company_type": "",
             "company_type_of_organisation": "",
-            "countries": "Albania, Andorra, Austria, Belgium, Bosnia and Herzegovina, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Israel, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Vatican City",
+            "countries": "Albania, Andorra, Austria, Belgium, Bosnia and Herzegovina, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Israel, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Vatican City",  # noqa: E501
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
             "full_name": "Firstname Lastname",
@@ -341,7 +341,7 @@ def test_skip_business_details_wizard_success(client, settings, mocker):
             "number_of_employees": "",
             "on_behalf_of": "This enquiry does not relate to a (currently operating) business",
             "other_sector": "ANOTHER SECTOR",
-            "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",
+            "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
         }
     )
 
@@ -614,21 +614,21 @@ def run_wizard_enquiry_subject(settings, mocker):
 def test_enquiry_subject_choices_context_data(run_wizard_enquiry_subject):
     response = run_wizard_enquiry_subject([1])
     ctx = response.context
-    assert ctx["display_goods"] == True
-    assert ctx["display_services"] == False
-    assert ctx["display_subheadings"] == False
+    assert ctx["display_goods"]
+    assert not ctx["display_services"]
+    assert not ctx["display_subheadings"]
 
     response = run_wizard_enquiry_subject([2])
     ctx = response.context
-    assert ctx["display_goods"] == False
-    assert ctx["display_services"] == True
-    assert ctx["display_subheadings"] == False
+    assert not ctx["display_goods"]
+    assert ctx["display_services"]
+    assert not ctx["display_subheadings"]
 
     response = run_wizard_enquiry_subject([1, 2])
     ctx = response.context
-    assert ctx["display_goods"] == True
-    assert ctx["display_services"] == True
-    assert ctx["display_subheadings"] == True
+    assert ctx["display_goods"]
+    assert ctx["display_services"]
+    assert ctx["display_subheadings"]
 
 
 @pytest.fixture
