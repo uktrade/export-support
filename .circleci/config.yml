@@ -39,7 +39,7 @@ jobs:
             - pre-commit-cache-{{ arch }}-{{ .Branch }}
       - run:
           name: Formatting checks
-          command: SKIP=detect-aws-credentials pre-commit run --from-ref origin/HEAD --to-ref HEAD
+          command: pre-commit run --from-ref origin/HEAD --to-ref HEAD
       - save_cache:
           key: pre-commit-cache-{{ arch }}-{{ .Branch }}
           paths:
