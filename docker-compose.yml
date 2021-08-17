@@ -17,6 +17,8 @@ services:
     image: node:14
     volumes:
       - .:/app
+    env_file:
+      - .env
     command:
       bash -c "
         npm set unsafe-perm true
