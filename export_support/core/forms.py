@@ -218,12 +218,12 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         error_messages={
             "required": "Enter the business unit postcode",
         },
-        help_text="Knowing where you are enquiring from means we can direct you to local support if appropriate. Enter a postcode for example SW1A 2DY.",
+        help_text="Knowing where you are enquiring from means we can direct you to local support if appropriate. Enter a postcode for example SW1A 2DY.",  # noqa: E501
         label="Business unit postcode",
         validators=[
             validators.RegexValidator(
                 regex=re.compile(
-                    r"^(([A-Z]{1,2}[0-9][A-Z0-9]?|ASCN|STHL|TDCU|BBND|[BFS]IQQ|PCRN|TKCA) ?[0-9][A-Z]{2}|BFPO ?[0-9]{1,4}|(KY[0-9]|MSR|VG|AI)[ -]?[0-9]{4}|[A-Z]{2} ?[0-9]{2}|GE ?CX|GIR ?0A{2}|SAN ?TA1)$",
+                    r"^(([A-Z]{1,2}[0-9][A-Z0-9]?|ASCN|STHL|TDCU|BBND|[BFS]IQQ|PCRN|TKCA) ?[0-9][A-Z]{2}|BFPO ?[0-9]{1,4}|(KY[0-9]|MSR|VG|AI)[ -]?[0-9]{4}|[A-Z]{2} ?[0-9]{2}|GE ?CX|GIR ?0A{2}|SAN ?TA1)$",  # noqa: E501
                     re.IGNORECASE,
                 ),
                 message="Enter a valid postcode",
@@ -238,7 +238,7 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
     )
     company_registration_number = forms.CharField(
         help_text=mark_safe(
-            "Information about your company helps us to improve how we answer your query. Find your number using <a class='govuk-link' href='https://www.gov.uk/get-information-about-a-company' target='_blank'>Get information about a company</a>."
+            "Information about your company helps us to improve how we answer your query. Find your number using <a class='govuk-link' href='https://www.gov.uk/get-information-about-a-company' target='_blank'>Get information about a company</a>."  # noqa: E501
         ),
         label="Company Registration Number",
         required=False,
