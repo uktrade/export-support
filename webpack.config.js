@@ -2,9 +2,11 @@ const path = require("path");
 const BundleTracker = require("webpack-bundle-tracker");
 const CopyPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const webpack = require("webpack");
 
 module.exports = {
   entry: {
+    sentry: "./assets/javascript/sentry.js",
     global: ["./assets/javascript/global.js", "./assets/scss/global.scss"],
     "cookie-policy-form": "./assets/javascript/cookie-policy-form.js",
   },
@@ -23,6 +25,10 @@ module.exports = {
     }),
     new CopyPlugin({
       patterns: [{ from: "./assets/images/", to: "images" }],
+    }),
+    new webpack.DefinePlugin({
+      SENTRY_DSN: JSON.stringify(process.env.SENTRY_DSN),
+      SENTRY_ENVIRONMENT: JSON.stringify(process.env.SENTRY_ENVIRONMENT),
     }),
   ],
 
