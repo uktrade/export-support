@@ -1,5 +1,7 @@
 {% extends "core/wizard_step.html" %}
 
+{% load render_bundle from webpack_loader %}
+
 {% block page_title %}Business details{% endblock %}
 
 {% block fields %}
@@ -62,9 +64,16 @@
                     </div>
                 </div>
             </div>
+            <label for="companies-house-autocomplete">Company name</label>
+            <div id="companies-house-autocomplete-container"></div>
             {% include "gds/forms/form_group.html" with field=form.company_name %}
             {% include "gds/forms/form_group.html" with field=form.company_post_code %}
             {% include "gds/forms/form_group.html" with field=form.company_registration_number %}
         </fieldset>
     </div>
+{% endblock %}
+
+{% block footer_additions %}
+    {{ block.super }}
+    {% render_bundle "business-details" "js" %}
 {% endblock %}
