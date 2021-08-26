@@ -1,20 +1,9 @@
 import accessibleAutocomplete from "accessible-autocomplete";
 
-const sortByName = (a, b) => {
-  if (a.name < b.name) {
-    return -1;
-  }
-  if (a.name > b.name) {
-    return 1;
-  }
-  return 0;
-};
-
 const getResults = (query, populateResults) => {
   fetch(`/api/company-search/?q=${query}`)
     .then((response) => response.json())
     .then(({ results }) => results)
-    .then((companies) => [...companies].sort(sortByName))
     .then((companies) => populateResults(companies));
 };
 const getInputValue = (selected) => (selected ? selected.name : "");

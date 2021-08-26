@@ -1,23 +1,15 @@
 from django.http import JsonResponse
 from django.views import View
 
+from export_support.companies.search import search_companies
+
 
 class CompaniesSearchView(View):
     def get(self, request):
+        results = search_companies(request.GET.get("q"))
+
         return JsonResponse(
             {
-                "results": [
-                    {"name": "Oscorp", "postcode": "W1 2AB", "companyNumber": "12345"},
-                    {
-                        "name": "Stark Industries",
-                        "postcode": "E2 3CD",
-                        "companyNumber": "67890",
-                    },
-                    {
-                        "name": "Damage Control",
-                        "postcode": "S3 4EF",
-                        "companyNumber": "98765",
-                    },
-                ]
+                "results": results,
             }
         )
