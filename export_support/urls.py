@@ -22,4 +22,5 @@ urlpatterns = [
         "healthcheck/",
         include("export_support.healthcheck.urls", namespace="healthcheck"),
     ),
+    path("api/", include("export_support.api.urls", namespace="api")),
 ]

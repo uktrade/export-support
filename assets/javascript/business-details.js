@@ -1,12 +1,22 @@
 import accessibleAutocomplete from "accessible-autocomplete";
 
-const companies = [
-  { name: "Oscorp", postcode: "W1 2AB", companyNumber: "12345" },
-  { name: "Stark Industries", postcode: "E2 3CD", companyNumber: "67890" },
-  { name: "Damage Control", postcode: "S3 4EF", companyNumber: "98765" },
-];
+const sortByName = (a, b) => {
+  if (a.name < b.name) {
+    return -1;
+  }
+  if (a.name > b.name) {
+    return 1;
+  }
+  return 0;
+};
 
-const getResults = (query, populateResults) => populateResults(companies);
+const getResults = (query, populateResults) => {
+  fetch(`/api/company-search/?q=${query}`)
+    .then((response) => response.json())
+    .then(({ results }) => results)
+    .then((companies) => [...companies].sort(sortByName))
+    .then((companies) => populateResults(companies));
+};
 const getInputValue = (selected) => (selected ? selected.name : "");
 const getSuggestion = ({ name, postcode }) =>
   `<div>${name}</div><div>${postcode}</div>`;
