@@ -3,7 +3,7 @@ import debounce from "lodash.debounce";
 
 let currentSearch = null;
 
-const getResults = (query, populateResults) => {
+const fetchResults = (query, populateResults) => {
   const url = `/api/company-search/?q=${query}`;
   currentSearch = url;
   return fetch(url)
@@ -47,7 +47,7 @@ const MIN_SEARCH_STRING_LENGTH = 3;
 accessibleAutocomplete({
   element: document.querySelector("#companies-house-autocomplete-container"),
   id: "companies-house-autocomplete",
-  source: debounce(getResults, 200, { leading: true }),
+  source: debounce(fetchResults, 200, { leading: true }),
   onConfirm: populateResultValues,
   minLength: MIN_SEARCH_STRING_LENGTH,
   showNoOptionsFound: false,
