@@ -7,8 +7,12 @@ const getResults = (query, populateResults) => {
     .then((companies) => populateResults(companies));
 };
 const getInputValue = (selected) => (selected ? selected.name : "");
-const getSuggestion = ({ name, postcode }) =>
-  `<div>${name}</div><div>${postcode}</div>`;
+const getSuggestion = ({ name, postcode }) => {
+  if (!postcode) {
+    return `<div>${name}</div>`;
+  }
+  return `<div>${name}</div><div>${postcode}</div>`;
+};
 
 const nameEl = document.querySelector("#id_business-details-company_name");
 const postcodeEl = document.querySelector(
