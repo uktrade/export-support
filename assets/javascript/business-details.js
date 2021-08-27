@@ -1,20 +1,12 @@
 import accessibleAutocomplete from "accessible-autocomplete";
 import debounce from "lodash.debounce";
 
-let currentSearch = null;
-
-const fetchResults = (query, populateResults) => {
+const fetchCompanies = (query) => {
   const url = `/api/company-search/?q=${query}`;
-  currentSearch = url;
+
   return fetch(url)
     .then((response) => response.json())
-    .then(({ results }) => results)
-    .then((companies) => {
-      if (url == currentSearch) {
-        populateResults(companies);
-      }
-      return companies;
-    });
+    .then(({ results }) => results);
 };
 const getInputValue = (selected) => (selected ? selected.name : "");
 const getSuggestion = ({ name, postcode }) => {
@@ -44,10 +36,22 @@ const populateResultValues = (confirmed) => {
 
 const MIN_SEARCH_STRING_LENGTH = 3;
 
+let currentSearch = null;
+
+const searchCompanies = (query, populateResults) => {
+  currentSearch = query;
+  fetchCompanies(query).then((companies) => {
+    if (currentSearch == query) {
+      populateResults(companies);
+    }
+    return companies;
+  });
+};
+
 accessibleAutocomplete({
   element: document.querySelector("#companies-house-autocomplete-container"),
   id: "companies-house-autocomplete",
-  source: debounce(fetchResults, 200, { leading: true }),
+  source: debounce(searchCompanies, 200, { leading: true }),
   onConfirm: populateResultValues,
   minLength: MIN_SEARCH_STRING_LENGTH,
   showNoOptionsFound: false,
