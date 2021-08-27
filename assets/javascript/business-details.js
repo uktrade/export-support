@@ -1,11 +1,20 @@
 import accessibleAutocomplete from "accessible-autocomplete";
 import debounce from "lodash.debounce";
 
+let currentSearch = null;
+
 const getResults = (query, populateResults) => {
-  fetch(`/api/company-search/?q=${query}`)
+  const url = `/api/company-search/?q=${query}`;
+  currentSearch = url;
+  fetch(url)
     .then((response) => response.json())
     .then(({ results }) => results)
-    .then((companies) => populateResults(companies));
+    .then((companies) => {
+      if (url != currentSearch) {
+        return;
+      }
+      populateResults(companies);
+    });
 };
 const getInputValue = (selected) => (selected ? selected.name : "");
 const getSuggestion = ({ name, postcode }) => {
