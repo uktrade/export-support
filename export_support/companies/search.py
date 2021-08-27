@@ -40,7 +40,8 @@ def exclude_snippet_results(items):
     return [
         item
         for item in items
-        if "title" in item["matches"] or "address_snippet" in item["matches"]
+        if "matches" in item
+        and ("title" in item["matches"] or "address_snippet" in item["matches"])
     ]
 
 
