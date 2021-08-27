@@ -6,14 +6,14 @@ let currentSearch = null;
 const getResults = (query, populateResults) => {
   const url = `/api/company-search/?q=${query}`;
   currentSearch = url;
-  fetch(url)
+  return fetch(url)
     .then((response) => response.json())
     .then(({ results }) => results)
     .then((companies) => {
-      if (url != currentSearch) {
-        return;
+      if (url == currentSearch) {
+        populateResults(companies);
       }
-      populateResults(companies);
+      return companies;
     });
 };
 const getInputValue = (selected) => (selected ? selected.name : "");
