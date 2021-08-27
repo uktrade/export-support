@@ -32,11 +32,15 @@ const populateResultValues = (confirmed) => {
   companyNumberEl.value = companyNumber;
 };
 
+const MIN_SEARCH_STRING_LENGTH = 3;
+
 accessibleAutocomplete({
   element: document.querySelector("#companies-house-autocomplete-container"),
   id: "companies-house-autocomplete",
   source: getResults,
   onConfirm: populateResultValues,
+  minLength: MIN_SEARCH_STRING_LENGTH,
+  showNoOptionsFound: false,
   templates: {
     inputValue: getInputValue,
     suggestion: getSuggestion,
