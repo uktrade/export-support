@@ -113,6 +113,10 @@ LOGGING = {
         },
     },
     "loggers": {
+        "": {
+            "level": "INFO",
+            "handlers": ["ecs" if USE_ECS_LOGGING else "console"],
+        },
         "django": {
             "level": "INFO",
             "handlers": ["ecs" if USE_ECS_LOGGING else "console"],
