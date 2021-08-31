@@ -8,7 +8,7 @@ const fetchCompanies = (query) => {
     .then((response) => response.json())
     .then(({ results }) => results);
 };
-const getInputValue = (selected) => (selected ? selected.name : "");
+const getInputValue = (selected) => selected?.name ?? "";
 const getSuggestion = ({ name, postcode }) => {
   if (!postcode) {
     return `<div>${name}</div>`;
