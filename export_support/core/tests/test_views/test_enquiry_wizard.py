@@ -1,17 +1,36 @@
+from enum import Enum
+
 import pytest
 from django.test import Client
 from django.urls import reverse
 from pytest_django.asserts import assertFormError, assertTemplateUsed
 
 from ...consts import ENQUIRY_COUNTRY_CODES
-from ...forms import SECTORS_MAP
+from ...forms import (
+    SECTORS_MAP,
+    CompanyTurnoverChoices,
+    CompanyTypeChoices,
+    EnquirySubjectChoices,
+    NumberOfEmployeesChoices,
+    OnBehalfOfChoices,
+)
+
+COUNTRY_MACHINE_READABLE_VALUES = list(ENQUIRY_COUNTRY_CODES.values())
+
+
+def get_coerced_field_value(field_value):
+    if isinstance(field_value, list):
+        return [get_coerced_field_value(v) for v in field_value]
+    if isinstance(field_value, Enum):
+        return str(field_value)
+    return field_value
 
 
 def get_form_data(step_name, data):
     form_data = {
         "enquiry_wizard_view-current_step": step_name,
         **{
-            f"{step_name}-{field_name}": field_value
+            f"{step_name}-{field_name}": get_coerced_field_value(field_value)
             for field_name, field_value in data.items()
         },
     }
@@ -46,7 +65,12 @@ def test_full_steps_wizard_success(client, settings, mocker):
         enquiry_subject_url,
         get_form_data(
             "enquiry-subject",
-            {"enquiry_subject": ["1", "2"]},
+            {
+                "enquiry_subject": [
+                    EnquirySubjectChoices.SELLING_GOODS_ABROAD,
+                    EnquirySubjectChoices.SELLING_SERVICES_ABROAD,
+                ]
+            },
         ),
     )
     assert response.status_code == 302
@@ -61,7 +85,7 @@ def test_full_steps_wizard_success(client, settings, mocker):
         export_countries_url,
         get_form_data(
             "export-countries",
-            {"countries": ENQUIRY_COUNTRY_CODES},
+            {"countries": COUNTRY_MACHINE_READABLE_VALUES},
         ),
     )
     assert response.status_code == 302
@@ -80,7 +104,7 @@ def test_full_steps_wizard_success(client, settings, mocker):
                 "first_name": "Firstname",
                 "last_name": "Lastname",
                 "email": "test@example.com",
-                "on_behalf_of": "1",
+                "on_behalf_of": OnBehalfOfChoices.OWN_COMPANY,
             },
         ),
     )
@@ -97,7 +121,7 @@ def test_full_steps_wizard_success(client, settings, mocker):
         get_form_data(
             "business-details",
             {
-                "company_type": "2",
+                "company_type": CompanyTypeChoices.OTHER,
                 "type_of_organisation": "Typeoforganisation",
                 "company_name": "Companyname",
                 "company_post_code": "SW1A 2BL",
@@ -118,8 +142,8 @@ def test_full_steps_wizard_success(client, settings, mocker):
         get_form_data(
             "business-size",
             {
-                "company_turnover": "1",
-                "number_of_employees": "1",
+                "company_turnover": CompanyTurnoverChoices.BELOW_85000,
+                "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
             },
         ),
     )
@@ -227,7 +251,12 @@ def test_skip_business_details_wizard_success(client, settings, mocker):
         enquiry_subject_url,
         get_form_data(
             "enquiry-subject",
-            {"enquiry_subject": ["1", "2"]},
+            {
+                "enquiry_subject": [
+                    EnquirySubjectChoices.SELLING_GOODS_ABROAD,
+                    EnquirySubjectChoices.SELLING_SERVICES_ABROAD,
+                ]
+            },
         ),
     )
     assert response.status_code == 302
@@ -242,7 +271,7 @@ def test_skip_business_details_wizard_success(client, settings, mocker):
         export_countries_url,
         get_form_data(
             "export-countries",
-            {"countries": ENQUIRY_COUNTRY_CODES},
+            {"countries": COUNTRY_MACHINE_READABLE_VALUES},
         ),
     )
     assert response.status_code == 302
@@ -261,7 +290,7 @@ def test_skip_business_details_wizard_success(client, settings, mocker):
                 "first_name": "Firstname",
                 "last_name": "Lastname",
                 "email": "test@example.com",
-                "on_behalf_of": "3",
+                "on_behalf_of": OnBehalfOfChoices.NOT_A_COMPANY,
             },
         ),
     )
@@ -373,7 +402,12 @@ def test_zendesk_form_is_not_valid_wizard_raises_error(client, settings, mocker)
         enquiry_subject_url,
         get_form_data(
             "enquiry-subject",
-            {"enquiry_subject": ["1", "2"]},
+            {
+                "enquiry_subject": [
+                    EnquirySubjectChoices.SELLING_GOODS_ABROAD,
+                    EnquirySubjectChoices.SELLING_SERVICES_ABROAD,
+                ]
+            },
         ),
     )
     assert response.status_code == 302
@@ -388,7 +422,7 @@ def test_zendesk_form_is_not_valid_wizard_raises_error(client, settings, mocker)
         export_countries_url,
         get_form_data(
             "export-countries",
-            {"countries": ENQUIRY_COUNTRY_CODES},
+            {"countries": COUNTRY_MACHINE_READABLE_VALUES},
         ),
     )
     assert response.status_code == 302
@@ -500,7 +534,7 @@ def run_wizard_enquiry_subject(settings, mocker):
             export_countries_url,
             get_form_data(
                 "export-countries",
-                {"countries": ENQUIRY_COUNTRY_CODES},
+                {"countries": COUNTRY_MACHINE_READABLE_VALUES},
             ),
         )
         assert response.status_code == 302
@@ -556,8 +590,8 @@ def run_wizard_enquiry_subject(settings, mocker):
             get_form_data(
                 "business-size",
                 {
-                    "company_turnover": "1",
-                    "number_of_employees": "1",
+                    "company_turnover": CompanyTurnoverChoices.BELOW_85000,
+                    "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
                 },
             ),
         )
@@ -612,19 +646,26 @@ def run_wizard_enquiry_subject(settings, mocker):
 
 
 def test_enquiry_subject_choices_context_data(run_wizard_enquiry_subject):
-    response = run_wizard_enquiry_subject([1])
+    response = run_wizard_enquiry_subject([EnquirySubjectChoices.SELLING_GOODS_ABROAD])
     ctx = response.context
     assert ctx["display_goods"]
     assert not ctx["display_services"]
     assert not ctx["display_subheadings"]
 
-    response = run_wizard_enquiry_subject([2])
+    response = run_wizard_enquiry_subject(
+        [EnquirySubjectChoices.SELLING_SERVICES_ABROAD]
+    )
     ctx = response.context
     assert not ctx["display_goods"]
     assert ctx["display_services"]
     assert not ctx["display_subheadings"]
 
-    response = run_wizard_enquiry_subject([1, 2])
+    response = run_wizard_enquiry_subject(
+        [
+            EnquirySubjectChoices.SELLING_GOODS_ABROAD,
+            EnquirySubjectChoices.SELLING_SERVICES_ABROAD,
+        ]
+    )
     ctx = response.context
     assert ctx["display_goods"]
     assert ctx["display_services"]
@@ -668,21 +709,30 @@ def run_wizard_enquiry_subject_guidance_url():
 
 
 def test_enquiry_subject_guidance_url(run_wizard_enquiry_subject_guidance_url, mocker):
-    response = run_wizard_enquiry_subject_guidance_url([1])
+    response = run_wizard_enquiry_subject_guidance_url(
+        [EnquirySubjectChoices.SELLING_GOODS_ABROAD]
+    )
     ctx = response.context
     assert (
         ctx["guidance_url"]
         == f"{reverse('core:non-eu-export-enquiries')}?enquiry_subject=1"
     )
 
-    response = run_wizard_enquiry_subject_guidance_url([2])
+    response = run_wizard_enquiry_subject_guidance_url(
+        [EnquirySubjectChoices.SELLING_SERVICES_ABROAD]
+    )
     ctx = response.context
     assert (
         ctx["guidance_url"]
         == f"{reverse('core:non-eu-export-enquiries')}?enquiry_subject=2"
     )
 
-    response = run_wizard_enquiry_subject_guidance_url([1, 2])
+    response = run_wizard_enquiry_subject_guidance_url(
+        [
+            EnquirySubjectChoices.SELLING_GOODS_ABROAD,
+            EnquirySubjectChoices.SELLING_SERVICES_ABROAD,
+        ]
+    )
     ctx = response.context
     assert (
         ctx["guidance_url"]
@@ -705,7 +755,7 @@ def test_enquiry_subject_guidance_url(run_wizard_enquiry_subject_guidance_url, m
         enquiry_subject_url,
         get_form_data(
             "enquiry-subject",
-            {"enquiry_subject": ["1"]},
+            {"enquiry_subject": [EnquirySubjectChoices.SELLING_GOODS_ABROAD]},
         ),
     )
     assert response.status_code == 302
@@ -744,7 +794,12 @@ def run_wizard_export_countries():
             enquiry_subject_url,
             get_form_data(
                 "enquiry-subject",
-                {"enquiry_subject": ["1", "2"]},
+                {
+                    "enquiry_subject": [
+                        EnquirySubjectChoices.SELLING_GOODS_ABROAD,
+                        EnquirySubjectChoices.SELLING_SERVICES_ABROAD,
+                    ]
+                },
             ),
         )
         assert response.status_code == 302
@@ -772,7 +827,7 @@ def test_export_countries_validation(run_wizard_export_countries):
     response = run_wizard_export_countries(
         {
             "select_all": "1",
-            "countries": ENQUIRY_COUNTRY_CODES,
+            "countries": COUNTRY_MACHINE_READABLE_VALUES,
         }
     )
     assert response.status_code == 302
@@ -790,7 +845,7 @@ def test_export_countries_validation(run_wizard_export_countries):
     response = run_wizard_export_countries(
         {
             "select_all": "1",
-            "countries": ENQUIRY_COUNTRY_CODES[:1],
+            "countries": COUNTRY_MACHINE_READABLE_VALUES[:1],
         }
     )
     assert response.status_code == 200
@@ -821,7 +876,12 @@ def run_wizard_sectors():
             enquiry_subject_url,
             get_form_data(
                 "enquiry-subject",
-                {"enquiry_subject": ["1", "2"]},
+                {
+                    "enquiry_subject": [
+                        EnquirySubjectChoices.SELLING_GOODS_ABROAD,
+                        EnquirySubjectChoices.SELLING_SERVICES_ABROAD,
+                    ]
+                },
             ),
         )
         assert response.status_code == 302
@@ -836,7 +896,7 @@ def run_wizard_sectors():
             export_countries_url,
             get_form_data(
                 "export-countries",
-                {"countries": ENQUIRY_COUNTRY_CODES},
+                {"countries": COUNTRY_MACHINE_READABLE_VALUES},
             ),
         )
         assert response.status_code == 302
@@ -855,7 +915,7 @@ def run_wizard_sectors():
                     "first_name": "Firstname",
                     "last_name": "Lastname",
                     "email": "test@example.com",
-                    "on_behalf_of": "1",
+                    "on_behalf_of": OnBehalfOfChoices.OWN_COMPANY,
                 },
             ),
         )
@@ -872,7 +932,7 @@ def run_wizard_sectors():
             get_form_data(
                 "business-details",
                 {
-                    "company_type": "1",
+                    "company_type": CompanyTypeChoices.PRIVATE_OR_LIMITED,
                     "company_name": "Companyname",
                     "company_post_code": "SW1A 2BL",
                     "company_registration_number": "12345678",
@@ -892,8 +952,8 @@ def run_wizard_sectors():
             get_form_data(
                 "business-size",
                 {
-                    "company_turnover": "1",
-                    "number_of_employees": "1",
+                    "company_turnover": CompanyTurnoverChoices.BELOW_85000,
+                    "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
                 },
             ),
         )
@@ -948,7 +1008,12 @@ def run_wizard_business_details():
             enquiry_subject_url,
             get_form_data(
                 "enquiry-subject",
-                {"enquiry_subject": ["1", "2"]},
+                {
+                    "enquiry_subject": [
+                        EnquirySubjectChoices.SELLING_GOODS_ABROAD,
+                        EnquirySubjectChoices.SELLING_SERVICES_ABROAD,
+                    ],
+                },
             ),
         )
         assert response.status_code == 302
@@ -963,7 +1028,7 @@ def run_wizard_business_details():
             export_countries_url,
             get_form_data(
                 "export-countries",
-                {"countries": ENQUIRY_COUNTRY_CODES},
+                {"countries": COUNTRY_MACHINE_READABLE_VALUES},
             ),
         )
         assert response.status_code == 302
@@ -982,7 +1047,7 @@ def run_wizard_business_details():
                     "first_name": "Firstname",
                     "last_name": "Lastname",
                     "email": "test@example.com",
-                    "on_behalf_of": "1",
+                    "on_behalf_of": OnBehalfOfChoices.OWN_COMPANY,
                 },
             ),
         )
@@ -1024,7 +1089,7 @@ def test_business_details_validation(run_wizard_business_details):
 
     response = run_wizard_business_details(
         {
-            "company_type": "2",
+            "company_type": CompanyTypeChoices.OTHER,
             "company_name": "Companyname",
             "company_post_code": "SW1A 2BL",
         }
@@ -1039,7 +1104,7 @@ def test_business_details_validation(run_wizard_business_details):
 
     response = run_wizard_business_details(
         {
-            "company_type": "2",
+            "company_type": CompanyTypeChoices.OTHER,
             "company_name": "Companyname",
             "company_post_code": "SW1A 2BL",
             "type_of_organisation": "    ",
