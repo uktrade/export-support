@@ -457,3 +457,4 @@ class ZendeskForm(ZendeskAPIForm):
     aaa_question = forms.CharField()
     full_name = forms.CharField()
     email = forms.CharField()
+    _custom_fields = forms.JSONField(required=False)

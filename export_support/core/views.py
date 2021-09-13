@@ -55,13 +55,30 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
 
         return [templates[self.steps.current]]
 
-    def send_to_zendesk(self, form_list):
+    def get_form_data(self, form_list):
         form_data = {}
+        custom_fields_data = []
+        custom_field_mapping = settings.ZENDESK_CUSTOM_FIELD_MAPPING
+
         for form in form_list:
             for field_name, field_value in form.get_zendesk_data().items():
                 field_name = ZendeskForm.FIELD_MAPPING.get(field_name, field_name)
                 form_data[field_name] = field_value
+                try:
+                    custom_field_id = custom_field_mapping[field_name]
+                except KeyError:
+                    continue
+                else:
+                    custom_fields_data.append(
+                        {custom_field_id: form.cleaned_data[field_name]}
+                    )
 
+        form_data["_custom_fields"] = custom_fields_data
+
+        return form_data
+
+    def send_to_zendesk(self, form_list):
+        form_data = self.get_form_data(form_list)
         zendesk_form = ZendeskForm(data=form_data)
         if not zendesk_form.is_valid():
             raise ValueError("Invalid ZendeskForm", dict(zendesk_form.errors))
