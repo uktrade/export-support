@@ -28,8 +28,7 @@ const populateResultValues = (confirmed) => {
   if (!confirmed) {
     return;
   }
-  const { name, postcode, companyNumber } = confirmed;
-  nameEl.value = name;
+  const { postcode, companyNumber } = confirmed;
   postcodeEl.value = postcode;
   companyNumberEl.value = companyNumber;
 };
@@ -48,9 +47,10 @@ const searchCompanies = (query, populateResults) => {
   });
 };
 
+const autocompleteId = "companies-house-autocomplete";
 accessibleAutocomplete({
   element: document.querySelector("#companies-house-autocomplete-container"),
-  id: "companies-house-autocomplete",
+  id: autocompleteId,
   source: debounce(searchCompanies, 200, { leading: true }),
   onConfirm: populateResultValues,
   minLength: MIN_SEARCH_STRING_LENGTH,
@@ -59,4 +59,9 @@ accessibleAutocomplete({
     inputValue: getInputValue,
     suggestion: getSuggestion,
   },
+});
+
+const autocompleteEl = document.querySelector(`#${autocompleteId}`);
+autocompleteEl.addEventListener("change", () => {
+  nameEl.value = autocompleteEl.value;
 });
