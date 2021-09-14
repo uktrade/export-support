@@ -17,9 +17,6 @@ const getSuggestion = ({ name, postcode }) => {
 };
 
 const nameEl = document.querySelector("#id_business-details-company_name");
-const postcodeEl = document.querySelector(
-  "#id_business-details-company_post_code"
-);
 const companyNumberEl = document.querySelector(
   "#id_business-details-company_registration_number"
 );
@@ -28,8 +25,7 @@ const populateResultValues = (confirmed) => {
   if (!confirmed) {
     return;
   }
-  const { postcode, companyNumber } = confirmed;
-  postcodeEl.value = postcode;
+  const { companyNumber } = confirmed;
   companyNumberEl.value = companyNumber;
 };
 
