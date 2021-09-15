@@ -5,20 +5,26 @@ from django import forms
 from django.core import validators
 from django.db import models
 from django.utils.safestring import mark_safe
-from django.utils.text import slugify
 
 from export_support.gds import fields as gds_fields
 from export_support.gds import forms as gds_forms
 
-from .consts import ENQUIRY_COUNTRY_CODES_TO_NAME_MAP, SECTORS
-from .countries import get_country_name_from_code
+from .consts import COUNTRIES_MAP, SECTORS_MAP
 
 
-def coerce_choice(int_enum):
-    def _coerce_choice(choice):
-        return int_enum(int(choice))
+def coerce_choice(enum):
+    def identity(x):
+        return x
 
-    return _coerce_choice
+    if issubclass(enum, models.IntegerChoices):
+        coercer = int
+    else:
+        coercer = identity
+
+    def _coerce(choice):
+        return enum(coercer(choice))
+
+    return _coerce
 
 
 class EnquirySubjectChoices(models.IntegerChoices):
@@ -63,8 +69,8 @@ class ExportCountriesForm(forms.Form):
     )
     countries = forms.MultipleChoiceField(
         choices=[
-            (code, country_name)
-            for code, country_name in ENQUIRY_COUNTRY_CODES_TO_NAME_MAP.items()
+            (machine_value, country_name)
+            for machine_value, country_name in COUNTRIES_MAP.items()
         ],
         label="Which country are you selling to?",
         required=False,
@@ -98,7 +104,7 @@ class ExportCountriesForm(forms.Form):
 
     def get_zendesk_data(self):
         countries = self.cleaned_data["countries"]
-        countries = [get_country_name_from_code(code) for code in countries]
+        countries = [COUNTRIES_MAP[code] for code in countries]
         countries = ", ".join(countries)
 
         return {
@@ -291,22 +297,28 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         }
 
 
-class CompanyTurnoverChoices(models.IntegerChoices):
-    BELOW_85000 = 1, "Below £85,000"
-    FROM_85000_TO_499999 = 2, "£85,000 to £499,999"
-    FROM_500000_TO_49999999 = 3, "£500,000 to £49,999,999"
-    OVER_50000000 = 4, "£50,000,000+"
-    DO_NOT_KNOW = 5, "I don't know"
-    PREFER_NOT_TO_SAY = 6, "I'd prefer not to say"
+class CompanyTurnoverChoices(models.TextChoices):
+    BELOW_85000 = "0_85000__ess_turnover_1", "Below £85,000"
+    FROM_85000_TO_499999 = "85000_499999__ess_turnover_1", "£85,000 to £499,999"
+    FROM_500000_TO_49999999 = (
+        "500000_49999999__ess_turnover_1",
+        "£500,000 to £49,999,999",
+    )
+    OVER_50000000 = "50000000__ess_turnover_1", "£50,000,000+"
+    DO_NOT_KNOW = "dont_know__ess_turnover_1", "I don't know"
+    PREFER_NOT_TO_SAY = "not_given__ess_turnover_1", "I'd prefer not to say"
 
 
-class NumberOfEmployeesChoices(models.IntegerChoices):
-    FEWER_THAN_10 = 1, "Fewer than 10"
-    FROM_10_TO_49 = 2, "10 - 49"
-    FROM_50_TO_249 = 3, "50 - 249"
-    OVER_250 = 4, "250 or more"
-    DO_NOT_KNOW = 5, "I don't know"
-    PREFER_NOT_TO_SAY = 6, "I'd prefer not to say"
+class NumberOfEmployeesChoices(models.TextChoices):
+    FEWER_THAN_10 = "0_10__ess_num_of_employees_1", "Fewer than 10"
+    FROM_10_TO_49 = "10_49__ess_num_of_employees_1", "10 - 49"
+    FROM_50_TO_249 = "50_249__ess_num_of_employees_1", "50 - 249"
+    OVER_250 = "250__ess_num_of_employees_1", "250 or more"
+    DO_NOT_KNOW = "unknown__ess_num_of_employees_1", "I don't know"
+    PREFER_NOT_TO_SAY = (
+        "prefer_not_to_say__ess_num_of_employees_1",
+        "I'd prefer not to say",
+    )
 
 
 class BusinessSizeForm(forms.Form):
@@ -347,9 +359,6 @@ class BusinessSizeForm(forms.Form):
             "company_turnover": company_turnover,
             "number_of_employees": number_of_employees,
         }
-
-
-SECTORS_MAP = {slugify(sector): sector for sector in SECTORS}
 
 
 class SectorsForm(forms.Form):
@@ -448,3 +457,4 @@ class ZendeskForm(ZendeskAPIForm):
     aaa_question = forms.CharField()
     full_name = forms.CharField()
     email = forms.CharField()
+    _custom_fields = forms.JSONField(required=False)
