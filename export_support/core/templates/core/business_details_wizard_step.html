@@ -12,6 +12,9 @@
                     Business details
                 </h1>
             </legend>
+            <p class="govuk-body">
+                Knowing details about your business will help us direct you to the right team for help.
+            </p>
             <div class="govuk-form-group {% if form.company_type.errors or form.type_of_organisation.errors %}govuk-form-group--error{% endif %}">
                 <label class="govuk-label" for="{{ form.company_type.id_for_label }}">
                     {{ form.company_type.label }}{% if not form.company_type.field.required %} <span class="govuk-hint govuk-!-display-inline">(optional)</span>{% endif %}
