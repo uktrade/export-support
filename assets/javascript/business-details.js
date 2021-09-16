@@ -1,6 +1,8 @@
 import accessibleAutocomplete from "accessible-autocomplete";
 import debounce from "lodash.debounce";
 
+const nameEl = document.querySelector("#id_business-details-company_name");
+
 const companiesHouseAutocompleteTemplate = document.querySelector(
   "#companies-house-autocomplete-template"
 );
@@ -13,7 +15,7 @@ const autocompleteFormGroup =
   companiesHouseAutocompleteTemplate.content.firstElementChild.cloneNode(true);
 const parent = companyNameFormGroupEl.parentNode;
 parent.insertBefore(autocompleteFormGroup, companyNameFormGroupEl);
-companyNameFormGroupEl.style.display = "none";
+companyNameFormGroupEl.remove();
 
 const fetchCompanies = (query) => {
   const url = `/api/company-search/?q=${query}`;
@@ -39,7 +41,6 @@ const getSuggestion = (suggestion) => {
   return `<div>${name}</div><div>${postcode}</div>`;
 };
 
-const nameEl = document.querySelector("#id_business-details-company_name");
 const companyNumberEl = document.querySelector(
   "#id_business-details-company_registration_number"
 );
@@ -48,12 +49,7 @@ const populateResultValues = (confirmed) => {
   if (!confirmed) {
     return;
   }
-  if (typeof confirmed == "string") {
-    nameEl.value = confirmed;
-    return;
-  }
-  const { name, companyNumber } = confirmed;
-  nameEl.value = name;
+  const { companyNumber } = confirmed;
   companyNumberEl.value = companyNumber;
 };
 
@@ -82,14 +78,10 @@ accessibleAutocomplete({
   source: debounce(searchCompanies, 200, { leading: true }),
   onConfirm: populateResultValues,
   minLength: MIN_SEARCH_STRING_LENGTH,
+  name: nameEl.name,
   showNoOptionsFound: false,
   templates: {
     inputValue: getInputValue,
     suggestion: getSuggestion,
   },
-});
-
-const autocompleteEl = document.querySelector(`#${autocompleteId}`);
-autocompleteEl.addEventListener("change", () => {
-  nameEl.value = autocompleteEl.value;
 });
