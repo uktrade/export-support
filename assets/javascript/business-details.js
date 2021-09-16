@@ -3,19 +3,24 @@ import debounce from "lodash.debounce";
 
 const nameEl = document.querySelector("#id_business-details-company_name");
 
-const companiesHouseAutocompleteTemplate = document.querySelector(
-  "#companies-house-autocomplete-template"
-);
-const companyNameFormGroupId =
-  companiesHouseAutocompleteTemplate.dataset.formGroupId;
-const companyNameFormGroupEl = document.querySelector(
-  `#${companyNameFormGroupId}`
-);
-const autocompleteFormGroup =
-  companiesHouseAutocompleteTemplate.content.firstElementChild.cloneNode(true);
-const parent = companyNameFormGroupEl.parentNode;
-parent.insertBefore(autocompleteFormGroup, companyNameFormGroupEl);
-companyNameFormGroupEl.remove();
+const replaceCompanyNameFormGroup = () => {
+  const companiesHouseAutocompleteTemplate = document.querySelector(
+    "#companies-house-autocomplete-template"
+  );
+  const companyNameFormGroupId =
+    companiesHouseAutocompleteTemplate.dataset.formGroupId;
+  const companyNameFormGroupEl = document.querySelector(
+    `#${companyNameFormGroupId}`
+  );
+  const autocompleteFormGroup =
+    companiesHouseAutocompleteTemplate.content.firstElementChild.cloneNode(
+      true
+    );
+  const parent = companyNameFormGroupEl.parentNode;
+  parent.insertBefore(autocompleteFormGroup, companyNameFormGroupEl);
+  companyNameFormGroupEl.remove();
+};
+replaceCompanyNameFormGroup();
 
 const fetchCompanies = (query) => {
   const url = `/api/company-search/?q=${query}`;
