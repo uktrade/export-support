@@ -1,6 +1,20 @@
 import accessibleAutocomplete from "accessible-autocomplete";
 import debounce from "lodash.debounce";
 
+const companiesHouseAutocompleteTemplate = document.querySelector(
+  "#companies-house-autocomplete-template"
+);
+const companyNameFormGroupId =
+  companiesHouseAutocompleteTemplate.dataset.formGroupId;
+const companyNameFormGroupEl = document.querySelector(
+  `#${companyNameFormGroupId}`
+);
+const autocompleteFormGroup =
+  companiesHouseAutocompleteTemplate.content.firstElementChild.cloneNode(true);
+const parent = companyNameFormGroupEl.parentNode;
+parent.insertBefore(autocompleteFormGroup, companyNameFormGroupEl);
+companyNameFormGroupEl.style.display = "none";
+
 const fetchCompanies = (query) => {
   const url = `/api/company-search/?q=${query}`;
 
@@ -25,7 +39,8 @@ const populateResultValues = (confirmed) => {
   if (!confirmed) {
     return;
   }
-  const { companyNumber } = confirmed;
+  const { name, companyNumber } = confirmed;
+  nameEl.value = name;
   companyNumberEl.value = companyNumber;
 };
 
@@ -44,8 +59,12 @@ const searchCompanies = (query, populateResults) => {
 };
 
 const autocompleteId = "companies-house-autocomplete";
+const container = document.querySelector(
+  "#companies-house-autocomplete-container"
+);
 accessibleAutocomplete({
-  element: document.querySelector("#companies-house-autocomplete-container"),
+  defaultValue: container.dataset["defaultValue"],
+  element: container,
   id: autocompleteId,
   source: debounce(searchCompanies, 200, { leading: true }),
   onConfirm: populateResultValues,

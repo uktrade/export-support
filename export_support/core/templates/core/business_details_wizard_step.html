@@ -64,8 +64,17 @@
                     </div>
                 </div>
             </div>
-            <label for="companies-house-autocomplete">Company name</label>
-            <div id="companies-house-autocomplete-container"></div>
+            <template data-form-group-id="form-group-{{ form.prefix }}-{{ form.company_name.name }}" id="companies-house-autocomplete-template">
+                <div class="govuk-form-group">
+                    <label class="govuk-label" for="companies-house-autocomplete">
+                        {{ form.company_name.label }}{% if not form.company_name.field.required %} <span class="govuk-hint govuk-!-display-inline">(optional)</span>{% endif %}
+                    </label>
+                    <div class="govuk-hint">
+                        If your business name is not shown in the search results, then enter it manually.
+                    </div>
+                    <div id="companies-house-autocomplete-container" data-default-value="{{ form.company_name.value }}"></div>
+                </div>
+            </template>
             {% include "gds/forms/form_group.html" with field=form.company_name %}
             {% include "gds/forms/form_group.html" with field=form.company_post_code %}
             {% include "gds/forms/form_group.html" with field=form.company_registration_number %}
