@@ -22,8 +22,17 @@ const fetchCompanies = (query) => {
     .then((response) => response.json())
     .then(({ results }) => results);
 };
-const getInputValue = (selected) => selected?.name ?? "";
-const getSuggestion = ({ name, postcode }) => {
+const getInputValue = (selected) => {
+  if (typeof selected == "string") {
+    return selected;
+  }
+  return selected?.name ?? "";
+};
+const getSuggestion = (suggestion) => {
+  let { name, postcode } = suggestion;
+  if (typeof suggestion == "string") {
+    name = suggestion;
+  }
   if (!postcode) {
     return `<div>${name}</div>`;
   }
@@ -37,6 +46,10 @@ const companyNumberEl = document.querySelector(
 
 const populateResultValues = (confirmed) => {
   if (!confirmed) {
+    return;
+  }
+  if (typeof confirmed == "string") {
+    nameEl.value = confirmed;
     return;
   }
   const { name, companyNumber } = confirmed;
