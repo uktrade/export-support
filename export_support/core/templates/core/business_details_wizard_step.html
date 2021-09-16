@@ -65,13 +65,24 @@
                 </div>
             </div>
             <template data-form-group-id="form-group-{{ form.prefix }}-{{ form.company_name.name }}" id="companies-house-autocomplete-template">
-                <div class="govuk-form-group">
+                <div class="govuk-form-group {% if form.company_name.errors %}govuk-form-group--error{% endif %}" id="form-group-{{ form.prefix }}-{{ form.company_name.name }}">
                     <label class="govuk-label" for="companies-house-autocomplete">
                         {{ form.company_name.label }}{% if not form.company_name.field.required %} <span class="govuk-hint govuk-!-display-inline">(optional)</span>{% endif %}
                     </label>
                     <div class="govuk-hint">
                         If your business name is not shown in the search results, then enter it manually.
                     </div>
+                    {% if form.company_name.errors %}
+                        <div>
+                            <a id="{{ form.prefix }}-{{ form.company_name.name }}_errors"></a>
+                            {% for error in form.company_name.errors %}
+                                <span class="govuk-error-message">
+                                    <span class="govuk-visually-hidden">Error:</span> {{ error }}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <a id="{{ form.prefix }}-{{ form.company_name.name }}_errors"></a>
                     <div id="companies-house-autocomplete-container" data-default-value="{{ form.company_name.value }}"></div>
                 </div>
             </template>
