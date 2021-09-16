@@ -83,7 +83,7 @@
                         </div>
                     {% endif %}
                     <a id="{{ form.prefix }}-{{ form.company_name.name }}_errors"></a>
-                    <div id="companies-house-autocomplete-container" data-default-value="{{ form.company_name.value }}"></div>
+                    <div id="companies-house-autocomplete-container" data-default-value="{{ form.company_name.value|default:"" }}"></div>
                 </div>
             </template>
             {% include "gds/forms/form_group.html" with field=form.company_name %}
