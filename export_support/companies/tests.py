@@ -1,6 +1,7 @@
 from collections import namedtuple
 
 from faker import Faker
+from requests_mock import ANY as ANY_URL
 
 from export_support.companies.search import search_companies
 
@@ -62,6 +63,26 @@ def _to_items(companies):
         }
         for company in companies
     ]
+
+
+def test_search_companies_query(requests_mock):
+    requests_mock.get(
+        ANY_URL,
+        json={
+            "items": [],
+        },
+    )
+    search_companies("test")
+    assert (
+        requests_mock.last_request.url
+        == "https://api.companieshouse.gov.uk/search/companies?q=test&items_per_page=20&start_index=0"
+    )
+
+    search_companies("another")
+    assert (
+        requests_mock.last_request.url
+        == "https://api.companieshouse.gov.uk/search/companies?q=another&items_per_page=20&start_index=0"
+    )
 
 
 def test_search_companies_less_than_full_page_results(requests_mock):
