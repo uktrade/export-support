@@ -1,10 +1,7 @@
 import base64
-import logging
 
 import requests
 from django.conf import settings
-
-logger = logging.getLogger(__name__)
 
 ITEMS_PER_PAGE = 20
 DESIRED_NUM_RESULTS = 20
