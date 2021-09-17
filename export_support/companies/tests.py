@@ -64,11 +64,8 @@ def _to_items(companies):
     ]
 
 
-def test_search_companies(requests_mock):
-    companies = [
-        _get_company(),
-        _get_company(),
-    ]
+def test_search_companies_less_than_full_page_results(requests_mock):
+    companies = [_get_company() for _ in range(2)]
 
     requests_mock.get(
         "https://api.companieshouse.gov.uk/search/companies?q=test&items_per_page=20&start_index=0",
@@ -76,10 +73,18 @@ def test_search_companies(requests_mock):
             "items": _to_results(companies),
         },
     )
+
+    items = search_companies("test")
+    assert items == _to_items(companies)
+
+
+def test_search_companies_full_page_results(requests_mock):
+    companies = [_get_company() for _ in range(20)]
+
     requests_mock.get(
-        "https://api.companieshouse.gov.uk/search/companies?q=test&items_per_page=20&start_index=20",
+        "https://api.companieshouse.gov.uk/search/companies?q=test&items_per_page=20&start_index=0",
         json={
-            "items": [],
+            "items": _to_results(companies),
         },
     )
 
@@ -95,12 +100,6 @@ def test_search_companies_active_company_filtering(requests_mock):
         "https://api.companieshouse.gov.uk/search/companies?q=test&items_per_page=20&start_index=0",
         json={
             "items": _to_results(companies),
-        },
-    )
-    requests_mock.get(
-        "https://api.companieshouse.gov.uk/search/companies?q=test&items_per_page=20&start_index=20",
-        json={
-            "items": [],
         },
     )
 
@@ -126,12 +125,6 @@ def test_search_companies_snippets_filtering(requests_mock):
             "items": _to_results(companies),
         },
     )
-    requests_mock.get(
-        "https://api.companieshouse.gov.uk/search/companies?q=test&items_per_page=20&start_index=20",
-        json={
-            "items": [],
-        },
-    )
 
     items = search_companies("test")
     assert items == _to_items(include_snippets)
@@ -155,13 +148,6 @@ def test_search_companies_desired_results_after_filtering(requests_mock):
         "https://api.companieshouse.gov.uk/search/companies?q=test&items_per_page=20&start_index=20",
         json={
             "items": _to_results(second_page_results),
-        },
-    )
-
-    requests_mock.get(
-        "https://api.companieshouse.gov.uk/search/companies?q=test&items_per_page=20&start_index=40",
-        json={
-            "items": [],
         },
     )
 

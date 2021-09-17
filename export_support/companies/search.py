@@ -48,17 +48,16 @@ def search_companies(query):
 
     while len(items) < DESIRED_NUM_RESULTS:
         response = _search_companies_house_api(query, start_index)
-        results = response.json()
+        results = response.json()["items"]
 
-        filtered_items = results["items"]
-        if not filtered_items:
-            break
-
-        filtered_items = _filter_active_companies(filtered_items)
+        filtered_items = _filter_active_companies(results)
         filtered_items = _exclude_snippet_results(filtered_items)
         filtered_items = [_get_result(item) for item in filtered_items]
 
         items += filtered_items
         start_index += ITEMS_PER_PAGE
+
+        if len(results) < ITEMS_PER_PAGE:
+            break
 
     return items
