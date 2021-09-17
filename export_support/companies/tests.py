@@ -153,3 +153,55 @@ def test_search_companies_desired_results_after_filtering(requests_mock):
 
     items = search_companies("test")
     assert items == _to_items(first_page_active + second_page_active)
+
+
+def test_search_companies_maximum_page_searches(requests_mock):
+    first_page_active = [_get_company()]
+    first_page_inactive = [_get_company(company_status="inactive") for _ in range(19)]
+    requests_mock.get(
+        "https://api.companieshouse.gov.uk/search/companies?q=test&items_per_page=20&start_index=0",
+        json={
+            "items": _to_results(first_page_active + first_page_inactive),
+        },
+    )
+    second_page_active = [_get_company()]
+    second_page_inactive = [_get_company(company_status="inactive") for _ in range(19)]
+    requests_mock.get(
+        "https://api.companieshouse.gov.uk/search/companies?q=test&items_per_page=20&start_index=20",
+        json={
+            "items": _to_results(second_page_active + second_page_inactive),
+        },
+    )
+    third_page_active = [_get_company()]
+    third_page_inactive = [_get_company(company_status="inactive") for _ in range(19)]
+    requests_mock.get(
+        "https://api.companieshouse.gov.uk/search/companies?q=test&items_per_page=20&start_index=40",
+        json={
+            "items": _to_results(third_page_active + third_page_inactive),
+        },
+    )
+    fourth_page_active = [_get_company()]
+    fourth_page_inactive = [_get_company(company_status="inactive") for _ in range(19)]
+    requests_mock.get(
+        "https://api.companieshouse.gov.uk/search/companies?q=test&items_per_page=20&start_index=60",
+        json={
+            "items": _to_results(fourth_page_active + fourth_page_inactive),
+        },
+    )
+    fifth_page_active = [_get_company()]
+    fifth_page_inactive = [_get_company(company_status="inactive") for _ in range(19)]
+    requests_mock.get(
+        "https://api.companieshouse.gov.uk/search/companies?q=test&items_per_page=20&start_index=80",
+        json={
+            "items": _to_results(fifth_page_active + fifth_page_inactive),
+        },
+    )
+
+    items = search_companies("test")
+    assert items == _to_items(
+        first_page_active
+        + second_page_active
+        + third_page_active
+        + fourth_page_active
+        + fifth_page_active
+    )

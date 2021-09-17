@@ -5,6 +5,7 @@ from django.conf import settings
 
 ITEMS_PER_PAGE = 20
 DESIRED_NUM_RESULTS = 20
+MAX_PAGE_SEARCH_ATTEMPTS = 5
 
 SEARCH_URL = "https://api.companieshouse.gov.uk/search/companies?q={}&items_per_page={}&start_index={}".format(
     "{query}",
@@ -43,11 +44,10 @@ def _exclude_snippet_results(items):
 
 
 def search_companies(query):
-    start_index = 0
     items = []
 
-    while len(items) < DESIRED_NUM_RESULTS:
-        response = _search_companies_house_api(query, start_index)
+    for attempt in range(MAX_PAGE_SEARCH_ATTEMPTS):
+        response = _search_companies_house_api(query, attempt * ITEMS_PER_PAGE)
         results = response.json()["items"]
 
         filtered_items = _filter_active_companies(results)
@@ -55,7 +55,9 @@ def search_companies(query):
         filtered_items = [_get_result(item) for item in filtered_items]
 
         items += filtered_items
-        start_index += ITEMS_PER_PAGE
+
+        if len(items) >= DESIRED_NUM_RESULTS:
+            break
 
         if len(results) < ITEMS_PER_PAGE:
             break
