@@ -6,9 +6,7 @@
     <div class="govuk-width-container">
         <form method="post" novalidate>
             {% block back_button %}
-                {% if wizard.steps.step1 != 1 %}
-                    <button class="govuk-back-link link-button" formnovalidate name="wizard_goto_step" value="{{ wizard.steps.prev }}">Back</button>
-                {% endif %}
+                <a class="govuk-back-link" href="{% url "core:enquiry-wizard-step" step=wizard.steps.prev %}">Back</a>
             {% endblock %}
             <main id="main-content" class="govuk-main-wrapper">
                 {% block errors %}
