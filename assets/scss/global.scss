@@ -12,4 +12,6 @@ $govuk-image-url-function: frontend-image-url;
 $govuk-assets-path: "~govuk-frontend/govuk/assets/";
 @import "govuk-frontend/govuk/all";
 
+@import "accessible-autocomplete";
+
 @import "styles";
