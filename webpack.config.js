@@ -9,6 +9,7 @@ module.exports = {
     sentry: "./assets/javascript/sentry.js",
     global: ["./assets/javascript/global.js", "./assets/scss/global.scss"],
     "cookie-policy-form": "./assets/javascript/cookie-policy-form.js",
+    "business-details": "./assets/javascript/business-details.js",
   },
 
   output: {
@@ -34,6 +35,17 @@ module.exports = {
 
   module: {
     rules: [
+      {
+        test: /\.m?js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ['@babel/preset-env']
+          }
+        }
+      },
+
       // Use file-loader to handle image assets
       {
         test: /\.(png|jpe?g|gif|woff2?|svg|ico|eot)$/i,

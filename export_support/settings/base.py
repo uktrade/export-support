@@ -113,6 +113,10 @@ LOGGING = {
         },
     },
     "loggers": {
+        "": {
+            "level": "INFO",
+            "handlers": ["ecs" if USE_ECS_LOGGING else "console"],
+        },
         "django": {
             "level": "INFO",
             "handlers": ["ecs" if USE_ECS_LOGGING else "console"],
@@ -285,3 +289,5 @@ GA_MEASUREMENT_PROTOCOL_UA = env.str("GA_MEASUREMENT_PROTOCOL_UA")
 GA_MEASUREMENT_PROTOCOL_TRACK_EVENTS = env.str(
     "GA_MEASUREMENT_PROTOCOL_TRACK_EVENTS", False
 )
+
+COMPANIES_HOUSE_TOKEN = env.str("COMPANIES_HOUSE_TOKEN")
