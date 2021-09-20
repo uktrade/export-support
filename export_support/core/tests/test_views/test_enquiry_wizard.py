@@ -1109,6 +1109,20 @@ def test_export_countries_validation(run_wizard_export_countries):
         'You must select either "Select all" or some countries not both',
     )
 
+    response = run_wizard_export_countries(
+        {
+            "select_all": "1",
+            "countries": ["invalid_country"],
+        }
+    )
+    assert response.status_code == 200
+    assertFormError(
+        response,
+        "form",
+        "countries",
+        "Select a valid choice. invalid_country is not one of the available choices.",
+    )
+
 
 @pytest.fixture
 def run_wizard_sectors():

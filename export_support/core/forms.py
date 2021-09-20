@@ -81,7 +81,15 @@ class ExportCountriesForm(forms.Form):
         cleaned_data = super().clean()
 
         has_select_all_selected = bool(cleaned_data["select_all"])
-        has_countries_selected = any(cleaned_data["countries"])
+
+        try:
+            # In the case that this field has produced a validation error before
+            # and therefore doesn't exist at this stage we can just bail out
+            # as there's another error to display.
+            has_countries_selected = any(cleaned_data["countries"])
+        except KeyError:
+            return cleaned_data
+
         has_all_countries_selected = [
             code for code, _ in self.fields["countries"].choices
         ] == cleaned_data["countries"]
