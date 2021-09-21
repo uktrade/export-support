@@ -23,3 +23,7 @@
   border-top: 1px solid $govuk-border-colour !important;
   padding-top: govuk-spacing(4) !important;
 }
+
+.non-bold-legend {
+  font-weight: normal;
+}
