@@ -1,10 +1,11 @@
 import common from "govuk-frontend/govuk/common";
-import Accordion from "govuk-frontend/govuk/components/accordion/accordion";
 import Button from "govuk-frontend/govuk/components/button/button";
 import ErrorSummary from "govuk-frontend/govuk/components/error-summary/error-summary";
 import Radios from "govuk-frontend/govuk/components/radios/radios";
 
-import initSelectAll from "./modules/select-all.js";
+import Accordion from "./modules/accordion";
+
+import initSelectAll from "./modules/select-all";
 import CookiePolicy from "./modules/cookie-banner";
 
 var cookiePolicy = new CookiePolicy();
