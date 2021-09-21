@@ -1,6 +1,6 @@
 <div class="govuk-form-group {% if field.errors %}govuk-form-group--error{% endif %}" id="form-group-{{ form.prefix }}-{{ field.name }}">
     <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s non-bold-legend" for="{{ field.id_for_label }}">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s govuk-!-font-weight-regular" for="{{ field.id_for_label }}">
             {{ field.label }}{% if not field.field.required %} <span class="govuk-hint govuk-!-display-inline">(optional)</span>{% endif %}
         </legend>
         {% if field.help_text %}
