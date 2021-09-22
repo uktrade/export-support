@@ -16,14 +16,6 @@
                 Knowing details about your business will help us direct you to the right team for help.
             </p>
             <div class="govuk-form-group {% if form.company_type.errors or form.type_of_organisation.errors %}govuk-form-group--error{% endif %}">
-                <label class="govuk-label" for="{{ form.company_type.id_for_label }}">
-                    {{ form.company_type.label }}{% if not form.company_type.field.required %} <span class="govuk-hint govuk-!-display-inline">(optional)</span>{% endif %}
-                </label>
-                {% if form.company_type.help_text %}
-                    <div class="govuk-hint">
-                        {{ form.company_type.help_text }}
-                    </div>
-                {% endif %}
                 {% if form.company_type.errors %}
                     <div>
                         <a id="{{ form.prefix }}-{{ form.company_type.name }}_errors"></a>
@@ -34,38 +26,46 @@
                         {% endfor %}
                     </div>
                 {% endif %}
-                <div class="govuk-radios" data-module="govuk-radios">
-                    <div class="govuk-radios__item">
-                        <input id="id_business-details-company_type_0" class="govuk-radios__input" name="business-details-company_type" type="radio" value="1" {% if form.company_type.value == "1" %}checked{% endif %}>
-                        <label class="govuk-label govuk-radios__label" for="id_business-details-company_type_0">
-                            UK private or public limited company
-                        </label>
-                    </div>
-                    <div class="govuk-radios__item">
-                        <input id="id_business-details-company_type_1" class="govuk-radios__input" name="business-details-company_type" type="radio" value="2" {% if form.company_type.value == "2" %}checked{% endif %} data-aria-controls="conditional-type-of-organisation">
-                        <label class="govuk-label govuk-radios__label" for="id_business-details-company_type_1">
-                            Other type of UK organisation
-                        </label>
-                    </div>
-                    <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-type-of-organisation">
-                        <div class="govuk-form-group">
-                            <label class="govuk-label" for="{{ form.type_of_organisation.id_for_label }}">
-                                {{ form.type_of_organisation.label }}
-                            </label>
-                            {% if form.type_of_organisation.errors %}
-                                <div>
-                                    <a id="{{ form.prefix }}-{{ form.type_of_organisation.name }}_errors"></a>
-                                    {% for error in form.type_of_organisation.errors %}
-                                        <span class="govuk-error-message">
-                                            <span class="govuk-visually-hidden">Error:</span> {{ error }}
-                                        </span>
-                                    {% endfor %}
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s govuk-!-font-weight-regular">Business type</legend>
+                        {% if form.company_type.help_text %}
+                            <div class="govuk-hint">
+                                {{ form.company_type.help_text }}
+                            </div>
+                        {% endif %}
+                        <div class="govuk-radios" data-module="govuk-radios">
+                            <div class="govuk-radios__item">
+                                <input id="id_business-details-company_type_0" class="govuk-radios__input" name="business-details-company_type" type="radio" value="1" {% if form.company_type.value == "1" %}checked{% endif %}>
+                                <label class="govuk-label govuk-radios__label" for="id_business-details-company_type_0">
+                                    UK private or public limited company
+                                </label>
+                            </div>
+                            <div class="govuk-radios__item">
+                                <input id="id_business-details-company_type_1" class="govuk-radios__input" name="business-details-company_type" type="radio" value="2" {% if form.company_type.value == "2" %}checked{% endif %} data-aria-controls="conditional-type-of-organisation">
+                                <label class="govuk-label govuk-radios__label" for="id_business-details-company_type_1">
+                                    Other type of UK organisation
+                                </label>
+                            </div>
+                            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-type-of-organisation">
+                                <div class="govuk-form-group">
+                                    <label class="govuk-label" for="{{ form.type_of_organisation.id_for_label }}">
+                                        {{ form.type_of_organisation.label }}
+                                    </label>
+                                    {% if form.type_of_organisation.errors %}
+                                        <div>
+                                            <a id="{{ form.prefix }}-{{ form.type_of_organisation.name }}_errors"></a>
+                                            {% for error in form.type_of_organisation.errors %}
+                                                <span class="govuk-error-message">
+                                                    <span class="govuk-visually-hidden">Error:</span> {{ error }}
+                                                </span>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                    {{ form.type_of_organisation }}
                                 </div>
-                            {% endif %}
-                            {{ form.type_of_organisation }}
+                            </div>
                         </div>
-                    </div>
-                </div>
+                </fieldset>
             </div>
             <template data-form-group-id="form-group-{{ form.prefix }}-{{ form.company_name.name }}" id="companies-house-autocomplete-template">
                 <div class="govuk-form-group {% if form.company_name.errors %}govuk-form-group--error{% endif %}" id="form-group-{{ form.prefix }}-{{ form.company_name.name }}">
