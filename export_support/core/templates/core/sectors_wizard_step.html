@@ -7,7 +7,7 @@
 {% block fields %}
     <div class="govuk-form-group {% if form.sectors.errors %}govuk-form-group--error{% endif %}">
         <span class="govuk-caption-l">Question {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</span>
-        <fieldset class="govuk-fieldset" aria-describedby="sectors-hint">
+        <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                 <h1 class="govuk-fieldset__heading">
                     {{ form.sectors.label }}

@@ -4,7 +4,7 @@
 
 {% block fields %}
     <div class="govuk-form-group">
-        <fieldset class="govuk-fieldset" aria-describedby="export-country-hint">
+        <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                 <h1 class="govuk-fieldset__heading">
                     Your personal details
@@ -16,7 +16,7 @@
             {% include "gds/forms/form_group.html" with field=form.first_name %}
             {% include "gds/forms/form_group.html" with field=form.last_name %}
             {% include "gds/forms/form_group.html" with field=form.email %}
-            {% include "gds/forms/form_group.html" with field=form.on_behalf_of %}
+            {% include "gds/forms/form_group_radio.html" with field=form.on_behalf_of %}
         </fieldset>
     </div>
 {% endblock %}
