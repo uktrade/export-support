@@ -9,7 +9,8 @@
   "scripts": {
     "build": "webpack --config=webpack.config.js --mode=production",
     "watch": "webpack --config=webpack.config.js --mode=development --watch",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "npm run build",
+    "preinstall": "npm-force-resolutions"
   },
   "dependencies": {
     "@babel/core": "^7.15.0",
@@ -30,7 +31,11 @@
     "webpack-cli": "^4.7.2"
   },
   "devDependencies": {
+    "npm-force-resolutions": "0.0.10",
     "prettier": "^2.3.1"
+  },
+  "resolutions": {
+    "ansi-regex": ">=6.0.1"
   },
   "repository": {
     "type": "git",
