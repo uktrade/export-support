@@ -11,7 +11,7 @@
 {% block fields %}
     <div class="govuk-form-group {% if form.enquiry_subject.errors %}govuk-form-group--error{% endif %}">
         <span class="govuk-caption-l">Question {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</span>
-        <fieldset class="govuk-fieldset" aria-describedby="enquiry-subject-hint">
+        <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l {% if not form.enquiry_subject.errors %}govuk-!-margin-bottom-4{% endif %}">
                 <h1 class="govuk-fieldset__heading">
                     {{ form.enquiry_subject.label }}

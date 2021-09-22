@@ -4,7 +4,7 @@
 
 {% block fields %}
     <div class="govuk-form-group {% if form.export_destination.errors %}govuk-form-group--error{% endif %}">
-        <fieldset class="govuk-fieldset" aria-describedby="export-destination-hint">
+        <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l {% if not form.export_destination.errors %}govuk-!-margin-bottom-4{% endif %}">
                 <h1 class="govuk-fieldset__heading">
                     {{ form.export_destination.label }}

@@ -11,7 +11,7 @@
 {% block fields %}
     <div class="govuk-form-group govuk-!-margin-bottom-2 {% if form.countries.errors %}govuk-form-group--error{% endif %}">
         <span class="govuk-caption-l">Question {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</span>
-        <fieldset class="govuk-fieldset" aria-describedby="export-country-hint" data-module="select-all" data-select-all-id="{{ form.select_all.id_for_label }}">
+        <fieldset class="govuk-fieldset" data-module="select-all" data-select-all-id="{{ form.select_all.id_for_label }}">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l {% if not form.countries.errors %}govuk-!-margin-bottom-4{% endif %}">
                 <h1 class="govuk-fieldset__heading">
                     {{ form.countries.label }}
