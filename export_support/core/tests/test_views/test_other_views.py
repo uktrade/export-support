@@ -16,6 +16,12 @@ def test_privacy_view(client):
     assertTemplateUsed(response, "core/privacy.html")
 
 
+def test_legal_disclaimer_view(client):
+    response = client.get(reverse("core:legal-disclaimer"))
+    assert response.status_code == 200
+    assertTemplateUsed(response, "core/legal_disclaimer.html")
+
+
 def test_non_eu_export_enquiries_view(client):
     url = reverse("core:non-eu-export-enquiries")
     response = client.get(url)

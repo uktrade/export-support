@@ -220,3 +220,7 @@ class NonEUExportEnquiriesView(TemplateView):
 
 class PrivacyView(TemplateView):
     template_name = "core/privacy.html"
+
+
+class LegalDisclaimer(TemplateView):
+    template_name = "core/legal_disclaimer.html"

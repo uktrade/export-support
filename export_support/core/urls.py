@@ -30,4 +30,9 @@ urlpatterns = [
         views.PrivacyView.as_view(),
         name="privacy",
     ),
+    path(
+        "legal-disclaimer",
+        views.LegalDisclaimer.as_view(),
+        name="legal-disclaimer",
+    ),
 ]
