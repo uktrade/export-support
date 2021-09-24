@@ -252,7 +252,7 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
     )
     company_registration_number = forms.CharField(
         help_text=mark_safe(
-            "Information about your company helps us to improve how we answer your query. Find your number using <a class='govuk-link' href='https://www.gov.uk/get-information-about-a-company' target='_blank'>Get information about a company</a>."  # noqa: E501
+            "Information about your company helps us to improve how we answer your query. Find your number using <a class='govuk-link' href='https://www.gov.uk/get-information-about-a-company' target='_blank'>Get information about a company <span class='govuk-visually-hidden'>(opens in new tab)</span></a>."  # noqa: E501
         ),
         label="Company Registration Number",
         required=False,
