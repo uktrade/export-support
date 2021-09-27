@@ -1,6 +1,6 @@
 <div class="govuk-form-group {% if field.errors %}govuk-form-group--error{% endif %}" id="form-group-{{ form.prefix }}-{{ field.name }}">
     <label class="govuk-label" for="{{ field.id_for_label }}">
-        {{ field.label }}{% if not field.field.required %} <span class="govuk-hint govuk-!-display-inline">(optional)</span>{% endif %}
+        {{ field.label }}{% if not field.field.required and not force_hide_optional %} <span class="govuk-hint govuk-!-display-inline">(optional)</span>{% endif %}
     </label>
     {% if field.help_text %}
         <div class="govuk-hint">

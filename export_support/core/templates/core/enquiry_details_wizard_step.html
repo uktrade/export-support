@@ -15,6 +15,17 @@
             </p>
             {% include "gds/forms/form_group.html" with field=form.nature_of_enquiry %}
             {% include "gds/forms/form_group.html" with field=form.question %}
+            <div class="govuk-form-group {% if form.how_did_you_hear_about_this_service.errors or form.other_how_did_you_hear_about_this_service.errors %}govuk-form-group--error{% endif %}">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-visually-hidden">How did you hear about this service?</legend>
+                    <div class="govuk-!-margin-bottom-4">
+                        {% include "gds/forms/form_group.html" with field=form.how_did_you_hear_about_this_service %}
+                    </div>
+                    <div class="govuk-inset-text govuk-!-margin-top-0">
+                        {% include "gds/forms/form_group.html" with field=form.other_how_did_you_hear_about_this_service force_hide_optional=True %}
+                    </div>
+                </fieldset>
+            </div>
         </fieldset>
     </div>
     <div class="govuk-grid-row">
