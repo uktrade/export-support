@@ -411,6 +411,19 @@ class SectorsForm(forms.Form):
         }
 
 
+class HowDidYouHearAboutThisServiceChoices(models.IntegerChoices):
+    SEARCH_ENGINE = 1, "Search engine"
+    LINKED_IN = 2, "LinkedIn"
+    TWITTER = 3, "Twitter"
+    FACEBOOK = 4, "Facebook"
+    RADIO_ADVERT = 5, "Radio advert"
+    NGO = 6, "Non-government organisation - such as a trade body"
+    NEWS_ARTICLE = 7, "News article"
+    ONLINE_ADVERT = 8, "Online advert"
+    PRINT_ADVERT = 9, "Print advert"
+    OTHER = 10, "Other"
+
+
 class EnquiryDetailsForm(gds_forms.FormErrorMixin, forms.Form):
     nature_of_enquiry = forms.CharField(
         label="Please describe the good(s) or service(s) the enquiry is about",
@@ -433,14 +446,84 @@ class EnquiryDetailsForm(gds_forms.FormErrorMixin, forms.Form):
             },
         ),
     )
+    how_did_you_hear_about_this_service = forms.TypedChoiceField(
+        choices=[("", "Please select")] + HowDidYouHearAboutThisServiceChoices.choices,
+        coerce=coerce_choice(HowDidYouHearAboutThisServiceChoices),
+        error_messages={
+            "required": "Select how you heard about this service",
+        },
+        label="How did you hear about this service?",
+        widget=forms.Select(
+            attrs={
+                "class": "govuk-select",
+            },
+        ),
+    )
+    other_how_did_you_hear_about_this_service = forms.CharField(
+        label='If "Other", please specify',
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "govuk-input",
+            },
+        ),
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        try:
+            how_did_you_hear_about_this_service = cleaned_data[
+                "how_did_you_hear_about_this_service"
+            ]
+        except KeyError:
+            return cleaned_data
+
+        is_how_did_you_hear_other_selected = (
+            how_did_you_hear_about_this_service
+            == HowDidYouHearAboutThisServiceChoices.OTHER
+        )
+        other_how_did_you_hear_about_this_service = cleaned_data[
+            "other_how_did_you_hear_about_this_service"
+        ].strip()
+
+        if (
+            is_how_did_you_hear_other_selected
+            and not other_how_did_you_hear_about_this_service
+        ):
+            self.add_error(
+                "other_how_did_you_hear_about_this_service",
+                "Enter how you heard about this service",
+            )
+
+        return cleaned_data
 
     def get_zendesk_data(self):
         nature_of_enquiry = self.cleaned_data["nature_of_enquiry"]
         question = self.cleaned_data["question"]
+        how_did_you_hear_about_this_service = self.cleaned_data[
+            "how_did_you_hear_about_this_service"
+        ]
+
+        if (
+            how_did_you_hear_about_this_service
+            == HowDidYouHearAboutThisServiceChoices.OTHER
+        ):
+            other_how_did_you_hear_about_this_service = self.cleaned_data[
+                "other_how_did_you_hear_about_this_service"
+            ]
+            how_did_you_hear_about_this_service = (
+                other_how_did_you_hear_about_this_service
+            )
+        else:
+            how_did_you_hear_about_this_service = (
+                how_did_you_hear_about_this_service.label
+            )
 
         return {
             "nature_of_enquiry": nature_of_enquiry,
             "question": question,
+            "how_did_you_hear_about_this_service": how_did_you_hear_about_this_service,
         }
 
 
@@ -465,4 +548,5 @@ class ZendeskForm(ZendeskAPIForm):
     aaa_question = forms.CharField()
     full_name = forms.CharField()
     email = forms.CharField()
+    how_did_you_hear_about_this_service = forms.CharField()
     _custom_fields = forms.JSONField(required=False)
