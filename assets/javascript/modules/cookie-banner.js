@@ -226,4 +226,4 @@ function CookieBanner() {
   };
 }
 
-module.exports = CookieBanner;
+export default CookieBanner;
