@@ -18,6 +18,7 @@
     "accessible-autocomplete": "^2.0.3",
     "babel-loader": "^8.2.2",
     "copy-webpack-plugin": "^9.0.0",
+    "core-js": "^3.18.1",
     "css-loader": "^5.2.6",
     "file-loader": "^6.2.0",
     "govuk-frontend": "^3.12.0",
