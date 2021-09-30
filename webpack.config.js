@@ -39,10 +39,7 @@ module.exports = {
         test: /\.m?js$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader",
-          options: {
-            presets: ['@babel/preset-env']
-          }
+          loader: "babel-loader"
         }
       },
 
@@ -82,4 +79,6 @@ module.exports = {
     modules: ["node_modules"],
     extensions: [".js", ".scss"],
   },
+
+  target: "es5"
 };
