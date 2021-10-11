@@ -226,3 +226,41 @@ def test_search_companies_maximum_page_searches(requests_mock):
         + fourth_page_active
         + fifth_page_active
     )
+
+
+def test_no_address_results(requests_mock):
+    requests_mock.get(
+        "https://api.companieshouse.gov.uk/search/companies?q=test&items_per_page=20",
+        json={
+            "items": [
+                {
+                    "title": "no address",
+                    "company_number": "12345",
+                    "company_status": "active",
+                    "matches": ["title"],
+                },
+                {
+                    "title": "none address",
+                    "address": None,
+                    "company_number": "67890",
+                    "company_status": "active",
+                    "matches": ["title"],
+                },
+            ],
+        },
+    )
+
+    items = search_companies("test")
+
+    assert items == [
+        {
+            "name": "no address",
+            "postcode": None,
+            "companyNumber": "12345",
+        },
+        {
+            "name": "none address",
+            "postcode": None,
+            "companyNumber": "67890",
+        },
+    ]

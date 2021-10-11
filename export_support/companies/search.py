@@ -22,7 +22,9 @@ def _search_companies_house_api(query, start_index):
 
 
 def _get_result(item):
-    address = item.get("address", {})
+    address = item.get("address")
+    if not address:
+        address = {}
     return {
         "name": item["title"],
         "postcode": address.get("postal_code"),
