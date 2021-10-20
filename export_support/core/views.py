@@ -224,3 +224,7 @@ class PrivacyView(TemplateView):
 
 class LegalDisclaimer(TemplateView):
     template_name = "core/legal_disclaimer.html"
+
+
+class AccessibilityStatement(TemplateView):
+    template_name = "core/accessibility_statement.html"
