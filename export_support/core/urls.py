@@ -35,4 +35,9 @@ urlpatterns = [
         views.LegalDisclaimer.as_view(),
         name="legal-disclaimer",
     ),
+    path(
+        "accessibility-statement",
+        views.AccessibilityStatement.as_view(),
+        name="accessibility-statement",
+    ),
 ]
