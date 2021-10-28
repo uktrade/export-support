@@ -62,15 +62,16 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
 
         for form in form_list:
             for field_name, field_value in form.get_zendesk_data().items():
+                original_field_name = field_name
                 field_name = ZendeskForm.FIELD_MAPPING.get(field_name, field_name)
                 form_data[field_name] = field_value
                 try:
-                    custom_field_id = custom_field_mapping[field_name]
+                    custom_field_id = custom_field_mapping[original_field_name]
                 except KeyError:
                     continue
                 else:
                     custom_fields_data.append(
-                        {custom_field_id: form.cleaned_data[field_name]}
+                        {custom_field_id: form.cleaned_data[original_field_name]}
                     )
 
         form_data["_custom_fields"] = custom_fields_data
