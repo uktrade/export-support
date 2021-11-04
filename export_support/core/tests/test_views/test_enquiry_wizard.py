@@ -16,9 +16,6 @@ from ...forms import (
     OnBehalfOfChoices,
 )
 
-pytestmark = pytest.mark.skip("Temporarily skip due to test changes on forms")
-
-
 COUNTRY_MACHINE_READABLE_VALUES = list(ENQUIRY_COUNTRY_CODES.values())
 
 
