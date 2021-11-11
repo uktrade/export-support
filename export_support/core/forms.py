@@ -5,6 +5,7 @@ from django import forms
 from django.core import validators
 from django.db import models
 from django.utils.safestring import mark_safe
+from phonenumber_field.formfields import PhoneNumberField
 
 from export_support.gds import fields as gds_fields
 from export_support.gds import forms as gds_forms
@@ -411,6 +412,12 @@ class SectorsForm(forms.Form):
         }
 
 
+class CallbackPreferredTimeChoices(models.IntegerChoices):
+    ANY_TIME = 1, "Any time"
+    MORNING = 2, "08:00 to 13:00 - GMT"
+    AFTERNOON = 3, "13:00 to 18:00 - GMT"
+
+
 class HowDidYouHearAboutThisServiceChoices(models.IntegerChoices):
     SEARCH_ENGINE = 1, "Search engine"
     LINKED_IN = 2, "LinkedIn"
@@ -443,6 +450,40 @@ class EnquiryDetailsForm(gds_forms.FormErrorMixin, forms.Form):
             attrs={
                 "class": "govuk-textarea",
                 "rows": 10,
+            },
+        ),
+    )
+    prefer_callback = forms.BooleanField(
+        label="Yes, I would prefer a telephone call back",
+        required=False,
+        widget=forms.CheckboxInput(
+            attrs={
+                "class": "govuk-checkboxes__input",
+                "data-aria-controls": "conditional-prefer-callback",
+            },
+        ),
+    )
+    prefer_callback_telephone_number = PhoneNumberField(
+        error_messages={
+            "invalid": "Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 808 157 0192",
+        },
+        label="UK telephone number",
+        region="GB",
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "tel",
+                "class": "govuk-input",
+            },
+        ),
+    )
+    prefer_callback_preferred_time = forms.TypedChoiceField(
+        choices=CallbackPreferredTimeChoices.choices,
+        coerce=coerce_choice(CallbackPreferredTimeChoices),
+        required=False,
+        widget=forms.Select(
+            attrs={
+                "class": "govuk-select",
             },
         ),
     )
@@ -496,6 +537,27 @@ class EnquiryDetailsForm(gds_forms.FormErrorMixin, forms.Form):
                 "Enter how you heard about this service",
             )
 
+        prefer_callback = cleaned_data["prefer_callback"]
+        prefer_callback_preferred_time = cleaned_data["prefer_callback_preferred_time"]
+        if prefer_callback:
+            try:
+                prefer_callback_telephone_number = cleaned_data[
+                    "prefer_callback_telephone_number"
+                ]
+            except KeyError:
+                pass
+            else:
+                if not prefer_callback_telephone_number:
+                    self.add_error(
+                        "prefer_callback_telephone_number",
+                        "Enter a telephone number for a call back response",
+                    )
+            if not prefer_callback_preferred_time:
+                self.add_error(
+                    "prefer_callback_preferred_time",
+                    "Enter a preferred call back time for a call back response",
+                )
+
         return cleaned_data
 
     def get_zendesk_data(self):
@@ -520,11 +582,24 @@ class EnquiryDetailsForm(gds_forms.FormErrorMixin, forms.Form):
                 how_did_you_hear_about_this_service.label
             )
 
-        return {
+        zendesk_data = {
+            "prefer_callback": "No",
             "nature_of_enquiry": nature_of_enquiry,
             "question": question,
             "how_did_you_hear_about_this_service": how_did_you_hear_about_this_service,
         }
+
+        prefer_callback = self.cleaned_data["prefer_callback"]
+        if prefer_callback:
+            zendesk_data["prefer_callback"] = "Yes"
+            zendesk_data["prefer_callback_telephone_number"] = str(
+                self.cleaned_data["prefer_callback_telephone_number"]
+            )
+            zendesk_data["prefer_callback_preferred_time"] = self.cleaned_data[
+                "prefer_callback_preferred_time"
+            ].label
+
+        return zendesk_data
 
 
 class ZendeskForm(ZendeskAPIForm):
@@ -548,5 +623,8 @@ class ZendeskForm(ZendeskAPIForm):
     aaa_question = forms.CharField()
     full_name = forms.CharField()
     email = forms.CharField()
+    prefer_callback = forms.CharField()
+    prefer_callback_telephone_number = forms.CharField(required=False)
+    prefer_callback_preferred_time = forms.CharField(required=False)
     how_did_you_hear_about_this_service = forms.CharField()
     _custom_fields = forms.JSONField(required=False)

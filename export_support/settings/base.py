@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "webpack_loader",
     "csp",
     "formtools",
+    "phonenumber_field",
 ]
 
 MIDDLEWARE = [
@@ -291,3 +292,5 @@ GA_MEASUREMENT_PROTOCOL_TRACK_EVENTS = env.str(
 )
 
 COMPANIES_HOUSE_TOKEN = env.str("COMPANIES_HOUSE_TOKEN")
+
+PHONENUMBER_DEFAULT_REGION = "GB"

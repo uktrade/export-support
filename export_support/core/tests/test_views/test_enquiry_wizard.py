@@ -8,6 +8,7 @@ from pytest_django.asserts import assertFormError, assertTemplateUsed
 from ...consts import ENQUIRY_COUNTRY_CODES
 from ...forms import (
     SECTORS_MAP,
+    CallbackPreferredTimeChoices,
     CompanyTurnoverChoices,
     CompanyTypeChoices,
     EnquirySubjectChoices,
@@ -182,6 +183,9 @@ def test_full_steps_wizard_success(client, settings, mocker):
             {
                 "nature_of_enquiry": "NATURE OF ENQUIRY",
                 "question": "QUESTION",
+                "prefer_callback": True,
+                "prefer_callback_telephone_number": "01234 123 123",
+                "prefer_callback_preferred_time": CallbackPreferredTimeChoices.ANY_TIME,
                 "how_did_you_hear_about_this_service": HowDidYouHearAboutThisServiceChoices.SEARCH_ENGINE,
             },
         ),
@@ -227,6 +231,9 @@ def test_full_steps_wizard_success(client, settings, mocker):
             "on_behalf_of": "The business I own or work for",
             "other_sector": "ANOTHER SECTOR",
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
+            "prefer_callback": "Yes",
+            "prefer_callback_telephone_number": "+441234123123",
+            "prefer_callback_preferred_time": "Any time",
             "how_did_you_hear_about_this_service": "Search engine",
             "_custom_fields": None,
         }
@@ -377,6 +384,9 @@ def test_full_steps_wizard_success_custom_fields(client, settings, mocker):
             {
                 "nature_of_enquiry": "NATURE OF ENQUIRY",
                 "question": "QUESTION",
+                "prefer_callback": True,
+                "prefer_callback_telephone_number": "01234 123 123",
+                "prefer_callback_preferred_time": CallbackPreferredTimeChoices.ANY_TIME,
                 "how_did_you_hear_about_this_service": HowDidYouHearAboutThisServiceChoices.SEARCH_ENGINE,
             },
         ),
@@ -422,6 +432,9 @@ def test_full_steps_wizard_success_custom_fields(client, settings, mocker):
             "on_behalf_of": "The business I own or work for",
             "other_sector": "ANOTHER SECTOR",
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
+            "prefer_callback": "Yes",
+            "prefer_callback_telephone_number": "+441234123123",
+            "prefer_callback_preferred_time": "Any time",
             "how_did_you_hear_about_this_service": "Search engine",
             "_custom_fields": [
                 {
@@ -584,6 +597,9 @@ def test_skip_business_details_wizard_success(client, settings, mocker):
             {
                 "nature_of_enquiry": "NATURE OF ENQUIRY",
                 "question": "QUESTION",
+                "prefer_callback": True,
+                "prefer_callback_telephone_number": "01234 123 123",
+                "prefer_callback_preferred_time": CallbackPreferredTimeChoices.ANY_TIME,
                 "how_did_you_hear_about_this_service": HowDidYouHearAboutThisServiceChoices.SEARCH_ENGINE,
             },
         ),
@@ -629,6 +645,9 @@ def test_skip_business_details_wizard_success(client, settings, mocker):
             "on_behalf_of": "This enquiry does not relate to a (currently operating) business",
             "other_sector": "ANOTHER SECTOR",
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
+            "prefer_callback": "Yes",
+            "prefer_callback_telephone_number": "+441234123123",
+            "prefer_callback_preferred_time": "Any time",
             "how_did_you_hear_about_this_service": "Search engine",
             "_custom_fields": None,
         }
@@ -738,6 +757,9 @@ def test_zendesk_form_is_not_valid_wizard_raises_error(client, settings, mocker)
             {
                 "nature_of_enquiry": "NATURE OF ENQUIRY",
                 "question": "QUESTION",
+                "prefer_callback": True,
+                "prefer_callback_telephone_number": "01234 123 123",
+                "prefer_callback_preferred_time": CallbackPreferredTimeChoices.ANY_TIME,
                 "how_did_you_hear_about_this_service": HowDidYouHearAboutThisServiceChoices.SEARCH_ENGINE,
             },
         ),
@@ -889,6 +911,9 @@ def run_wizard_enquiry_subject(settings, mocker):
                 {
                     "nature_of_enquiry": "NATURE OF ENQUIRY",
                     "question": "QUESTION",
+                    "prefer_callback": True,
+                    "prefer_callback_telephone_number": "01234 123 123",
+                    "prefer_callback_preferred_time": CallbackPreferredTimeChoices.ANY_TIME,
                     "how_did_you_hear_about_this_service": HowDidYouHearAboutThisServiceChoices.SEARCH_ENGINE,
                 },
             ),
@@ -1584,6 +1609,9 @@ def test_enquiry_details_how_did_you_hear_other_zendesk_output(
         {
             "nature_of_enquiry": "NATURE OF ENQUIRY",
             "question": "QUESTION",
+            "prefer_callback": True,
+            "prefer_callback_telephone_number": "01234 123 123",
+            "prefer_callback_preferred_time": CallbackPreferredTimeChoices.ANY_TIME,
             "how_did_you_hear_about_this_service": HowDidYouHearAboutThisServiceChoices.SEARCH_ENGINE,
             "other_how_did_you_hear_about_this_service": "This is ignored",
         },
@@ -1626,6 +1654,9 @@ def test_enquiry_details_how_did_you_hear_other_zendesk_output(
             "on_behalf_of": "The business I own or work for",
             "other_sector": "ANOTHER SECTOR",
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
+            "prefer_callback": "Yes",
+            "prefer_callback_telephone_number": "+441234123123",
+            "prefer_callback_preferred_time": "Any time",
             "how_did_you_hear_about_this_service": "Search engine",
             "_custom_fields": None,
         }
@@ -1639,6 +1670,9 @@ def test_enquiry_details_how_did_you_hear_other_zendesk_output(
         {
             "nature_of_enquiry": "NATURE OF ENQUIRY",
             "question": "QUESTION",
+            "prefer_callback": True,
+            "prefer_callback_telephone_number": "01234 123 123",
+            "prefer_callback_preferred_time": CallbackPreferredTimeChoices.ANY_TIME,
             "how_did_you_hear_about_this_service": HowDidYouHearAboutThisServiceChoices.OTHER,
             "other_how_did_you_hear_about_this_service": "Other service I heard this from",
         },
@@ -1681,7 +1715,59 @@ def test_enquiry_details_how_did_you_hear_other_zendesk_output(
             "on_behalf_of": "The business I own or work for",
             "other_sector": "ANOTHER SECTOR",
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
+            "prefer_callback": "Yes",
+            "prefer_callback_telephone_number": "+441234123123",
+            "prefer_callback_preferred_time": "Any time",
             "how_did_you_hear_about_this_service": "Other service I heard this from",
             "_custom_fields": None,
         }
+    )
+
+
+def test_enquiry_details_prefers_callback_validation(run_wizard_enquiry_details):
+    response = run_wizard_enquiry_details(
+        {
+            "nature_of_enquiry": "NATURE OF ENQUIRY",
+            "question": "QUESTION",
+            "prefer_callback": True,
+            "how_did_you_hear_about_this_service": HowDidYouHearAboutThisServiceChoices.SEARCH_ENGINE,
+            "other_how_did_you_hear_about_this_service": "This is ignored",
+        },
+    )
+    assert response.status_code == 200
+    assertFormError(
+        response,
+        "form",
+        "prefer_callback_telephone_number",
+        "Enter a telephone number for a call back response",
+    )
+    assertFormError(
+        response,
+        "form",
+        "prefer_callback_preferred_time",
+        "Enter a preferred call back time for a call back response",
+    )
+
+    response = run_wizard_enquiry_details(
+        {
+            "nature_of_enquiry": "NATURE OF ENQUIRY",
+            "question": "QUESTION",
+            "prefer_callback": True,
+            "prefer_callback_telephone_number": "NOTAPHONENNUMBER",
+            "how_did_you_hear_about_this_service": HowDidYouHearAboutThisServiceChoices.SEARCH_ENGINE,
+            "other_how_did_you_hear_about_this_service": "This is ignored",
+        },
+    )
+    assert response.status_code == 200
+    assertFormError(
+        response,
+        "form",
+        "prefer_callback_telephone_number",
+        "Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 808 157 0192",
+    )
+    assertFormError(
+        response,
+        "form",
+        "prefer_callback_preferred_time",
+        "Enter a preferred call back time for a call back response",
     )
