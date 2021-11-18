@@ -1,4 +1,3 @@
-import pytest
 from django.urls import reverse
 from pytest_django.asserts import assertTemplateUsed
 
@@ -23,7 +22,6 @@ def test_legal_disclaimer_view(client):
     assertTemplateUsed(response, "core/legal_disclaimer.html")
 
 
-@pytest.mark.skip(reason="Temporarily skip due to test changes on forms")
 def test_non_eu_export_enquiries_view(client):
     url = reverse("core:non-eu-export-enquiries")
     response = client.get(url)

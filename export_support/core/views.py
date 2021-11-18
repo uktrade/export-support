@@ -7,14 +7,17 @@ from formtools.wizard.views import NamedUrlSessionWizardView
 
 from .forms import (
     BusinessDetailsForm,
+    BusinessSizeForm,
     EnquiryDetailsForm,
     EnquirySubjectChoices,
+    EnquirySubjectForm,
     ExportCountriesForm,
     OnBehalfOfChoices,
     PersonalDetailsForm,
     SectorsForm,
     ZendeskForm,
 )
+from .utils import dict_to_query_dict
 
 
 class IndexView(RedirectView):
@@ -31,9 +34,11 @@ def is_company(wizard):
 
 class EnquiryWizardView(NamedUrlSessionWizardView):
     form_list = [
+        ("enquiry-subject", EnquirySubjectForm),
         ("export-countries", ExportCountriesForm),
         ("personal-details", PersonalDetailsForm),
         ("business-details", BusinessDetailsForm),
+        ("business-size", BusinessSizeForm),
         ("sectors", SectorsForm),
         ("enquiry-details", EnquiryDetailsForm),
     ]
@@ -111,16 +116,36 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         ctx = super().get_context_data(form=form, **kwargs)
 
         if self.steps.current == "export-countries":
+            enquiry_subject_form = self.get_form(
+                step="enquiry-subject",
+                data=self.storage.get_step_data("enquiry-subject"),
+            )
+            if enquiry_subject_form.is_valid():
+                filter_data = enquiry_subject_form.get_filter_data()
+            else:
+                filter_data = {}
+
+            params = dict_to_query_dict(filter_data)
             guidance_url = reverse("core:non-eu-export-enquiries")
-            ctx["guidance_url"] = guidance_url
+
+            ctx["guidance_url"] = f"{guidance_url}?{params.urlencode()}"
 
         return ctx
 
     def done(self, form_list, form_dict, **kwargs):
+        enquiry_subject_cleaned_data = self.get_cleaned_data_for_step("enquiry-subject")
+        enquiry_subject = enquiry_subject_cleaned_data["enquiry_subject"]
+
+        display_goods = EnquirySubjectChoices.SELLING_GOODS_ABROAD in enquiry_subject
+        display_services = (
+            EnquirySubjectChoices.SELLING_SERVICES_ABROAD in enquiry_subject
+        )
+        display_subheadings = display_goods and display_services
+
         ctx = {
-            "display_goods": True,
-            "display_services": True,
-            "display_subheadings": True,
+            "display_goods": display_goods,
+            "display_services": display_services,
+            "display_subheadings": display_subheadings,
         }
 
         self.send_to_zendesk(form_list)
@@ -146,6 +171,42 @@ class NonEUExportEnquiriesView(TemplateView):
             EnquirySubjectChoices.SELLING_GOODS_ABROAD,
             EnquirySubjectChoices.SELLING_SERVICES_ABROAD,
         ]
+
+        enquiry_subject_form = EnquirySubjectForm(self.request.GET)
+        if enquiry_subject_form.is_valid():
+            selected_heading_components = []
+
+            enquiry_subject_value = enquiry_subject_form.cleaned_data["enquiry_subject"]
+
+            has_export_goods_selected = (
+                EnquirySubjectChoices.SELLING_GOODS_ABROAD in enquiry_subject_value
+            )
+            ctx["should_display_export_goods"] = has_export_goods_selected
+            if has_export_goods_selected:
+                selected_heading_components.append(
+                    EnquirySubjectChoices.SELLING_GOODS_ABROAD
+                )
+
+            has_export_services_selected = (
+                EnquirySubjectChoices.SELLING_SERVICES_ABROAD in enquiry_subject_value
+            )
+            ctx["should_display_export_services"] = has_export_services_selected
+            if has_export_services_selected:
+                selected_heading_components.append(
+                    EnquirySubjectChoices.SELLING_SERVICES_ABROAD
+                )
+
+            num_visible_sections = len(
+                [
+                    c
+                    for c in [
+                        has_export_goods_selected,
+                        has_export_services_selected,
+                    ]
+                    if c
+                ]
+            )
+            ctx["should_display_sub_headings"] = num_visible_sections > 1
 
         selected_components_heading_content = [
             heading_components[component] for component in selected_heading_components

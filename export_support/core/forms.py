@@ -532,6 +532,7 @@ class ZendeskForm(ZendeskAPIForm):
         "question": "aaa_question",
     }
 
+    enquiry_subject = forms.CharField()
     countries = forms.CharField()
     on_behalf_of = forms.CharField()
     company_type = forms.CharField(required=False)
@@ -539,6 +540,8 @@ class ZendeskForm(ZendeskAPIForm):
     company_name = forms.CharField(required=False)
     company_post_code = forms.CharField(required=False)
     company_registration_number = forms.CharField(required=False)
+    company_turnover = forms.CharField(required=False)
+    number_of_employees = forms.CharField(required=False)
     sectors = forms.CharField(required=False)
     other_sector = forms.CharField(required=False)
     nature_of_enquiry = forms.CharField(required=False)
