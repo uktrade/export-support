@@ -1,3 +1,5 @@
+import logging
+
 from directory_forms_api_client import helpers
 from django.conf import settings
 from django.shortcuts import render
@@ -18,6 +20,8 @@ from .forms import (
     ZendeskForm,
 )
 from .utils import dict_to_query_dict
+
+logger = logging.getLogger(__name__)
 
 
 class IndexView(RedirectView):
@@ -112,6 +116,16 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
             sender=sender,
         )
 
+    def send_contact_consent(self, form_list):
+        # Function to send consent confirmation to legal-basis-api
+        for form in form_list:
+            # Consent data is provided in the Enquiry Details Form
+            if isinstance(form, EnquiryDetailsForm):
+                consent_given = form.cleaned_data["email_consent"]
+                if consent_given:
+                    # Need to make the call to the api
+                    logger.critical(str(consent_given))
+
     def get_context_data(self, form, **kwargs):
         ctx = super().get_context_data(form=form, **kwargs)
 
@@ -148,6 +162,7 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
             "display_subheadings": display_subheadings,
         }
 
+        self.send_contact_consent(form_list)
         self.send_to_zendesk(form_list)
 
         return render(self.request, "core/enquiry_contact_success.html", ctx)
