@@ -1,6 +1,7 @@
 from enum import Enum
 
 import pytest
+import requests_mock
 from django.test import Client
 from django.urls import reverse
 from pytest_django.asserts import assertFormError, assertTemplateUsed
@@ -48,6 +49,8 @@ def test_full_steps_wizard_success(client, settings, mocker):
     settings.ZENDESK_SERVICE_NAME = "ZENDESK_SERVICE_NAME"
     settings.ZENDESK_SUBDOMAIN = "ZENDESK_SUBDOMAIN"
     settings.ZENDESK_CUSTOM_FIELD_MAPPING = {}
+    settings.CONSENT_API_URL = "http://placeholder:8080/api/v1/person/"
+    settings.CONSENT_API_METHOD = "POST"
 
     mock_zendesk_form_action_class = mocker.patch(
         "export_support.core.forms.ZendeskForm.action_class"
@@ -183,6 +186,7 @@ def test_full_steps_wizard_success(client, settings, mocker):
                 "nature_of_enquiry": "NATURE OF ENQUIRY",
                 "question": "QUESTION",
                 "how_did_you_hear_about_this_service": HowDidYouHearAboutThisServiceChoices.SEARCH_ENGINE,
+                "email_consent": True,
             },
         ),
     )
@@ -191,9 +195,19 @@ def test_full_steps_wizard_success(client, settings, mocker):
     done_url = get_step_url("done")
     assert response.url == done_url
 
-    response = client.get(done_url)
+    with requests_mock.mock() as m:
+        # Mock the post request to the consent api
+        adapter = m.post("http://placeholder:8080/api/v1/person/")
+        response = client.get(done_url)
+
     assert response.status_code == 200
     assertTemplateUsed(response, "core/enquiry_contact_success.html")
+
+    # Check the contents of the request to the consent api
+    consent_request_content = adapter.last_request.json()
+    assert consent_request_content["consents"] == ["email_marketing"]
+    assert consent_request_content["email"] == "test@example.com"
+    assert consent_request_content["key_type"] == "email"
 
     mock_zendesk_form_action_class.assert_called_with(
         form_url="FORM_URL",
