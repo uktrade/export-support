@@ -14,3 +14,4 @@ django-log-formatter-ecs==0.0.5
 django-ga-measurement-protocol==0.2.0
 requests-mock==1.9.3
 Faker==8.13.2
+django-phonenumber-field[phonenumbers]==6.0.0

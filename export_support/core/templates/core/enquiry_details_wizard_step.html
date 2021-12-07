@@ -15,6 +15,24 @@
             </p>
             {% include "gds/forms/form_group.html" with field=form.nature_of_enquiry %}
             {% include "gds/forms/form_group.html" with field=form.question %}
+            <div class="govuk-form-group {% if form.prefer_callback_telephone_number.errors or form.prefer_callback_preferred_time.errors %}govuk-form-group--error{% endif %}">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend">Would you prefer a telephone call back to an email response?</legend>
+                    <div class="govuk-hint">The export support team will contact you by phone within 3 working days.</div>
+                    <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+                        <div class="govuk-checkboxes__item">
+                            {{ form.prefer_callback }}
+                            <label class="govuk-label govuk-checkboxes__label" for="{{ form.prefer_callback.id_for_label }}">
+                                {{ form.prefer_callback.label }}
+                            </label>
+                        </div>
+                        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-prefer-callback">
+                            {% include "gds/forms/form_group.html" with field=form.prefer_callback_telephone_number force_hide_optional=True %}
+                            {% include "gds/forms/form_group.html" with field=form.prefer_callback_preferred_time force_hide_optional=True %}
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
             <div class="govuk-form-group {% if form.how_did_you_hear_about_this_service.errors or form.other_how_did_you_hear_about_this_service.errors %}govuk-form-group--error{% endif %}">
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-visually-hidden">How did you hear about this service?</legend>
