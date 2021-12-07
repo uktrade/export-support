@@ -1,3 +1,9 @@
+import json
+import logging
+from datetime import datetime
+
+import mohawk
+import requests
 from directory_forms_api_client import helpers
 from django.conf import settings
 from django.shortcuts import render
@@ -18,6 +24,8 @@ from .forms import (
     ZendeskForm,
 )
 from .utils import dict_to_query_dict
+
+logger = logging.getLogger(__name__)
 
 
 class IndexView(RedirectView):
@@ -112,6 +120,49 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
             sender=sender,
         )
 
+    def send_contact_consent(self):
+        # Function to send consent confirmation to legal-basis-api
+
+        enquiry_details_cleaned_data = self.get_cleaned_data_for_step("enquiry-details")
+        personal_details_cleaned_data = self.get_cleaned_data_for_step(
+            "personal-details"
+        )
+
+        if enquiry_details_cleaned_data["email_consent"]:
+            url = settings.CONSENT_API_URL
+            data = json.dumps(
+                {
+                    "consents": ["email_marketing"],
+                    "modified_at": str(datetime.now()),
+                    "email": personal_details_cleaned_data["email"],
+                    "key_type": "email",
+                }
+            )
+
+            header = mohawk.Sender(
+                {
+                    "id": settings.CONSENT_API_ID,
+                    "key": settings.CONSENT_API_KEY,
+                    "algorithm": "sha256",
+                },
+                url,
+                settings.CONSENT_API_METHOD,
+                content_type="application/json",
+                content=data,
+            ).request_header
+
+            requests.request(
+                settings.CONSENT_API_METHOD,
+                url,
+                data=data,
+                headers={
+                    "Authorization": header,
+                    "Content-Type": "application/json",
+                },
+            ).raise_for_status()
+
+            logger.info("Sent consent confirmation to legal-basis-api")
+
     def get_context_data(self, form, **kwargs):
         ctx = super().get_context_data(form=form, **kwargs)
 
@@ -148,6 +199,7 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
             "display_subheadings": display_subheadings,
         }
 
+        self.send_contact_consent()
         self.send_to_zendesk(form_list)
 
         return render(self.request, "core/enquiry_contact_success.html", ctx)
