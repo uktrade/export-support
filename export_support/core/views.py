@@ -14,6 +14,7 @@ from formtools.wizard.views import NamedUrlSessionWizardView
 from .forms import (
     BusinessDetailsForm,
     BusinessSizeForm,
+    BusinessTypeForm,
     EnquiryDetailsForm,
     EnquirySubjectChoices,
     EnquirySubjectForm,
@@ -36,6 +37,7 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         ("enquiry-subject", EnquirySubjectForm),
         ("export-countries", ExportCountriesForm),
         ("personal-details", PersonalDetailsForm),
+        ("business-type", BusinessTypeForm),
         ("business-details", BusinessDetailsForm),
         ("business-size", BusinessSizeForm),
         ("sectors", SectorsForm),

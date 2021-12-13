@@ -186,6 +186,28 @@ class PersonalDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         }
 
 
+class BusinessTypeChoices(models.IntegerChoices):
+    PRIVATE_OR_LIMITED = 1, "UK private or public limited company"
+    OTHER = 2, "Other type of UK organisation"
+    SOLE_TRADE_OR_PRIVATE_INDIVIDUAL = 3, "Sole trader or private individual"
+
+
+class BusinessTypeForm(forms.Form):
+    business_type = forms.TypedChoiceField(
+        coerce=coerce_choice(BusinessTypeChoices),
+        choices=BusinessTypeChoices.choices,
+        error_messages={
+            "required": "Select the business type",
+        },
+        help_text="Understanding your business type will help us improve this service.",
+        label="Business type",
+        widget=gds_fields.RadioSelect,
+    )
+
+    def get_zendesk_data(self):
+        return {}
+
+
 class CompanyTypeChoices(models.IntegerChoices):
     PRIVATE_OR_LIMITED = 1, "UK private or public limited company"
     OTHER = 2, "Other type of UK organisation"

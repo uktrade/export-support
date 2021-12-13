@@ -9,6 +9,7 @@ from pytest_django.asserts import assertFormError, assertTemplateUsed
 from ...consts import ENQUIRY_COUNTRY_CODES
 from ...forms import (
     SECTORS_MAP,
+    BusinessTypeChoices,
     CompanyTurnoverChoices,
     CompanyTypeChoices,
     EnquirySubjectChoices,
@@ -110,6 +111,23 @@ def test_full_steps_wizard_success(client, settings, mocker):
                 "last_name": "Lastname",
                 "email": "test@example.com",
                 "on_behalf_of": OnBehalfOfChoices.OWN_COMPANY,
+            },
+        ),
+    )
+    assert response.status_code == 302
+
+    business_type_url = get_step_url("business-type")
+    assert response.url == business_type_url
+
+    response = client.get(business_type_url)
+    assert response.status_code == 200
+    assertTemplateUsed(response, "core/business_type_wizard_step.html")
+    response = client.post(
+        business_type_url,
+        get_form_data(
+            "business-type",
+            {
+                "business_type": BusinessTypeChoices.PRIVATE_OR_LIMITED,
             },
         ),
     )
@@ -316,6 +334,23 @@ def test_full_steps_wizard_success_custom_fields(client, settings, mocker):
                 "last_name": "Lastname",
                 "email": "test@example.com",
                 "on_behalf_of": OnBehalfOfChoices.OWN_COMPANY,
+            },
+        ),
+    )
+    assert response.status_code == 302
+
+    business_type_url = get_step_url("business-type")
+    assert response.url == business_type_url
+
+    response = client.get(business_type_url)
+    assert response.status_code == 200
+    assertTemplateUsed(response, "core/business_type_wizard_step.html")
+    response = client.post(
+        business_type_url,
+        get_form_data(
+            "business-type",
+            {
+                "business_type": BusinessTypeChoices.PRIVATE_OR_LIMITED,
             },
         ),
     )
@@ -573,6 +608,23 @@ def test_zendesk_form_is_not_valid_wizard_raises_error(client, settings, mocker)
     )
     assert response.status_code == 302
 
+    business_type_url = get_step_url("business-type")
+    assert response.url == business_type_url
+
+    response = client.get(business_type_url)
+    assert response.status_code == 200
+    assertTemplateUsed(response, "core/business_type_wizard_step.html")
+    response = client.post(
+        business_type_url,
+        get_form_data(
+            "business-type",
+            {
+                "business_type": BusinessTypeChoices.PRIVATE_OR_LIMITED,
+            },
+        ),
+    )
+    assert response.status_code == 302
+
     business_details_url = get_step_url("business-details")
     assert response.url == business_details_url
 
@@ -720,6 +772,23 @@ def run_wizard_enquiry_subject(settings, mocker):
                     "last_name": "Lastname",
                     "email": "test@example.com",
                     "on_behalf_of": "1",
+                },
+            ),
+        )
+        assert response.status_code == 302
+
+        business_type_url = get_step_url("business-type")
+        assert response.url == business_type_url
+
+        response = client.get(business_type_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/business_type_wizard_step.html")
+        response = client.post(
+            business_type_url,
+            get_form_data(
+                "business-type",
+                {
+                    "business_type": BusinessTypeChoices.PRIVATE_OR_LIMITED,
                 },
             ),
         )
@@ -1102,6 +1171,23 @@ def run_wizard_sectors():
         )
         assert response.status_code == 302
 
+        business_type_url = get_step_url("business-type")
+        assert response.url == business_type_url
+
+        response = client.get(business_type_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/business_type_wizard_step.html")
+        response = client.post(
+            business_type_url,
+            get_form_data(
+                "business-type",
+                {
+                    "business_type": BusinessTypeChoices.PRIVATE_OR_LIMITED,
+                },
+            ),
+        )
+        assert response.status_code == 302
+
         business_details_url = get_step_url("business-details")
         assert response.url == business_details_url
 
@@ -1234,6 +1320,23 @@ def run_wizard_business_details():
         )
         assert response.status_code == 302
 
+        business_type_url = get_step_url("business-type")
+        assert response.url == business_type_url
+
+        response = client.get(business_type_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/business_type_wizard_step.html")
+        response = client.post(
+            business_type_url,
+            get_form_data(
+                "business-type",
+                {
+                    "business_type": BusinessTypeChoices.PRIVATE_OR_LIMITED,
+                },
+            ),
+        )
+        assert response.status_code == 302
+
         business_details_url = get_step_url("business-details")
         assert response.url == business_details_url
 
@@ -1360,6 +1463,23 @@ def run_wizard_enquiry_details():
                     "last_name": "Lastname",
                     "email": "test@example.com",
                     "on_behalf_of": OnBehalfOfChoices.OWN_COMPANY,
+                },
+            ),
+        )
+        assert response.status_code == 302
+
+        business_type_url = get_step_url("business-type")
+        assert response.url == business_type_url
+
+        response = client.get(business_type_url)
+        assert response.status_code == 200
+        assertTemplateUsed(response, "core/business_type_wizard_step.html")
+        response = client.post(
+            business_type_url,
+            get_form_data(
+                "business-type",
+                {
+                    "business_type": BusinessTypeChoices.PRIVATE_OR_LIMITED,
                 },
             ),
         )
