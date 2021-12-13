@@ -18,7 +18,6 @@ from .forms import (
     EnquirySubjectChoices,
     EnquirySubjectForm,
     ExportCountriesForm,
-    OnBehalfOfChoices,
     PersonalDetailsForm,
     SectorsForm,
     ZendeskForm,
@@ -32,14 +31,6 @@ class IndexView(RedirectView):
     url = reverse_lazy("core:enquiry-wizard")
 
 
-def is_company(wizard):
-    cleaned_data = wizard.get_cleaned_data_for_step("personal-details")
-    if not cleaned_data:
-        return True
-
-    return cleaned_data["on_behalf_of"] != OnBehalfOfChoices.NOT_A_COMPANY
-
-
 class EnquiryWizardView(NamedUrlSessionWizardView):
     form_list = [
         ("enquiry-subject", EnquirySubjectForm),
@@ -50,10 +41,6 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         ("sectors", SectorsForm),
         ("enquiry-details", EnquiryDetailsForm),
     ]
-    condition_dict = {
-        "business-details": is_company,
-        "business-size": is_company,
-    }
 
     def get_template_names(self):
         templates = {
