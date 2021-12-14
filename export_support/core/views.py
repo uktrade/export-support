@@ -12,8 +12,8 @@ from django.views.generic import RedirectView, TemplateView
 from formtools.wizard.views import NamedUrlSessionWizardView
 
 from .forms import (
+    BusinessAdditionalInformationForm,
     BusinessDetailsForm,
-    BusinessSizeForm,
     BusinessTypeForm,
     EnquiryDetailsForm,
     EnquirySubjectChoices,
@@ -39,7 +39,10 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         ("personal-details", PersonalDetailsForm),
         ("business-type", BusinessTypeForm),
         ("business-details", BusinessDetailsForm),
-        ("business-size", BusinessSizeForm),
+        (
+            "business-additional-information",
+            BusinessAdditionalInformationForm,
+        ),
         ("sectors", SectorsForm),
         ("enquiry-details", EnquiryDetailsForm),
     ]

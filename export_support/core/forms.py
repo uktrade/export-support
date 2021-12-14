@@ -208,11 +208,6 @@ class BusinessTypeForm(forms.Form):
         return {}
 
 
-class CompanyTypeChoices(models.IntegerChoices):
-    PRIVATE_OR_LIMITED = 1, "UK private or public limited company"
-    OTHER = 2, "Other type of UK organisation"
-
-
 class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
     company_name = forms.CharField(
         error_messages={
@@ -278,6 +273,15 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         }
 
 
+class PrivateOrPublicCompanyTypeChoices(models.IntegerChoices):
+    PRIVATE_LIMITED_COMPANY = 1, "Private limited company"
+    PUBLIC_LIMITED_COMPANY = 2, "Public limited company"
+    LIMITED_LIABILITY_PARTNERSHIP = 3, "Limited liability partnership"
+    NOT_CURRENTLY_TRADING = 4, "Not currently trading"
+    CLOSED_BUSINESS = 5, "Closed business"
+    OTHER = 6, "Other"
+
+
 class CompanyTurnoverChoices(models.TextChoices):
     BELOW_85000 = "0_85000__ess_turnover_1", "Below £85,000"
     FROM_85000_TO_499999 = "85000_499999__ess_turnover_1", "£85,000 to £499,999"
@@ -302,7 +306,29 @@ class NumberOfEmployeesChoices(models.TextChoices):
     )
 
 
-class BusinessSizeForm(forms.Form):
+class BusinessAdditionalInformationForm(forms.Form):
+    type_of_business = forms.TypedChoiceField(
+        coerce=coerce_choice(PrivateOrPublicCompanyTypeChoices),
+        choices=[("", "Please select")] + PrivateOrPublicCompanyTypeChoices.choices,
+        error_messages={
+            "required": "Select the type of business",
+        },
+        label="Type of business",
+        widget=forms.Select(
+            attrs={
+                "class": "govuk-select",
+            },
+        ),
+    )
+    other_type_of_business = forms.CharField(
+        label='If "Other", please specify',
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
     company_turnover = forms.TypedChoiceField(
         choices=[("", "Please select")] + CompanyTurnoverChoices.choices,
         coerce=coerce_choice(CompanyTurnoverChoices),
@@ -332,11 +358,39 @@ class BusinessSizeForm(forms.Form):
         ),
     )
 
+    def clean(self):
+        cleaned_data = super().clean()
+
+        try:
+            type_of_business = cleaned_data["type_of_business"]
+        except KeyError:
+            return cleaned_data
+
+        other_type_of_business = cleaned_data["other_type_of_business"]
+        if (
+            type_of_business == PrivateOrPublicCompanyTypeChoices.OTHER
+            and not other_type_of_business
+        ):
+            self.add_error(
+                "other_type_of_business",
+                "Enter the type of business",
+            )
+
+        return cleaned_data
+
     def get_zendesk_data(self):
+        type_of_business = self.cleaned_data["type_of_business"]
         company_turnover = self.cleaned_data["company_turnover"].label
         number_of_employees = self.cleaned_data["number_of_employees"].label
 
+        if type_of_business == PrivateOrPublicCompanyTypeChoices.OTHER:
+            other_type_of_business = self.cleaned_data["other_type_of_business"]
+            type_of_business = other_type_of_business
+        else:
+            type_of_business = type_of_business.label
+
         return {
+            "type_of_business": type_of_business,
             "company_turnover": company_turnover,
             "number_of_employees": number_of_employees,
         }
@@ -526,5 +580,6 @@ class ZendeskForm(ZendeskAPIForm):
     aaa_question = forms.CharField()
     full_name = forms.CharField()
     email = forms.CharField()
+    type_of_business = forms.CharField()
     how_did_you_hear_about_this_service = forms.CharField()
     _custom_fields = forms.JSONField(required=False)
