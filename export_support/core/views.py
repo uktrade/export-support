@@ -24,6 +24,8 @@ from .forms import (
     OrganisationDetailsForm,
     PersonalDetailsForm,
     SectorsForm,
+    SoloExporterAdditionalInformationForm,
+    SoloExporterDetailsForm,
     ZendeskForm,
 )
 from .utils import dict_to_query_dict
@@ -61,6 +63,8 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         ),
         ("organisation-details", OrganisationDetailsForm),
         ("organisation-additional-information", OrganisationAdditionalInformationForm),
+        ("solo-exporter-details", SoloExporterDetailsForm),
+        ("solo-exporter-additional-information", SoloExporterAdditionalInformationForm),
         ("sectors", SectorsForm),
         ("enquiry-details", EnquiryDetailsForm),
     ]
@@ -72,6 +76,12 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         "organisation-details": is_business_type(BusinessTypeChoices.OTHER),
         "organisation-additional-information": is_business_type(
             BusinessTypeChoices.OTHER
+        ),
+        "solo-exporter-details": is_business_type(
+            BusinessTypeChoices.SOLE_TRADE_OR_PRIVATE_INDIVIDUAL
+        ),
+        "solo-exporter-additional-information": is_business_type(
+            BusinessTypeChoices.SOLE_TRADE_OR_PRIVATE_INDIVIDUAL
         ),
     }
 

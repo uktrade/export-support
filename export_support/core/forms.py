@@ -512,6 +512,100 @@ class OrganisationAdditionalInformationForm(forms.Form):
         return cleaned_data
 
 
+class SoloExporterDetailsForm(forms.Form):
+    business_name = forms.CharField(
+        error_messages={
+            "required": "Enter the business name",
+        },
+        help_text="If you have a trading name, then enter it here.",
+        label="Business name",
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "organization",
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+    post_code = forms.CharField(
+        error_messages={
+            "required": "Enter the postcode",
+        },
+        help_text="Knowing where you are enquiring from means we can direct you to local support if appropriate. Enter a postcode for example SW1A 2DY.",  # noqa: E501
+        label="Postcode",
+        validators=[postcode_validator],
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "postal-code",
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+
+
+class SoloExporterTypeChoices(models.IntegerChoices):
+    SOLE_TRADER = 1, "Sole trader"
+    PRIVATE_INDIVIDUAL = 2, "Private individual"
+    OTHER = 3, "Other"
+
+
+class SoloExporterAdditionalInformationForm(forms.Form):
+    type_of_exporter = forms.TypedChoiceField(
+        coerce=coerce_choice(SoloExporterTypeChoices),
+        choices=[("", "Please select")] + SoloExporterTypeChoices.choices,
+        error_messages={
+            "required": "Select the type of exporter",
+        },
+        label="Type of exporter",
+        widget=forms.Select(
+            attrs={
+                "class": "govuk-select",
+            },
+        ),
+    )
+    other_type_of_exporter = forms.CharField(
+        label='If "Other", please specify',
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+    business_turnover = forms.TypedChoiceField(
+        choices=[("", "Please select")] + CompanyTurnoverChoices.choices,
+        coerce=coerce_choice(CompanyTurnoverChoices),
+        help_text="Select your business turnover for the last financial year (if applicable).",
+        label="Business turnover",
+        required=False,
+        widget=forms.Select(
+            attrs={
+                "class": "govuk-select",
+            },
+        ),
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        try:
+            type_of_exporter = cleaned_data["type_of_exporter"]
+        except KeyError:
+            return cleaned_data
+
+        other_type_of_exporter = cleaned_data["other_type_of_exporter"]
+        if (
+            type_of_exporter == SoloExporterTypeChoices.OTHER
+            and not other_type_of_exporter
+        ):
+            self.add_error(
+                "other_type_of_exporter",
+                "Enter the type of exporter",
+            )
+
+        return cleaned_data
+
+
 class SectorsForm(forms.Form):
     sectors = forms.MultipleChoiceField(
         choices=SECTORS_MAP.items(),

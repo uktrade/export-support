@@ -1,0 +1,27 @@
+{% extends "core/wizard_step.html" %}
+
+{% block page_title %}Further details{% endblock %}
+
+{% block fields %}
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                    Further details
+                </h1>
+            </legend>
+            <div class="govuk-form-group govuk-!-margin-bottom-2 {% if form.type_of_exporter.errors or form.other_type_of_exporter.errors %}govuk-form-group--error{% endif %}">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-visually-hidden">What is the type of exporter?</legend>
+                    <div class="govuk-!-margin-bottom-4">
+                        {% include "gds/forms/form_group.html" with field=form.type_of_exporter %}
+                    </div>
+                    <div class="govuk-inset-text govuk-!-margin-top-0">
+                        {% include "gds/forms/form_group.html" with field=form.other_type_of_exporter force_hide_optional=True %}
+                    </div>
+                </fieldset>
+            </div>
+            {% include "gds/forms/form_group.html" with field=form.business_turnover %}
+        </fieldset>
+    </div>
+{% endblock %}
