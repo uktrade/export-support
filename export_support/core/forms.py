@@ -1,8 +1,5 @@
-import re
-
 from directory_forms_api_client.forms import ZendeskAPIForm
 from django import forms
-from django.core import validators
 from django.db import models
 from django.utils.safestring import mark_safe
 
@@ -10,6 +7,7 @@ from export_support.gds import fields as gds_fields
 from export_support.gds import forms as gds_forms
 
 from .consts import COUNTRIES_MAP, SECTORS_MAP
+from .validators import postcode_validator
 
 
 def coerce_choice(enum):
@@ -213,33 +211,11 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         error_messages={
             "required": "Enter the business name",
         },
-        help_text="Knowing details about your business will help us direct you to the right team for help.",
+        help_text="If your business name is not shown in the search results, then enter it manually.",
         label="Business name",
         widget=forms.TextInput(
             attrs={
                 "autocomplete": "organization",
-                "class": "govuk-input govuk-!-width-one-half",
-            },
-        ),
-    )
-    company_post_code = forms.CharField(
-        error_messages={
-            "required": "Enter the business unit postcode",
-        },
-        help_text="Knowing where you are enquiring from means we can direct you to local support if appropriate. Enter a postcode for example SW1A 2DY.",  # noqa: E501
-        label="Business unit postcode",
-        validators=[
-            validators.RegexValidator(
-                regex=re.compile(
-                    r"^(([A-Z]{1,2}[0-9][A-Z0-9]?|ASCN|STHL|TDCU|BBND|[BFS]IQQ|PCRN|TKCA) ?[0-9][A-Z]{2}|BFPO ?[0-9]{1,4}|(KY[0-9]|MSR|VG|AI)[ -]?[0-9]{4}|[A-Z]{2} ?[0-9]{2}|GE ?CX|GIR ?0A{2}|SAN ?TA1)$",  # noqa: E501
-                    re.IGNORECASE,
-                ),
-                message="Enter a valid postcode",
-            ),
-        ],
-        widget=forms.TextInput(
-            attrs={
-                "autocomplete": "postal-code",
                 "class": "govuk-input govuk-!-width-one-half",
             },
         ),
@@ -252,6 +228,20 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         required=False,
         widget=forms.TextInput(
             attrs={
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+    company_post_code = forms.CharField(
+        error_messages={
+            "required": "Enter the business unit postcode",
+        },
+        help_text="Knowing where you are enquiring from means we can direct you to local support if appropriate. Enter a postcode for example SW1A 2DY.",  # noqa: E501
+        label="Business unit postcode",
+        validators=[postcode_validator],
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "postal-code",
                 "class": "govuk-input govuk-!-width-one-half",
             },
         ),
@@ -394,6 +384,132 @@ class BusinessAdditionalInformationForm(forms.Form):
             "company_turnover": company_turnover,
             "number_of_employees": number_of_employees,
         }
+
+
+class OrganisationDetailsForm(forms.Form):
+    organisation_name = forms.CharField(
+        error_messages={
+            "required": "Enter the organisation name",
+        },
+        label="Organisation name",
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "organization",
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+    company_registration_number = forms.CharField(
+        help_text=mark_safe(
+            "If your organisation is registered with Companies House, then its registration number will help us answer your query. <a class='govuk-link' href='https://www.gov.uk/get-information-about-a-company' target='_blank'>Look up a company registration number<span class='govuk-visually-hidden'> (opens in new tab)</span></a>."  # noqa: E501
+        ),
+        label="Company Registration Number",
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+    organisation_unit_post_code = forms.CharField(
+        error_messages={
+            "required": "Enter the organisation unit postcode",
+        },
+        help_text="Knowing where you are enquiring from means we can direct you to local support if appropriate. Enter a postcode for example SW1A 2DY.",  # noqa: E501
+        label="Organisation unit postcode",
+        validators=[postcode_validator],
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "postal-code",
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+
+    def clean_organisation_unit_post_code(self):
+        organisation_unit_post_code = self.cleaned_data["organisation_unit_post_code"]
+        return organisation_unit_post_code.upper()
+
+
+class OrganisationTypeChoices(models.IntegerChoices):
+    CHARITY_OR_SOCIAL_ENTERPRISE = 1, "Charity / Social enterprise"
+    UNIVERSITY = 2, "University"
+    OTHER_EDUCATION_INSTITUTION = 3, "Other education institution"
+    PARTNERSHIP = 4, "Partnership"
+    OTHER = 5, "Other"
+
+
+class OrganisationAdditionalInformationForm(forms.Form):
+    type_of_organisation = forms.TypedChoiceField(
+        coerce=coerce_choice(OrganisationTypeChoices),
+        choices=[("", "Please select")] + OrganisationTypeChoices.choices,
+        error_messages={
+            "required": "Select the type of organisation",
+        },
+        label="Type of organisation",
+        widget=forms.Select(
+            attrs={
+                "class": "govuk-select",
+            },
+        ),
+    )
+    other_type_of_organisation = forms.CharField(
+        label='If "Other", please specify',
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+    organisation_turnover = forms.TypedChoiceField(
+        choices=[("", "Please select")] + CompanyTurnoverChoices.choices,
+        coerce=coerce_choice(CompanyTurnoverChoices),
+        error_messages={
+            "required": "Select the UK turnover",
+        },
+        help_text="Different levels of support may be available depending on the size of the organisation.",
+        label="UK turnover (last financial year)",
+        widget=forms.Select(
+            attrs={
+                "class": "govuk-select",
+            },
+        ),
+    )
+    number_of_employees = forms.TypedChoiceField(
+        choices=[("", "Please select")] + NumberOfEmployeesChoices.choices,
+        coerce=coerce_choice(NumberOfEmployeesChoices),
+        error_messages={
+            "required": "Select the number of UK employees",
+        },
+        help_text="Knowing about the size of the organisation will help us direct you to the most suitable adviser.",
+        label="Number of UK employees",
+        widget=forms.Select(
+            attrs={
+                "class": "govuk-select",
+            },
+        ),
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        try:
+            type_of_organisation = cleaned_data["type_of_organisation"]
+        except KeyError:
+            return cleaned_data
+
+        other_type_of_organisation = cleaned_data["other_type_of_organisation"]
+        if (
+            type_of_organisation == OrganisationTypeChoices.OTHER
+            and not other_type_of_organisation
+        ):
+            self.add_error(
+                "other_type_of_organisation",
+                "Enter the type of organisation",
+            )
+
+        return cleaned_data
 
 
 class SectorsForm(forms.Form):

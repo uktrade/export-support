@@ -14,11 +14,14 @@ from formtools.wizard.views import NamedUrlSessionWizardView
 from .forms import (
     BusinessAdditionalInformationForm,
     BusinessDetailsForm,
+    BusinessTypeChoices,
     BusinessTypeForm,
     EnquiryDetailsForm,
     EnquirySubjectChoices,
     EnquirySubjectForm,
     ExportCountriesForm,
+    OrganisationAdditionalInformationForm,
+    OrganisationDetailsForm,
     PersonalDetailsForm,
     SectorsForm,
     ZendeskForm,
@@ -32,6 +35,19 @@ class IndexView(RedirectView):
     url = reverse_lazy("core:enquiry-wizard")
 
 
+def is_business_type(business_type_choice):
+    def _is_type(wizard):
+        cleaned_data = wizard.get_cleaned_data_for_step("business-type")
+        if not cleaned_data:
+            return True
+
+        business_type = cleaned_data["business_type"]
+
+        return business_type == business_type_choice
+
+    return _is_type
+
+
 class EnquiryWizardView(NamedUrlSessionWizardView):
     form_list = [
         ("enquiry-subject", EnquirySubjectForm),
@@ -43,9 +59,21 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
             "business-additional-information",
             BusinessAdditionalInformationForm,
         ),
+        ("organisation-details", OrganisationDetailsForm),
+        ("organisation-additional-information", OrganisationAdditionalInformationForm),
         ("sectors", SectorsForm),
         ("enquiry-details", EnquiryDetailsForm),
     ]
+    condition_dict = {
+        "business-details": is_business_type(BusinessTypeChoices.PRIVATE_OR_LIMITED),
+        "business-additional-information": is_business_type(
+            BusinessTypeChoices.PRIVATE_OR_LIMITED
+        ),
+        "organisation-details": is_business_type(BusinessTypeChoices.OTHER),
+        "organisation-additional-information": is_business_type(
+            BusinessTypeChoices.OTHER
+        ),
+    }
 
     def get_template_names(self):
         templates = {
