@@ -4,7 +4,7 @@ import pytest
 import requests_mock
 from django.test import Client
 from django.urls import reverse
-from pytest_django.asserts import assertFormError, assertTemplateUsed
+from pytest_django.asserts import assertTemplateUsed
 
 from ...consts import ENQUIRY_COUNTRY_CODES
 from ...forms import (
@@ -1023,107 +1023,8 @@ def test_enquiry_subject_guidance_url(run_wizard_enquiry_subject_guidance_url, m
 
 
 @pytest.fixture
-def run_wizard_export_countries():
-    def run(export_countries_form_data):
-        client = Client()
-
-        wizard_start_url = reverse("core:enquiry-wizard")
-        response = client.get(wizard_start_url)
-        assert response.status_code == 302
-
-        enquiry_subject_url = get_step_url("enquiry-subject")
-        assert response.url == enquiry_subject_url
-
-        response = client.get(enquiry_subject_url)
-        assert response.status_code == 200
-        assertTemplateUsed(response, "core/enquiry_subject_wizard_step.html")
-        response = client.post(
-            enquiry_subject_url,
-            get_form_data(
-                "enquiry-subject",
-                {
-                    "enquiry_subject": [
-                        EnquirySubjectChoices.SELLING_GOODS_ABROAD,
-                        EnquirySubjectChoices.SELLING_SERVICES_ABROAD,
-                    ]
-                },
-            ),
-        )
-        assert response.status_code == 302
-
-        export_countries_url = get_step_url("export-countries")
-        assert response.url == export_countries_url
-
-        response = client.get(export_countries_url)
-        assert response.status_code == 200
-        assertTemplateUsed(response, "core/export_countries_wizard_step.html")
-        response = client.post(
-            export_countries_url,
-            get_form_data(
-                "export-countries",
-                export_countries_form_data,
-            ),
-        )
-
-        return response
-
-    return run
-
-
-def test_export_countries_validation(run_wizard_export_countries):
-    response = run_wizard_export_countries(
-        {
-            "select_all": "1",
-            "countries": COUNTRY_MACHINE_READABLE_VALUES,
-        }
-    )
-    assert response.status_code == 302
-    assert response.url == get_step_url("personal-details")
-
-    response = run_wizard_export_countries({})
-    assert response.status_code == 200
-    assertFormError(
-        response,
-        "form",
-        "countries",
-        "Select the country or countries you are selling to",
-    )
-
-    response = run_wizard_export_countries(
-        {
-            "select_all": "1",
-            "countries": COUNTRY_MACHINE_READABLE_VALUES[:1],
-        }
-    )
-    assert response.status_code == 200
-    assertFormError(
-        response,
-        "form",
-        "countries",
-        'You must select either "Select all" or some countries not both',
-    )
-
-    response = run_wizard_export_countries(
-        {
-            "select_all": "1",
-            "countries": ["invalid_country"],
-        }
-    )
-    assert response.status_code == 200
-    assertFormError(
-        response,
-        "form",
-        "countries",
-        "Select a valid choice. invalid_country is not one of the available choices.",
-    )
-
-
-@pytest.fixture
 def run_business_additional_information():
-    def run(business_additional_information_form_data, client=None):
-        if not client:
-            client = Client()
-
+    def run(business_additional_information_form_data, client):
         wizard_start_url = reverse("core:enquiry-wizard")
         response = client.get(wizard_start_url)
         assert response.status_code == 302
@@ -1240,39 +1141,6 @@ def run_business_additional_information():
         return response
 
     return run
-
-
-def test_business_additional_information_validation(
-    run_business_additional_information,
-):
-    response = run_business_additional_information(
-        {
-            "company_turnover": CompanyTurnoverChoices.BELOW_85000,
-            "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
-        }
-    )
-    assert response.status_code == 200
-    assertFormError(
-        response,
-        "form",
-        "type_of_business",
-        "Select the type of business",
-    )
-
-    response = run_business_additional_information(
-        {
-            "type_of_business": PrivateOrPublicCompanyTypeChoices.OTHER,
-            "company_turnover": CompanyTurnoverChoices.BELOW_85000,
-            "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
-        }
-    )
-    assert response.status_code == 200
-    assertFormError(
-        response,
-        "form",
-        "other_type_of_business",
-        "Enter the type of business",
-    )
 
 
 @pytest.fixture
@@ -1440,164 +1308,8 @@ def test_business_additional_information_type_of_business_other_zendesk_output(
 
 
 @pytest.fixture
-def run_wizard_sectors():
-    def run(sectors_form_data):
-        client = Client()
-
-        wizard_start_url = reverse("core:enquiry-wizard")
-        response = client.get(wizard_start_url)
-        assert response.status_code == 302
-
-        enquiry_subject_url = get_step_url("enquiry-subject")
-        assert response.url == enquiry_subject_url
-
-        response = client.get(enquiry_subject_url)
-        assert response.status_code == 200
-        assertTemplateUsed(response, "core/enquiry_subject_wizard_step.html")
-        response = client.post(
-            enquiry_subject_url,
-            get_form_data(
-                "enquiry-subject",
-                {
-                    "enquiry_subject": [
-                        EnquirySubjectChoices.SELLING_GOODS_ABROAD,
-                        EnquirySubjectChoices.SELLING_SERVICES_ABROAD,
-                    ]
-                },
-            ),
-        )
-        assert response.status_code == 302
-
-        export_countries_url = get_step_url("export-countries")
-        assert response.url == export_countries_url
-
-        response = client.get(export_countries_url)
-        assert response.status_code == 200
-        assertTemplateUsed(response, "core/export_countries_wizard_step.html")
-        response = client.post(
-            export_countries_url,
-            get_form_data(
-                "export-countries",
-                {"countries": COUNTRY_MACHINE_READABLE_VALUES},
-            ),
-        )
-        assert response.status_code == 302
-
-        personal_details_url = get_step_url("personal-details")
-        assert response.url == personal_details_url
-
-        response = client.get(personal_details_url)
-        assert response.status_code == 200
-        assertTemplateUsed(response, "core/personal_details_wizard_step.html")
-        response = client.post(
-            personal_details_url,
-            get_form_data(
-                "personal-details",
-                {
-                    "first_name": "Firstname",
-                    "last_name": "Lastname",
-                    "email": "test@example.com",
-                    "on_behalf_of": OnBehalfOfChoices.OWN_COMPANY,
-                },
-            ),
-        )
-        assert response.status_code == 302
-
-        business_type_url = get_step_url("business-type")
-        assert response.url == business_type_url
-
-        response = client.get(business_type_url)
-        assert response.status_code == 200
-        assertTemplateUsed(response, "core/business_type_wizard_step.html")
-        response = client.post(
-            business_type_url,
-            get_form_data(
-                "business-type",
-                {
-                    "business_type": BusinessTypeChoices.PRIVATE_OR_LIMITED,
-                },
-            ),
-        )
-        assert response.status_code == 302
-
-        business_details_url = get_step_url("business-details")
-        assert response.url == business_details_url
-
-        response = client.get(business_details_url)
-        assert response.status_code == 200
-        assertTemplateUsed(response, "core/business_details_wizard_step.html")
-        response = client.post(
-            business_details_url,
-            get_form_data(
-                "business-details",
-                {
-                    "company_name": "Companyname",
-                    "company_post_code": "SW1A 2BL",
-                    "company_registration_number": "12345678",
-                },
-            ),
-        )
-        assert response.status_code == 302
-
-        business_additional_information_url = get_step_url(
-            "business-additional-information"
-        )
-        assert response.url == business_additional_information_url
-
-        response = client.get(business_additional_information_url)
-        assert response.status_code == 200
-        assertTemplateUsed(
-            response, "core/business_additional_information_wizard_step.html"
-        )
-        response = client.post(
-            business_additional_information_url,
-            get_form_data(
-                "business-additional-information",
-                {
-                    "type_of_business": PrivateOrPublicCompanyTypeChoices.PRIVATE_LIMITED_COMPANY,
-                    "company_turnover": CompanyTurnoverChoices.BELOW_85000,
-                    "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
-                },
-            ),
-        )
-        assert response.status_code == 302
-
-        sectors_url = get_step_url("sectors")
-        assert response.url == sectors_url
-
-        response = client.get(sectors_url)
-        assert response.status_code == 200
-        assertTemplateUsed(response, "core/sectors_wizard_step.html")
-        response = client.post(
-            sectors_url,
-            get_form_data(
-                "sectors",
-                sectors_form_data,
-            ),
-        )
-
-        return response
-
-    return run
-
-
-def test_sectors_validation(run_wizard_sectors):
-    response = run_wizard_sectors({})
-    assert response.status_code == 200
-    assertFormError(
-        response,
-        "form",
-        "sectors",
-        "Select the industry or business area(s) your enquiry relates to",
-    )
-
-
-@pytest.fixture
 def run_wizard_enquiry_details():
-    def run(enquiry_details_form_data, client=None):
-        if not client:
-            client = Client()
-
+    def run(enquiry_details_form_data, client):
         wizard_start_url = reverse("core:enquiry-wizard")
         response = client.get(wizard_start_url)
         assert response.status_code == 302
@@ -1751,37 +1463,6 @@ def run_wizard_enquiry_details():
         return response
 
     return run
-
-
-def test_enquiry_details_validation(run_wizard_enquiry_details):
-    response = run_wizard_enquiry_details(
-        {
-            "nature_of_enquiry": "TEST",
-            "question": "TEST",
-        }
-    )
-    assert response.status_code == 200
-    assertFormError(
-        response,
-        "form",
-        "how_did_you_hear_about_this_service",
-        "Select how you heard about this service",
-    )
-
-    response = run_wizard_enquiry_details(
-        {
-            "nature_of_enquiry": "TEST",
-            "question": "TEST",
-            "how_did_you_hear_about_this_service": HowDidYouHearAboutThisServiceChoices.OTHER,
-        }
-    )
-    assert response.status_code == 200
-    assertFormError(
-        response,
-        "form",
-        "other_how_did_you_hear_about_this_service",
-        "Enter how you heard about this service",
-    )
 
 
 def test_enquiry_details_how_did_you_hear_other_zendesk_output(
