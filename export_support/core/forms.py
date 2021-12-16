@@ -430,6 +430,17 @@ class OrganisationDetailsForm(forms.Form):
         organisation_unit_post_code = self.cleaned_data["organisation_unit_post_code"]
         return organisation_unit_post_code.upper()
 
+    def get_zendesk_data(self):
+        organisation_name = self.cleaned_data["organisation_name"]
+        company_registration_number = self.cleaned_data["company_registration_number"]
+        organisation_unit_post_code = self.cleaned_data["organisation_unit_post_code"]
+
+        return {
+            "organisation_name": organisation_name,
+            "company_registration_number": company_registration_number,
+            "organisation_unit_post_code": organisation_unit_post_code,
+        }
+
 
 class OrganisationTypeChoices(models.IntegerChoices):
     CHARITY_OR_SOCIAL_ENTERPRISE = 1, "Charity / Social enterprise"
@@ -511,6 +522,23 @@ class OrganisationAdditionalInformationForm(forms.Form):
 
         return cleaned_data
 
+    def get_zendesk_data(self):
+        type_of_organisation = self.cleaned_data["type_of_organisation"]
+        organisation_turnover = self.cleaned_data["organisation_turnover"].label
+        number_of_employees = self.cleaned_data["number_of_employees"].label
+
+        if type_of_organisation == OrganisationTypeChoices.OTHER:
+            other_type_of_organisation = self.cleaned_data["other_type_of_organisation"]
+            type_of_organisation = other_type_of_organisation
+        else:
+            type_of_organisation = type_of_organisation.label
+
+        return {
+            "type_of_organisation": type_of_organisation,
+            "organisation_turnover": organisation_turnover,
+            "number_of_employees": number_of_employees,
+        }
+
 
 class SoloExporterDetailsForm(forms.Form):
     business_name = forms.CharField(
@@ -541,6 +569,15 @@ class SoloExporterDetailsForm(forms.Form):
             },
         ),
     )
+
+    def get_zendesk_data(self):
+        business_name = self.cleaned_data["business_name"]
+        post_code = self.cleaned_data["post_code"]
+
+        return {
+            "business_name": business_name,
+            "post_code": post_code,
+        }
 
 
 class SoloExporterTypeChoices(models.IntegerChoices):
@@ -604,6 +641,23 @@ class SoloExporterAdditionalInformationForm(forms.Form):
             )
 
         return cleaned_data
+
+    def get_zendesk_data(self):
+        type_of_exporter = self.cleaned_data["type_of_exporter"]
+        business_turnover = self.cleaned_data["business_turnover"].label
+        number_of_employees = NumberOfEmployeesChoices.FEWER_THAN_10.label
+
+        if type_of_exporter == SoloExporterTypeChoices.OTHER:
+            other_type_of_exporter = self.cleaned_data["other_type_of_exporter"]
+            type_of_exporter = other_type_of_exporter
+        else:
+            type_of_exporter = type_of_exporter.label
+
+        return {
+            "type_of_exporter": type_of_exporter,
+            "business_turnover": business_turnover,
+            "number_of_employees": number_of_employees,
+        }
 
 
 class SectorsForm(forms.Form):

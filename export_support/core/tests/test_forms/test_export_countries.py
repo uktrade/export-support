@@ -7,7 +7,7 @@ COUNTRY_MACHINE_READABLE_VALUES = list(ENQUIRY_COUNTRY_CODES.values())
 def test_export_countries_validation_is_valid():
     form = ExportCountriesForm(
         {
-            "select_all": "1",
+            "select_all": True,
             "countries": COUNTRY_MACHINE_READABLE_VALUES,
         }
     )
@@ -25,7 +25,7 @@ def test_export_countries_validation_no_countries_selected():
 def test_export_countries_validation_select_all_mutually_exclusive_from_countries():
     form = ExportCountriesForm(
         {
-            "select_all": "1",
+            "select_all": True,
             "countries": COUNTRY_MACHINE_READABLE_VALUES[:1],
         }
     )
@@ -38,7 +38,7 @@ def test_export_countries_validation_select_all_mutually_exclusive_from_countrie
 def test_export_countries_validation_invalid_country():
     form = ExportCountriesForm(
         {
-            "select_all": "1",
+            "select_all": True,
             "countries": ["invalid_country"],
         }
     )
@@ -47,4 +47,21 @@ def test_export_countries_validation_invalid_country():
         "countries": [
             "Select a valid choice. invalid_country is not one of the available choices."
         ],
+    }
+
+
+def test_get_zendesk_data():
+    form = ExportCountriesForm(
+        {
+            "select_all": False,
+            "countries": [
+                "albania__ess_export",
+                "cyprus__ess_export",
+                "latvia__ess_export",
+            ],
+        }
+    )
+    assert form.is_valid()
+    assert form.get_zendesk_data() == {
+        "countries": "Albania, Cyprus, Latvia",
     }
