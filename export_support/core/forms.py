@@ -30,7 +30,7 @@ class EnquirySubjectChoices(models.IntegerChoices):
     SELLING_SERVICES_ABROAD = 2, "Selling services abroad"
 
 
-class EnquirySubjectForm(forms.Form):
+class EnquirySubjectForm(gds_forms.FormErrorMixin, forms.Form):
     enquiry_subject = forms.TypedMultipleChoiceField(
         coerce=coerce_choice(EnquirySubjectChoices),
         choices=EnquirySubjectChoices.choices,
@@ -57,7 +57,7 @@ class EnquirySubjectForm(forms.Form):
         return {"enquiry_subject": enquiry_subject}
 
 
-class ExportCountriesForm(forms.Form):
+class ExportCountriesForm(gds_forms.FormErrorMixin, forms.Form):
     select_all = forms.BooleanField(
         label="Select all",
         required=False,
@@ -190,7 +190,7 @@ class BusinessTypeChoices(models.IntegerChoices):
     SOLE_TRADE_OR_PRIVATE_INDIVIDUAL = 3, "Sole trader or private individual"
 
 
-class BusinessTypeForm(forms.Form):
+class BusinessTypeForm(gds_forms.FormErrorMixin, forms.Form):
     business_type = forms.TypedChoiceField(
         coerce=coerce_choice(BusinessTypeChoices),
         choices=BusinessTypeChoices.choices,
@@ -296,7 +296,7 @@ class NumberOfEmployeesChoices(models.TextChoices):
     )
 
 
-class BusinessAdditionalInformationForm(forms.Form):
+class BusinessAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
     type_of_business = forms.TypedChoiceField(
         coerce=coerce_choice(PrivateOrPublicCompanyTypeChoices),
         choices=[("", "Please select")] + PrivateOrPublicCompanyTypeChoices.choices,
@@ -386,7 +386,7 @@ class BusinessAdditionalInformationForm(forms.Form):
         }
 
 
-class OrganisationDetailsForm(forms.Form):
+class OrganisationDetailsForm(gds_forms.FormErrorMixin, forms.Form):
     organisation_name = forms.CharField(
         error_messages={
             "required": "Enter the organisation name",
@@ -450,7 +450,7 @@ class OrganisationTypeChoices(models.IntegerChoices):
     OTHER = 5, "Other"
 
 
-class OrganisationAdditionalInformationForm(forms.Form):
+class OrganisationAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
     type_of_organisation = forms.TypedChoiceField(
         coerce=coerce_choice(OrganisationTypeChoices),
         choices=[("", "Please select")] + OrganisationTypeChoices.choices,
@@ -540,7 +540,7 @@ class OrganisationAdditionalInformationForm(forms.Form):
         }
 
 
-class SoloExporterDetailsForm(forms.Form):
+class SoloExporterDetailsForm(gds_forms.FormErrorMixin, forms.Form):
     business_name = forms.CharField(
         error_messages={
             "required": "Enter the business name",
@@ -586,7 +586,7 @@ class SoloExporterTypeChoices(models.IntegerChoices):
     OTHER = 3, "Other"
 
 
-class SoloExporterAdditionalInformationForm(forms.Form):
+class SoloExporterAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
     type_of_exporter = forms.TypedChoiceField(
         coerce=coerce_choice(SoloExporterTypeChoices),
         choices=[("", "Please select")] + SoloExporterTypeChoices.choices,
@@ -660,7 +660,7 @@ class SoloExporterAdditionalInformationForm(forms.Form):
         }
 
 
-class SectorsForm(forms.Form):
+class SectorsForm(gds_forms.FormErrorMixin, forms.Form):
     sectors = forms.MultipleChoiceField(
         choices=SECTORS_MAP.items(),
         label="Which industry or business area does your enquiry relate to?",
