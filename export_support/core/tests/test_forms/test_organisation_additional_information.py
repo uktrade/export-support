@@ -6,6 +6,35 @@ from ...forms import (
 )
 
 
+def test_validation_type_of_business_required():
+    form = OrganisationAdditionalInformationForm(
+        {
+            "organisation_turnover": CompanyTurnoverChoices.BELOW_85000,
+            "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
+        }
+    )
+
+    assert not form.is_valid()
+    assert form.errors == {
+        "type_of_organisation": ["Select the type of organisation"],
+    }
+
+
+def test_validation_other_type_of_business_required_when_other_selected():
+    form = OrganisationAdditionalInformationForm(
+        {
+            "type_of_organisation": OrganisationTypeChoices.OTHER,
+            "organisation_turnover": CompanyTurnoverChoices.BELOW_85000,
+            "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
+        }
+    )
+
+    assert not form.is_valid()
+    assert form.errors == {
+        "other_type_of_organisation": ["Enter the type of organisation"],
+    }
+
+
 def test_get_zendesk_data():
     form = OrganisationAdditionalInformationForm(
         {
