@@ -436,9 +436,9 @@ class OrganisationDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         organisation_unit_post_code = self.cleaned_data["organisation_unit_post_code"]
 
         return {
-            "organisation_name": organisation_name,
+            "company_name": organisation_name,
             "company_registration_number": company_registration_number,
-            "organisation_unit_post_code": organisation_unit_post_code,
+            "company_post_code": organisation_unit_post_code,
         }
 
 
@@ -534,8 +534,8 @@ class OrganisationAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form
             type_of_organisation = type_of_organisation.label
 
         return {
-            "type_of_organisation": type_of_organisation,
-            "organisation_turnover": organisation_turnover,
+            "type_of_business": type_of_organisation,
+            "company_turnover": organisation_turnover,
             "number_of_employees": number_of_employees,
         }
 
@@ -575,8 +575,8 @@ class SoloExporterDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         post_code = self.cleaned_data["post_code"]
 
         return {
-            "business_name": business_name,
-            "post_code": post_code,
+            "company_name": business_name,
+            "company_post_code": post_code,
         }
 
 
@@ -654,8 +654,8 @@ class SoloExporterAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form
             type_of_exporter = type_of_exporter.label
 
         return {
-            "type_of_exporter": type_of_exporter,
-            "business_turnover": business_turnover,
+            "type_of_business": type_of_exporter,
+            "company_turnover": business_turnover,
             "number_of_employees": number_of_employees,
         }
 

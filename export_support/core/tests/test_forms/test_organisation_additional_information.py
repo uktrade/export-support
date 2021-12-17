@@ -46,8 +46,8 @@ def test_get_zendesk_data():
 
     assert form.is_valid()
     assert form.get_zendesk_data() == {
-        "type_of_organisation": "Charity / Social enterprise",
-        "organisation_turnover": "Below £85,000",
+        "type_of_business": "Charity / Social enterprise",
+        "company_turnover": "Below £85,000",
         "number_of_employees": "Fewer than 10",
     }
 
@@ -62,8 +62,8 @@ def test_get_zendesk_data():
 
     assert form.is_valid()
     assert form.get_zendesk_data() == {
-        "type_of_organisation": "OTHER TYPE OF ORGANISATION",
-        "organisation_turnover": "Below £85,000",
+        "type_of_business": "OTHER TYPE OF ORGANISATION",
+        "company_turnover": "Below £85,000",
         "number_of_employees": "Fewer than 10",
     }
 
@@ -78,7 +78,7 @@ def test_get_zendesk_data():
 
     assert form.is_valid()
     assert form.get_zendesk_data() == {
-        "type_of_organisation": "Charity / Social enterprise",
-        "organisation_turnover": "Below £85,000",
+        "type_of_business": "Charity / Social enterprise",
+        "company_turnover": "Below £85,000",
         "number_of_employees": "Fewer than 10",
     }

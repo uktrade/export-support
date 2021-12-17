@@ -42,8 +42,8 @@ def test_get_zendesk_data():
 
     assert form.is_valid()
     assert form.get_zendesk_data() == {
-        "type_of_exporter": "Sole trader",
-        "business_turnover": "Below £85,000",
+        "type_of_business": "Sole trader",
+        "company_turnover": "Below £85,000",
         "number_of_employees": "Fewer than 10",
     }
 
@@ -57,8 +57,8 @@ def test_get_zendesk_data():
 
     assert form.is_valid()
     assert form.get_zendesk_data() == {
-        "type_of_exporter": "OTHER TYPE OF ORGANISATION",
-        "business_turnover": "Below £85,000",
+        "type_of_business": "OTHER TYPE OF ORGANISATION",
+        "company_turnover": "Below £85,000",
         "number_of_employees": "Fewer than 10",
     }
 
@@ -72,7 +72,7 @@ def test_get_zendesk_data():
 
     assert form.is_valid()
     assert form.get_zendesk_data() == {
-        "type_of_exporter": "Sole trader",
-        "business_turnover": "Below £85,000",
+        "type_of_business": "Sole trader",
+        "company_turnover": "Below £85,000",
         "number_of_employees": "Fewer than 10",
     }

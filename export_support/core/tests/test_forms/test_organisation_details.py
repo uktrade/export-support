@@ -12,7 +12,7 @@ def test_get_zendesk_data():
 
     assert form.is_valid()
     assert form.get_zendesk_data() == {
-        "organisation_name": "ACME",
+        "company_name": "ACME",
         "company_registration_number": "12345678",
-        "organisation_unit_post_code": "SW1A 2BL",
+        "company_post_code": "SW1A 2BL",
     }
