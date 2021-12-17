@@ -726,6 +726,7 @@ def test_full_steps_wizard_success_custom_fields(client, settings, mocker):
         "enquiry_subject": "222",
         "countries": "333",
         "company_registration_number": "444",
+        "type_of_business": "555",
     }
 
     mock_zendesk_form_action_class = mocker.patch(
@@ -981,7 +982,227 @@ def test_full_steps_wizard_success_custom_fields(client, settings, mocker):
                     ]
                 },
                 {"444": "12345678"},
+                {"555": PrivateOrPublicCompanyTypeChoices.PRIVATE_LIMITED_COMPANY},
                 {"111": CompanyTurnoverChoices.BELOW_85000},
+            ],
+        }
+    )
+
+
+def test_full_steps_wizard_success_private_custom_fields_are_ignored(
+    client, settings, mocker
+):
+    # In this case a "private" custom field is one that begins and ends with double underscores.
+    # These are values that don't match up to a tag in Zendesk so shouldn't be sent through.
+    settings.FORM_URL = "FORM_URL"
+    settings.ZENDESK_SERVICE_NAME = "ZENDESK_SERVICE_NAME"
+    settings.ZENDESK_SUBDOMAIN = "ZENDESK_SUBDOMAIN"
+    settings.ZENDESK_CUSTOM_FIELD_MAPPING = {
+        "type_of_business": "111",
+        "company_turnover": "222",
+    }
+
+    mock_zendesk_form_action_class = mocker.patch(
+        "export_support.core.forms.ZendeskForm.action_class"
+    )
+
+    wizard_start_url = reverse("core:enquiry-wizard")
+    response = client.get(wizard_start_url)
+    assert response.status_code == 302
+
+    enquiry_subject_url = get_step_url("enquiry-subject")
+    assert response.url == enquiry_subject_url
+
+    response = client.get(enquiry_subject_url)
+    assert response.status_code == 200
+    assertTemplateUsed(response, "core/enquiry_subject_wizard_step.html")
+    response = client.post(
+        enquiry_subject_url,
+        get_form_data(
+            "enquiry-subject",
+            {
+                "enquiry_subject": [
+                    EnquirySubjectChoices.SELLING_GOODS_ABROAD,
+                    EnquirySubjectChoices.SELLING_SERVICES_ABROAD,
+                ]
+            },
+        ),
+    )
+    assert response.status_code == 302
+
+    export_countries_url = get_step_url("export-countries")
+    assert response.url == export_countries_url
+
+    response = client.get(export_countries_url)
+    assert response.status_code == 200
+    assertTemplateUsed(response, "core/export_countries_wizard_step.html")
+    response = client.post(
+        export_countries_url,
+        get_form_data(
+            "export-countries",
+            {"countries": COUNTRY_MACHINE_READABLE_VALUES},
+        ),
+    )
+    assert response.status_code == 302
+
+    personal_details_url = get_step_url("personal-details")
+    assert response.url == personal_details_url
+
+    response = client.get(personal_details_url)
+    assert response.status_code == 200
+    assertTemplateUsed(response, "core/personal_details_wizard_step.html")
+    response = client.post(
+        personal_details_url,
+        get_form_data(
+            "personal-details",
+            {
+                "first_name": "Firstname",
+                "last_name": "Lastname",
+                "email": "test@example.com",
+                "on_behalf_of": OnBehalfOfChoices.OWN_COMPANY,
+            },
+        ),
+    )
+    assert response.status_code == 302
+
+    business_type_url = get_step_url("business-type")
+    assert response.url == business_type_url
+
+    response = client.get(business_type_url)
+    assert response.status_code == 200
+    assertTemplateUsed(response, "core/business_type_wizard_step.html")
+    response = client.post(
+        business_type_url,
+        get_form_data(
+            "business-type",
+            {
+                "business_type": BusinessTypeChoices.PRIVATE_OR_LIMITED,
+            },
+        ),
+    )
+    assert response.status_code == 302
+
+    business_details_url = get_step_url("business-details")
+    assert response.url == business_details_url
+
+    response = client.get(business_details_url)
+    assert response.status_code == 200
+    assertTemplateUsed(response, "core/business_details_wizard_step.html")
+    response = client.post(
+        business_details_url,
+        get_form_data(
+            "business-details",
+            {
+                "company_name": "Companyname",
+                "company_post_code": "SW1A 2BL",
+                "company_registration_number": "12345678",
+            },
+        ),
+    )
+    assert response.status_code == 302
+
+    business_additional_information_url = get_step_url(
+        "business-additional-information"
+    )
+    assert response.url == business_additional_information_url
+
+    response = client.get(business_additional_information_url)
+    assert response.status_code == 200
+    assertTemplateUsed(
+        response, "core/business_additional_information_wizard_step.html"
+    )
+    response = client.post(
+        business_additional_information_url,
+        get_form_data(
+            "business-additional-information",
+            {
+                "type_of_business": PrivateOrPublicCompanyTypeChoices.OTHER,
+                "other_type_of_business": "Othertypeofbusiness",
+                "company_turnover": CompanyTurnoverChoices.BELOW_85000,
+                "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
+            },
+        ),
+    )
+    assert response.status_code == 302
+
+    sectors_url = get_step_url("sectors")
+    assert response.url == sectors_url
+
+    response = client.get(sectors_url)
+    assert response.status_code == 200
+    assertTemplateUsed(response, "core/sectors_wizard_step.html")
+    response = client.post(
+        sectors_url,
+        get_form_data(
+            "sectors",
+            {
+                "sectors": [sector for sector in SECTORS_MAP.keys()],
+                "other": "ANOTHER SECTOR",
+            },
+        ),
+    )
+    assert response.status_code == 302
+
+    enquiry_details_url = get_step_url("enquiry-details")
+    assert response.url == enquiry_details_url
+
+    response = client.get(enquiry_details_url)
+    assert response.status_code == 200
+    assertTemplateUsed(response, "core/enquiry_details_wizard_step.html")
+    response = client.post(
+        enquiry_details_url,
+        get_form_data(
+            "enquiry-details",
+            {
+                "nature_of_enquiry": "NATURE OF ENQUIRY",
+                "question": "QUESTION",
+                "how_did_you_hear_about_this_service": HowDidYouHearAboutThisServiceChoices.SEARCH_ENGINE,
+            },
+        ),
+    )
+    assert response.status_code == 302
+
+    done_url = get_step_url("done")
+    assert response.url == done_url
+
+    response = client.get(done_url)
+    assert response.status_code == 200
+    assertTemplateUsed(response, "core/enquiry_contact_success.html")
+
+    mock_zendesk_form_action_class.assert_called_with(
+        form_url="FORM_URL",
+        full_name="Firstname Lastname",
+        email_address="test@example.com",
+        subject="NATURE OF ENQUIRY",
+        service_name="ZENDESK_SERVICE_NAME",
+        subdomain="ZENDESK_SUBDOMAIN",
+        spam_control={"contents": "QUESTION"},
+        sender={
+            "email_address": "test@example.com",
+            "country_code": "",
+            "ip_address": None,
+        },
+    )
+    mock_zendesk_form_action_class().save.assert_called_with(
+        {
+            "aaa_question": "QUESTION",
+            "company_name": "Companyname",
+            "company_post_code": "SW1A 2BL",
+            "company_registration_number": "12345678",
+            "company_turnover": "Below £85,000",
+            "countries": "Albania, Andorra, Austria, Belgium, Bosnia and Herzegovina, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Israel, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Vatican City",  # noqa: E501
+            "email": "test@example.com",
+            "enquiry_subject": "Selling goods abroad, Selling services abroad",
+            "full_name": "Firstname Lastname",
+            "nature_of_enquiry": "NATURE OF ENQUIRY",
+            "number_of_employees": "Fewer than 10",
+            "on_behalf_of": "The business I own or work for (or in my own interest)",
+            "other_sector": "ANOTHER SECTOR",
+            "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
+            "type_of_business": "Othertypeofbusiness",
+            "how_did_you_hear_about_this_service": "Search engine",
+            "_custom_fields": [
+                {"222": CompanyTurnoverChoices.BELOW_85000},
             ],
         }
     )

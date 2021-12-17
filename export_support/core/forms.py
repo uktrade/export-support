@@ -263,13 +263,25 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         }
 
 
-class PrivateOrPublicCompanyTypeChoices(models.IntegerChoices):
-    PRIVATE_LIMITED_COMPANY = 1, "Private limited company"
-    PUBLIC_LIMITED_COMPANY = 2, "Public limited company"
-    LIMITED_LIABILITY_PARTNERSHIP = 3, "Limited liability partnership"
-    NOT_CURRENTLY_TRADING = 4, "Not currently trading"
-    CLOSED_BUSINESS = 5, "Closed business"
-    OTHER = 6, "Other"
+class PrivateOrPublicCompanyTypeChoices(models.TextChoices):
+    PRIVATE_LIMITED_COMPANY = (
+        "private_limited_company__ess_organistation",
+        "Private limited company",
+    )
+    PUBLIC_LIMITED_COMPANY = (
+        "public_limited_company__ess_organistation",
+        "Public limited company",
+    )
+    LIMITED_LIABILITY_PARTNERSHIP = (
+        "__limited_liability_partnership__",
+        "Limited liability partnership",
+    )
+    NOT_CURRENTLY_TRADING = (
+        "not_trading_yet__ess_organistation",
+        "Not currently trading",
+    )
+    CLOSED_BUSINESS = "closed_business__ess_organistation", "Closed business"
+    OTHER = "__other__", "Other"
 
 
 class CompanyTurnoverChoices(models.TextChoices):
@@ -442,12 +454,18 @@ class OrganisationDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         }
 
 
-class OrganisationTypeChoices(models.IntegerChoices):
-    CHARITY_OR_SOCIAL_ENTERPRISE = 1, "Charity / Social enterprise"
-    UNIVERSITY = 2, "University"
-    OTHER_EDUCATION_INSTITUTION = 3, "Other education institution"
-    PARTNERSHIP = 4, "Partnership"
-    OTHER = 5, "Other"
+class OrganisationTypeChoices(models.TextChoices):
+    CHARITY_OR_SOCIAL_ENTERPRISE = (
+        "charity_social_enterprise__ess_organistation",
+        "Charity / Social enterprise",
+    )
+    UNIVERSITY = "university__ess_organistation", "University"
+    OTHER_EDUCATION_INSTITUTION = (
+        "other_education_institution__ess_organistation",
+        "Other education institution",
+    )
+    PARTNERSHIP = "partnership__ess_organistation", "Partnership"
+    OTHER = "__other__", "Other"
 
 
 class OrganisationAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
@@ -580,10 +598,10 @@ class SoloExporterDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         }
 
 
-class SoloExporterTypeChoices(models.IntegerChoices):
-    SOLE_TRADER = 1, "Sole trader"
-    PRIVATE_INDIVIDUAL = 2, "Private individual"
-    OTHER = 3, "Other"
+class SoloExporterTypeChoices(models.TextChoices):
+    SOLE_TRADER = "soletrader__ess_organistation", "Sole trader"
+    PRIVATE_INDIVIDUAL = "__private_individual__", "Private individual"
+    OTHER = "__other__", "Other"
 
 
 class SoloExporterAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):

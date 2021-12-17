@@ -50,6 +50,19 @@ def is_business_type(business_type_choice):
     return _is_type
 
 
+def filter_private_values(value):
+    def _is_private_value(val):
+        val = str(val)
+        return val.startswith("__") and val.endswith("__")
+
+    if isinstance(value, list):
+        value = [val for val in value if not _is_private_value(val)]
+    else:
+        value = value if not _is_private_value(value) else None
+
+    return value
+
+
 class EnquiryWizardView(NamedUrlSessionWizardView):
     form_list = [
         ("enquiry-subject", EnquirySubjectForm),
@@ -106,10 +119,13 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
                     custom_field_id = custom_field_mapping[field_name]
                 except KeyError:
                     continue
-                else:
-                    custom_fields_data.append(
-                        {custom_field_id: form.cleaned_data[field_name]}
-                    )
+
+                field_value = form.cleaned_data[field_name]
+                field_value = filter_private_values(field_value)
+                if not field_value:
+                    continue
+
+                custom_fields_data.append({custom_field_id: field_value})
 
         form_data["_custom_fields"] = custom_fields_data
 
