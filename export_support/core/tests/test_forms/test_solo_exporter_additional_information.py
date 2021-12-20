@@ -8,7 +8,7 @@ from ...forms import (
 def test_validation_type_of_business_required():
     form = SoloExporterAdditionalInformationForm(
         {
-            "organisation_turnover": CompanyTurnoverChoices.BELOW_85000,
+            "company_turnover": CompanyTurnoverChoices.BELOW_85000,
         }
     )
 
@@ -22,7 +22,7 @@ def test_validation_other_type_of_business_required_when_other_selected():
     form = SoloExporterAdditionalInformationForm(
         {
             "company_type": SoloExporterTypeChoices.OTHER,
-            "organisation_turnover": CompanyTurnoverChoices.BELOW_85000,
+            "company_turnover": CompanyTurnoverChoices.BELOW_85000,
         }
     )
 
@@ -36,7 +36,7 @@ def test_get_zendesk_data():
     form = SoloExporterAdditionalInformationForm(
         {
             "company_type": SoloExporterTypeChoices.SOLE_TRADER,
-            "business_turnover": CompanyTurnoverChoices.BELOW_85000,
+            "company_turnover": CompanyTurnoverChoices.BELOW_85000,
         }
     )
 
@@ -51,7 +51,7 @@ def test_get_zendesk_data():
         {
             "company_type": SoloExporterTypeChoices.OTHER,
             "other_type_of_exporter": "OTHER TYPE OF ORGANISATION",
-            "business_turnover": CompanyTurnoverChoices.BELOW_85000,
+            "company_turnover": CompanyTurnoverChoices.BELOW_85000,
         }
     )
 
@@ -66,7 +66,7 @@ def test_get_zendesk_data():
         {
             "company_type": SoloExporterTypeChoices.SOLE_TRADER,
             "other_type_of_exporter": "THIS IS IGNORED",
-            "business_turnover": CompanyTurnoverChoices.BELOW_85000,
+            "company_turnover": CompanyTurnoverChoices.BELOW_85000,
         }
     )
 

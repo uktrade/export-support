@@ -9,7 +9,7 @@ from ...forms import (
 def test_validation_type_of_business_required():
     form = OrganisationAdditionalInformationForm(
         {
-            "organisation_turnover": CompanyTurnoverChoices.BELOW_85000,
+            "company_turnover": CompanyTurnoverChoices.BELOW_85000,
             "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
         }
     )
@@ -24,7 +24,7 @@ def test_validation_other_type_of_business_required_when_other_selected():
     form = OrganisationAdditionalInformationForm(
         {
             "company_type": OrganisationTypeChoices.OTHER,
-            "organisation_turnover": CompanyTurnoverChoices.BELOW_85000,
+            "company_turnover": CompanyTurnoverChoices.BELOW_85000,
             "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
         }
     )
@@ -39,7 +39,7 @@ def test_get_zendesk_data():
     form = OrganisationAdditionalInformationForm(
         {
             "company_type": OrganisationTypeChoices.CHARITY_OR_SOCIAL_ENTERPRISE,
-            "organisation_turnover": CompanyTurnoverChoices.BELOW_85000,
+            "company_turnover": CompanyTurnoverChoices.BELOW_85000,
             "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
         }
     )
@@ -55,7 +55,7 @@ def test_get_zendesk_data():
         {
             "company_type": OrganisationTypeChoices.OTHER,
             "other_type_of_organisation": "OTHER TYPE OF ORGANISATION",
-            "organisation_turnover": CompanyTurnoverChoices.BELOW_85000,
+            "company_turnover": CompanyTurnoverChoices.BELOW_85000,
             "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
         }
     )
@@ -71,7 +71,7 @@ def test_get_zendesk_data():
         {
             "company_type": OrganisationTypeChoices.CHARITY_OR_SOCIAL_ENTERPRISE,
             "other_type_of_organisation": "THIS IS IGNORED",
-            "organisation_turnover": CompanyTurnoverChoices.BELOW_85000,
+            "company_turnover": CompanyTurnoverChoices.BELOW_85000,
             "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
         }
     )

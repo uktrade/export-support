@@ -6,7 +6,7 @@ def test_get_zendesk_data():
         {
             "company_name": "ACME",
             "company_registration_number": "12345678",
-            "organisation_unit_post_code": "SW1A 2BL",
+            "company_post_code": "SW1A 2BL",
         }
     )
 

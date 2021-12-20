@@ -427,7 +427,7 @@ class OrganisationDetailsForm(gds_forms.FormErrorMixin, forms.Form):
             },
         ),
     )
-    organisation_unit_post_code = forms.CharField(
+    company_post_code = forms.CharField(
         error_messages={
             "required": "Enter the organisation unit postcode",
         },
@@ -442,19 +442,19 @@ class OrganisationDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         ),
     )
 
-    def clean_organisation_unit_post_code(self):
-        organisation_unit_post_code = self.cleaned_data["organisation_unit_post_code"]
-        return organisation_unit_post_code.upper()
+    def clean_company_post_code(self):
+        company_post_code = self.cleaned_data["company_post_code"]
+        return company_post_code.upper()
 
     def get_zendesk_data(self):
         company_name = self.cleaned_data["company_name"]
         company_registration_number = self.cleaned_data["company_registration_number"]
-        organisation_unit_post_code = self.cleaned_data["organisation_unit_post_code"]
+        company_post_code = self.cleaned_data["company_post_code"]
 
         return {
             "company_name": company_name,
             "company_registration_number": company_registration_number,
-            "company_post_code": organisation_unit_post_code,
+            "company_post_code": company_post_code,
         }
 
 
@@ -495,7 +495,7 @@ class OrganisationAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form
             },
         ),
     )
-    organisation_turnover = forms.TypedChoiceField(
+    company_turnover = forms.TypedChoiceField(
         choices=[("", "Please select")] + CompanyTurnoverChoices.choices,
         coerce=coerce_choice(CompanyTurnoverChoices),
         error_messages={
@@ -546,7 +546,7 @@ class OrganisationAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form
 
     def get_zendesk_data(self):
         type_of_organisation = self.cleaned_data["company_type"]
-        organisation_turnover = self.cleaned_data["organisation_turnover"].label
+        company_turnover = self.cleaned_data["company_turnover"].label
         number_of_employees = self.cleaned_data["number_of_employees"].label
 
         if type_of_organisation == OrganisationTypeChoices.OTHER:
@@ -557,7 +557,7 @@ class OrganisationAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form
 
         return {
             "company_type": type_of_organisation,
-            "company_turnover": organisation_turnover,
+            "company_turnover": company_turnover,
             "number_of_employees": number_of_employees,
         }
 
@@ -577,7 +577,7 @@ class SoloExporterDetailsForm(gds_forms.FormErrorMixin, forms.Form):
             },
         ),
     )
-    post_code = forms.CharField(
+    company_post_code = forms.CharField(
         error_messages={
             "required": "Enter the postcode",
         },
@@ -594,11 +594,11 @@ class SoloExporterDetailsForm(gds_forms.FormErrorMixin, forms.Form):
 
     def get_zendesk_data(self):
         company_name = self.cleaned_data["company_name"]
-        post_code = self.cleaned_data["post_code"]
+        company_post_code = self.cleaned_data["company_post_code"]
 
         return {
             "company_name": company_name,
-            "company_post_code": post_code,
+            "company_post_code": company_post_code,
         }
 
 
@@ -631,7 +631,7 @@ class SoloExporterAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form
             },
         ),
     )
-    business_turnover = forms.TypedChoiceField(
+    company_turnover = forms.TypedChoiceField(
         choices=[("", "Please select")] + CompanyTurnoverChoices.choices,
         coerce=coerce_choice(CompanyTurnoverChoices),
         help_text="Select your business turnover for the last financial year (if applicable).",
@@ -666,7 +666,7 @@ class SoloExporterAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form
 
     def get_zendesk_data(self):
         type_of_exporter = self.cleaned_data["company_type"]
-        business_turnover = self.cleaned_data["business_turnover"].label
+        company_turnover = self.cleaned_data["company_turnover"].label
         number_of_employees = NumberOfEmployeesChoices.FEWER_THAN_10.label
 
         if type_of_exporter == SoloExporterTypeChoices.OTHER:
@@ -677,7 +677,7 @@ class SoloExporterAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form
 
         return {
             "company_type": type_of_exporter,
-            "company_turnover": business_turnover,
+            "company_turnover": company_turnover,
             "number_of_employees": number_of_employees,
         }
 
