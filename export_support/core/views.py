@@ -37,11 +37,19 @@ class IndexView(RedirectView):
     url = reverse_lazy("core:enquiry-wizard")
 
 
-def is_business_type(business_type_choice):
+def is_business_type(business_type_choice, on_default_path=False):
+    """Returns a function to assert whether the wizard step should be shown
+    based on the business type selected.
+
+    The `on_default_path` allows the returned function to return a default
+    value if the business type hasn't been filled in yet. This is important
+    when we want to show the correct number of steps in the form.
+    """
+
     def _is_type(wizard):
         cleaned_data = wizard.get_cleaned_data_for_step("business-type")
         if not cleaned_data:
-            return True
+            return on_default_path
 
         business_type = cleaned_data["business_type"]
 
@@ -82,19 +90,22 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         ("enquiry-details", EnquiryDetailsForm),
     ]
     condition_dict = {
-        "business-details": is_business_type(BusinessTypeChoices.PRIVATE_OR_LIMITED),
+        "business-details": is_business_type(
+            BusinessTypeChoices.PRIVATE_OR_LIMITED, on_default_path=True
+        ),
         "business-additional-information": is_business_type(
-            BusinessTypeChoices.PRIVATE_OR_LIMITED
+            BusinessTypeChoices.PRIVATE_OR_LIMITED,
+            on_default_path=True,
         ),
         "organisation-details": is_business_type(BusinessTypeChoices.OTHER),
         "organisation-additional-information": is_business_type(
-            BusinessTypeChoices.OTHER
+            BusinessTypeChoices.OTHER,
         ),
         "solo-exporter-details": is_business_type(
-            BusinessTypeChoices.SOLE_TRADE_OR_PRIVATE_INDIVIDUAL
+            BusinessTypeChoices.SOLE_TRADE_OR_PRIVATE_INDIVIDUAL,
         ),
         "solo-exporter-additional-information": is_business_type(
-            BusinessTypeChoices.SOLE_TRADE_OR_PRIVATE_INDIVIDUAL
+            BusinessTypeChoices.SOLE_TRADE_OR_PRIVATE_INDIVIDUAL,
         ),
     }
 

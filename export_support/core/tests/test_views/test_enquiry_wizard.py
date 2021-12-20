@@ -47,6 +47,13 @@ def get_step_url(step_name):
     return reverse("core:enquiry-wizard-step", kwargs={"step": step_name})
 
 
+def assert_number_of_steps(response, *, current_step_number, total_number_of_steps):
+    ctx = response.context_data
+    steps = ctx["wizard"]["steps"]
+    assert steps.step1 == current_step_number
+    assert steps.count == total_number_of_steps
+
+
 def test_full_steps_private_or_limited_business_type_wizard_success(
     client, settings, mocker
 ):
@@ -70,6 +77,7 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
 
     response = client.get(enquiry_subject_url)
     assert response.status_code == 200
+    assert_number_of_steps(response, current_step_number=1, total_number_of_steps=8)
     assertTemplateUsed(response, "core/enquiry_subject_wizard_step.html")
     response = client.post(
         enquiry_subject_url,
@@ -90,6 +98,7 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
 
     response = client.get(export_countries_url)
     assert response.status_code == 200
+    assert_number_of_steps(response, current_step_number=2, total_number_of_steps=8)
     assertTemplateUsed(response, "core/export_countries_wizard_step.html")
     response = client.post(
         export_countries_url,
@@ -105,6 +114,7 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
 
     response = client.get(personal_details_url)
     assert response.status_code == 200
+    assert_number_of_steps(response, current_step_number=3, total_number_of_steps=8)
     assertTemplateUsed(response, "core/personal_details_wizard_step.html")
     response = client.post(
         personal_details_url,
@@ -125,6 +135,7 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
 
     response = client.get(business_type_url)
     assert response.status_code == 200
+    assert_number_of_steps(response, current_step_number=4, total_number_of_steps=8)
     assertTemplateUsed(response, "core/business_type_wizard_step.html")
     response = client.post(
         business_type_url,
@@ -142,6 +153,7 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
 
     response = client.get(business_details_url)
     assert response.status_code == 200
+    assert_number_of_steps(response, current_step_number=5, total_number_of_steps=8)
     assertTemplateUsed(response, "core/business_details_wizard_step.html")
     response = client.post(
         business_details_url,
@@ -163,6 +175,7 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
 
     response = client.get(business_additional_information_url)
     assert response.status_code == 200
+    assert_number_of_steps(response, current_step_number=6, total_number_of_steps=8)
     assertTemplateUsed(
         response, "core/business_additional_information_wizard_step.html"
     )
@@ -184,6 +197,7 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
 
     response = client.get(sectors_url)
     assert response.status_code == 200
+    assert_number_of_steps(response, current_step_number=7, total_number_of_steps=8)
     assertTemplateUsed(response, "core/sectors_wizard_step.html")
     response = client.post(
         sectors_url,
@@ -202,6 +216,7 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
 
     response = client.get(enquiry_details_url)
     assert response.status_code == 200
+    assert_number_of_steps(response, current_step_number=8, total_number_of_steps=8)
     assertTemplateUsed(response, "core/enquiry_details_wizard_step.html")
     response = client.post(
         enquiry_details_url,
@@ -294,6 +309,7 @@ def test_full_steps_other_organisation_business_type_wizard_success(
 
     response = client.get(enquiry_subject_url)
     assert response.status_code == 200
+    assert_number_of_steps(response, current_step_number=1, total_number_of_steps=8)
     assertTemplateUsed(response, "core/enquiry_subject_wizard_step.html")
     response = client.post(
         enquiry_subject_url,
@@ -314,6 +330,7 @@ def test_full_steps_other_organisation_business_type_wizard_success(
 
     response = client.get(export_countries_url)
     assert response.status_code == 200
+    assert_number_of_steps(response, current_step_number=2, total_number_of_steps=8)
     assertTemplateUsed(response, "core/export_countries_wizard_step.html")
     response = client.post(
         export_countries_url,
@@ -329,6 +346,7 @@ def test_full_steps_other_organisation_business_type_wizard_success(
 
     response = client.get(personal_details_url)
     assert response.status_code == 200
+    assert_number_of_steps(response, current_step_number=3, total_number_of_steps=8)
     assertTemplateUsed(response, "core/personal_details_wizard_step.html")
     response = client.post(
         personal_details_url,
@@ -349,6 +367,7 @@ def test_full_steps_other_organisation_business_type_wizard_success(
 
     response = client.get(business_type_url)
     assert response.status_code == 200
+    assert_number_of_steps(response, current_step_number=4, total_number_of_steps=8)
     assertTemplateUsed(response, "core/business_type_wizard_step.html")
     response = client.post(
         business_type_url,
@@ -366,6 +385,7 @@ def test_full_steps_other_organisation_business_type_wizard_success(
 
     response = client.get(organisation_details_url)
     assert response.status_code == 200
+    assert_number_of_steps(response, current_step_number=5, total_number_of_steps=8)
     assertTemplateUsed(response, "core/organisation_details_wizard_step.html")
     response = client.post(
         organisation_details_url,
@@ -387,6 +407,7 @@ def test_full_steps_other_organisation_business_type_wizard_success(
 
     response = client.get(organisation_additional_information)
     assert response.status_code == 200
+    assert_number_of_steps(response, current_step_number=6, total_number_of_steps=8)
     assertTemplateUsed(
         response, "core/organisation_additional_information_wizard_step.html"
     )
@@ -408,6 +429,7 @@ def test_full_steps_other_organisation_business_type_wizard_success(
 
     response = client.get(sectors_url)
     assert response.status_code == 200
+    assert_number_of_steps(response, current_step_number=7, total_number_of_steps=8)
     assertTemplateUsed(response, "core/sectors_wizard_step.html")
     response = client.post(
         sectors_url,
@@ -426,6 +448,7 @@ def test_full_steps_other_organisation_business_type_wizard_success(
 
     response = client.get(enquiry_details_url)
     assert response.status_code == 200
+    assert_number_of_steps(response, current_step_number=8, total_number_of_steps=8)
     assertTemplateUsed(response, "core/enquiry_details_wizard_step.html")
     response = client.post(
         enquiry_details_url,
@@ -518,6 +541,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
 
     response = client.get(enquiry_subject_url)
     assert response.status_code == 200
+    assert_number_of_steps(response, current_step_number=1, total_number_of_steps=8)
     assertTemplateUsed(response, "core/enquiry_subject_wizard_step.html")
     response = client.post(
         enquiry_subject_url,
@@ -538,6 +562,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
 
     response = client.get(export_countries_url)
     assert response.status_code == 200
+    assert_number_of_steps(response, current_step_number=2, total_number_of_steps=8)
     assertTemplateUsed(response, "core/export_countries_wizard_step.html")
     response = client.post(
         export_countries_url,
@@ -553,6 +578,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
 
     response = client.get(personal_details_url)
     assert response.status_code == 200
+    assert_number_of_steps(response, current_step_number=3, total_number_of_steps=8)
     assertTemplateUsed(response, "core/personal_details_wizard_step.html")
     response = client.post(
         personal_details_url,
@@ -573,6 +599,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
 
     response = client.get(business_type_url)
     assert response.status_code == 200
+    assert_number_of_steps(response, current_step_number=4, total_number_of_steps=8)
     assertTemplateUsed(response, "core/business_type_wizard_step.html")
     response = client.post(
         business_type_url,
@@ -590,6 +617,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
 
     response = client.get(solo_exporter_details_url)
     assert response.status_code == 200
+    assert_number_of_steps(response, current_step_number=5, total_number_of_steps=8)
     assertTemplateUsed(response, "core/solo_exporter_details_wizard_step.html")
     response = client.post(
         solo_exporter_details_url,
@@ -610,6 +638,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
 
     response = client.get(solo_exporter_additional_information_url)
     assert response.status_code == 200
+    assert_number_of_steps(response, current_step_number=6, total_number_of_steps=8)
     assertTemplateUsed(
         response, "core/solo_exporter_additional_information_wizard_step.html"
     )
@@ -630,6 +659,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
 
     response = client.get(sectors_url)
     assert response.status_code == 200
+    assert_number_of_steps(response, current_step_number=7, total_number_of_steps=8)
     assertTemplateUsed(response, "core/sectors_wizard_step.html")
     response = client.post(
         sectors_url,
@@ -648,6 +678,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
 
     response = client.get(enquiry_details_url)
     assert response.status_code == 200
+    assert_number_of_steps(response, current_step_number=8, total_number_of_steps=8)
     assertTemplateUsed(response, "core/enquiry_details_wizard_step.html")
     response = client.post(
         enquiry_details_url,
