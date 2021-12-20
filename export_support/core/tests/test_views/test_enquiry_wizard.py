@@ -393,7 +393,7 @@ def test_full_steps_other_organisation_business_type_wizard_success(
         get_form_data(
             "organisation-details",
             {
-                "organisation_name": "Organisationname",
+                "company_name": "Organisationname",
                 "organisation_unit_post_code": "SW1A 2BL",
                 "company_registration_number": "12345678",
             },
@@ -626,7 +626,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
         get_form_data(
             "solo-exporter-details",
             {
-                "business_name": "Soloexporter",
+                "company_name": "Soloexporter",
                 "post_code": "SW1A 2BL",
             },
         ),

@@ -403,7 +403,7 @@ class BusinessAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
 
 
 class OrganisationDetailsForm(gds_forms.FormErrorMixin, forms.Form):
-    organisation_name = forms.CharField(
+    company_name = forms.CharField(
         error_messages={
             "required": "Enter the organisation name",
         },
@@ -447,12 +447,12 @@ class OrganisationDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         return organisation_unit_post_code.upper()
 
     def get_zendesk_data(self):
-        organisation_name = self.cleaned_data["organisation_name"]
+        company_name = self.cleaned_data["company_name"]
         company_registration_number = self.cleaned_data["company_registration_number"]
         organisation_unit_post_code = self.cleaned_data["organisation_unit_post_code"]
 
         return {
-            "company_name": organisation_name,
+            "company_name": company_name,
             "company_registration_number": company_registration_number,
             "company_post_code": organisation_unit_post_code,
         }
@@ -563,7 +563,7 @@ class OrganisationAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form
 
 
 class SoloExporterDetailsForm(gds_forms.FormErrorMixin, forms.Form):
-    business_name = forms.CharField(
+    company_name = forms.CharField(
         error_messages={
             "required": "Enter the business name",
         },
@@ -593,11 +593,11 @@ class SoloExporterDetailsForm(gds_forms.FormErrorMixin, forms.Form):
     )
 
     def get_zendesk_data(self):
-        business_name = self.cleaned_data["business_name"]
+        company_name = self.cleaned_data["company_name"]
         post_code = self.cleaned_data["post_code"]
 
         return {
-            "company_name": business_name,
+            "company_name": company_name,
             "company_post_code": post_code,
         }
 

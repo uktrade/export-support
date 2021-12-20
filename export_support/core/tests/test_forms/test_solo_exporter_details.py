@@ -4,7 +4,7 @@ from ...forms import SoloExporterDetailsForm
 def test_get_zendesk_data():
     form = SoloExporterDetailsForm(
         {
-            "business_name": "ACME",
+            "company_name": "ACME",
             "post_code": "SW1A 2BL",
         }
     )
