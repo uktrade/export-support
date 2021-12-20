@@ -662,11 +662,13 @@ class SoloExporterAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form
                 "Enter the type of exporter",
             )
 
+        cleaned_data["number_of_employees"] = NumberOfEmployeesChoices.FEWER_THAN_10
+
         return cleaned_data
 
     def get_zendesk_data(self):
         type_of_exporter = self.cleaned_data["company_type"]
-        number_of_employees = NumberOfEmployeesChoices.FEWER_THAN_10.label
+        number_of_employees = self.cleaned_data["number_of_employees"].label
 
         company_turnover = self.cleaned_data["company_turnover"]
         if isinstance(company_turnover, CompanyTurnoverChoices):

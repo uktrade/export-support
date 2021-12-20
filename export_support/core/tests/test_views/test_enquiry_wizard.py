@@ -1320,6 +1320,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success_custom_fields(
         "company_registration_number": "444",
         "company_type": "555",
         "company_post_code": "666",
+        "number_of_employees": "777",
     }
 
     mock_zendesk_form_action_class = mocker.patch(
@@ -1578,6 +1579,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success_custom_fields(
                 {"666": "SW1A 2BL"},
                 {"555": SoloExporterTypeChoices.SOLE_TRADER},
                 {"111": CompanyTurnoverChoices.BELOW_85000},
+                {"777": NumberOfEmployeesChoices.FEWER_THAN_10},
             ],
         }
     )
