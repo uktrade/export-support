@@ -16,14 +16,14 @@ def test_validation_type_of_business_required():
 
     assert not form.is_valid()
     assert form.errors == {
-        "type_of_organisation": ["Select the type of organisation"],
+        "company_type": ["Select the type of organisation"],
     }
 
 
 def test_validation_other_type_of_business_required_when_other_selected():
     form = OrganisationAdditionalInformationForm(
         {
-            "type_of_organisation": OrganisationTypeChoices.OTHER,
+            "company_type": OrganisationTypeChoices.OTHER,
             "organisation_turnover": CompanyTurnoverChoices.BELOW_85000,
             "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
         }
@@ -38,7 +38,7 @@ def test_validation_other_type_of_business_required_when_other_selected():
 def test_get_zendesk_data():
     form = OrganisationAdditionalInformationForm(
         {
-            "type_of_organisation": OrganisationTypeChoices.CHARITY_OR_SOCIAL_ENTERPRISE,
+            "company_type": OrganisationTypeChoices.CHARITY_OR_SOCIAL_ENTERPRISE,
             "organisation_turnover": CompanyTurnoverChoices.BELOW_85000,
             "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
         }
@@ -46,14 +46,14 @@ def test_get_zendesk_data():
 
     assert form.is_valid()
     assert form.get_zendesk_data() == {
-        "type_of_business": "Charity / Social enterprise",
+        "company_type": "Charity / Social enterprise",
         "company_turnover": "Below £85,000",
         "number_of_employees": "Fewer than 10",
     }
 
     form = OrganisationAdditionalInformationForm(
         {
-            "type_of_organisation": OrganisationTypeChoices.OTHER,
+            "company_type": OrganisationTypeChoices.OTHER,
             "other_type_of_organisation": "OTHER TYPE OF ORGANISATION",
             "organisation_turnover": CompanyTurnoverChoices.BELOW_85000,
             "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
@@ -62,14 +62,14 @@ def test_get_zendesk_data():
 
     assert form.is_valid()
     assert form.get_zendesk_data() == {
-        "type_of_business": "OTHER TYPE OF ORGANISATION",
+        "company_type": "OTHER TYPE OF ORGANISATION",
         "company_turnover": "Below £85,000",
         "number_of_employees": "Fewer than 10",
     }
 
     form = OrganisationAdditionalInformationForm(
         {
-            "type_of_organisation": OrganisationTypeChoices.CHARITY_OR_SOCIAL_ENTERPRISE,
+            "company_type": OrganisationTypeChoices.CHARITY_OR_SOCIAL_ENTERPRISE,
             "other_type_of_organisation": "THIS IS IGNORED",
             "organisation_turnover": CompanyTurnoverChoices.BELOW_85000,
             "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
@@ -78,7 +78,7 @@ def test_get_zendesk_data():
 
     assert form.is_valid()
     assert form.get_zendesk_data() == {
-        "type_of_business": "Charity / Social enterprise",
+        "company_type": "Charity / Social enterprise",
         "company_turnover": "Below £85,000",
         "number_of_employees": "Fewer than 10",
     }

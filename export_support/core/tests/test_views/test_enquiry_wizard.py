@@ -184,7 +184,7 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
         get_form_data(
             "business-additional-information",
             {
-                "type_of_business": PrivateOrPublicCompanyTypeChoices.PRIVATE_LIMITED_COMPANY,
+                "company_type": PrivateOrPublicCompanyTypeChoices.PRIVATE_LIMITED_COMPANY,
                 "company_turnover": CompanyTurnoverChoices.BELOW_85000,
                 "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
             },
@@ -270,6 +270,7 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
             "company_post_code": "SW1A 2BL",
             "company_registration_number": "12345678",
             "company_turnover": "Below £85,000",
+            "company_type": "Private limited company",
             "countries": "Albania, Andorra, Austria, Belgium, Bosnia and Herzegovina, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Israel, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Vatican City",  # noqa: E501
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
@@ -279,7 +280,6 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
             "on_behalf_of": "The business I own or work for (or in my own interest)",
             "other_sector": "ANOTHER SECTOR",
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
-            "type_of_business": "Private limited company",
             "how_did_you_hear_about_this_service": "Search engine",
             "_custom_fields": None,
         }
@@ -416,7 +416,7 @@ def test_full_steps_other_organisation_business_type_wizard_success(
         get_form_data(
             "organisation-additional-information",
             {
-                "type_of_organisation": OrganisationTypeChoices.CHARITY_OR_SOCIAL_ENTERPRISE,
+                "company_type": OrganisationTypeChoices.CHARITY_OR_SOCIAL_ENTERPRISE,
                 "organisation_turnover": CompanyTurnoverChoices.BELOW_85000,
                 "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
             },
@@ -502,6 +502,7 @@ def test_full_steps_other_organisation_business_type_wizard_success(
             "company_post_code": "SW1A 2BL",
             "company_registration_number": "12345678",
             "company_turnover": "Below £85,000",
+            "company_type": "Charity / Social enterprise",
             "countries": "Albania, Andorra, Austria, Belgium, Bosnia and Herzegovina, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Israel, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Vatican City",  # noqa: E501
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
@@ -511,7 +512,6 @@ def test_full_steps_other_organisation_business_type_wizard_success(
             "on_behalf_of": "The business I own or work for (or in my own interest)",
             "other_sector": "ANOTHER SECTOR",
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
-            "type_of_business": "Charity / Social enterprise",
             "how_did_you_hear_about_this_service": "Search engine",
             "_custom_fields": None,
         }
@@ -647,7 +647,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
         get_form_data(
             "solo-exporter-additional-information",
             {
-                "type_of_exporter": SoloExporterTypeChoices.SOLE_TRADER,
+                "company_type": SoloExporterTypeChoices.SOLE_TRADER,
                 "business_turnover": CompanyTurnoverChoices.BELOW_85000,
             },
         ),
@@ -732,6 +732,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
             "company_post_code": "SW1A 2BL",
             "company_registration_number": "",
             "company_turnover": "Below £85,000",
+            "company_type": "Sole trader",
             "countries": "Albania, Andorra, Austria, Belgium, Bosnia and Herzegovina, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Israel, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Vatican City",  # noqa: E501
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
@@ -741,7 +742,6 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
             "on_behalf_of": "The business I own or work for (or in my own interest)",
             "other_sector": "ANOTHER SECTOR",
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
-            "type_of_business": "Sole trader",
             "how_did_you_hear_about_this_service": "Search engine",
             "_custom_fields": None,
         }
@@ -757,7 +757,7 @@ def test_full_steps_wizard_success_custom_fields(client, settings, mocker):
         "enquiry_subject": "222",
         "countries": "333",
         "company_registration_number": "444",
-        "type_of_business": "555",
+        "company_type": "555",
     }
 
     mock_zendesk_form_action_class = mocker.patch(
@@ -874,7 +874,7 @@ def test_full_steps_wizard_success_custom_fields(client, settings, mocker):
         get_form_data(
             "business-additional-information",
             {
-                "type_of_business": PrivateOrPublicCompanyTypeChoices.PRIVATE_LIMITED_COMPANY,
+                "company_type": PrivateOrPublicCompanyTypeChoices.PRIVATE_LIMITED_COMPANY,
                 "company_turnover": CompanyTurnoverChoices.BELOW_85000,
                 "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
             },
@@ -947,6 +947,7 @@ def test_full_steps_wizard_success_custom_fields(client, settings, mocker):
             "company_post_code": "SW1A 2BL",
             "company_registration_number": "12345678",
             "company_turnover": "Below £85,000",
+            "company_type": "Private limited company",
             "countries": "Albania, Andorra, Austria, Belgium, Bosnia and Herzegovina, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Israel, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Vatican City",  # noqa: E501
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
@@ -956,7 +957,6 @@ def test_full_steps_wizard_success_custom_fields(client, settings, mocker):
             "on_behalf_of": "The business I own or work for (or in my own interest)",
             "other_sector": "ANOTHER SECTOR",
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
-            "type_of_business": "Private limited company",
             "how_did_you_hear_about_this_service": "Search engine",
             "_custom_fields": [
                 {
@@ -1029,7 +1029,7 @@ def test_full_steps_wizard_success_private_custom_fields_are_ignored(
     settings.ZENDESK_SERVICE_NAME = "ZENDESK_SERVICE_NAME"
     settings.ZENDESK_SUBDOMAIN = "ZENDESK_SUBDOMAIN"
     settings.ZENDESK_CUSTOM_FIELD_MAPPING = {
-        "type_of_business": "111",
+        "company_type": "111",
         "company_turnover": "222",
     }
 
@@ -1147,7 +1147,7 @@ def test_full_steps_wizard_success_private_custom_fields_are_ignored(
         get_form_data(
             "business-additional-information",
             {
-                "type_of_business": PrivateOrPublicCompanyTypeChoices.OTHER,
+                "company_type": PrivateOrPublicCompanyTypeChoices.OTHER,
                 "other_type_of_business": "Othertypeofbusiness",
                 "company_turnover": CompanyTurnoverChoices.BELOW_85000,
                 "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
@@ -1230,7 +1230,7 @@ def test_full_steps_wizard_success_private_custom_fields_are_ignored(
             "on_behalf_of": "The business I own or work for (or in my own interest)",
             "other_sector": "ANOTHER SECTOR",
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
-            "type_of_business": "Othertypeofbusiness",
+            "company_type": "Othertypeofbusiness",
             "how_did_you_hear_about_this_service": "Search engine",
             "_custom_fields": [
                 {"222": CompanyTurnoverChoices.BELOW_85000},
@@ -1365,7 +1365,7 @@ def test_zendesk_form_is_not_valid_wizard_raises_error(client, settings, mocker)
         get_form_data(
             "business-additional-information",
             {
-                "type_of_business": PrivateOrPublicCompanyTypeChoices.PRIVATE_LIMITED_COMPANY,
+                "company_type": PrivateOrPublicCompanyTypeChoices.PRIVATE_LIMITED_COMPANY,
                 "company_turnover": CompanyTurnoverChoices.BELOW_85000,
                 "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
             },
@@ -1537,7 +1537,7 @@ def run_wizard_enquiry_subject(settings, mocker):
             get_form_data(
                 "business-additional-information",
                 {
-                    "type_of_business": PrivateOrPublicCompanyTypeChoices.PRIVATE_LIMITED_COMPANY,
+                    "company_type": PrivateOrPublicCompanyTypeChoices.PRIVATE_LIMITED_COMPANY,
                     "company_turnover": CompanyTurnoverChoices.BELOW_85000,
                     "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
                 },

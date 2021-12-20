@@ -14,14 +14,14 @@ def test_validation_type_of_business_required():
 
     assert not form.is_valid()
     assert form.errors == {
-        "type_of_exporter": ["Select the type of exporter"],
+        "company_type": ["Select the type of exporter"],
     }
 
 
 def test_validation_other_type_of_business_required_when_other_selected():
     form = SoloExporterAdditionalInformationForm(
         {
-            "type_of_exporter": SoloExporterTypeChoices.OTHER,
+            "company_type": SoloExporterTypeChoices.OTHER,
             "organisation_turnover": CompanyTurnoverChoices.BELOW_85000,
         }
     )
@@ -35,21 +35,21 @@ def test_validation_other_type_of_business_required_when_other_selected():
 def test_get_zendesk_data():
     form = SoloExporterAdditionalInformationForm(
         {
-            "type_of_exporter": SoloExporterTypeChoices.SOLE_TRADER,
+            "company_type": SoloExporterTypeChoices.SOLE_TRADER,
             "business_turnover": CompanyTurnoverChoices.BELOW_85000,
         }
     )
 
     assert form.is_valid()
     assert form.get_zendesk_data() == {
-        "type_of_business": "Sole trader",
+        "company_type": "Sole trader",
         "company_turnover": "Below £85,000",
         "number_of_employees": "Fewer than 10",
     }
 
     form = SoloExporterAdditionalInformationForm(
         {
-            "type_of_exporter": SoloExporterTypeChoices.OTHER,
+            "company_type": SoloExporterTypeChoices.OTHER,
             "other_type_of_exporter": "OTHER TYPE OF ORGANISATION",
             "business_turnover": CompanyTurnoverChoices.BELOW_85000,
         }
@@ -57,14 +57,14 @@ def test_get_zendesk_data():
 
     assert form.is_valid()
     assert form.get_zendesk_data() == {
-        "type_of_business": "OTHER TYPE OF ORGANISATION",
+        "company_type": "OTHER TYPE OF ORGANISATION",
         "company_turnover": "Below £85,000",
         "number_of_employees": "Fewer than 10",
     }
 
     form = SoloExporterAdditionalInformationForm(
         {
-            "type_of_exporter": SoloExporterTypeChoices.SOLE_TRADER,
+            "company_type": SoloExporterTypeChoices.SOLE_TRADER,
             "other_type_of_exporter": "THIS IS IGNORED",
             "business_turnover": CompanyTurnoverChoices.BELOW_85000,
         }
@@ -72,7 +72,7 @@ def test_get_zendesk_data():
 
     assert form.is_valid()
     assert form.get_zendesk_data() == {
-        "type_of_business": "Sole trader",
+        "company_type": "Sole trader",
         "company_turnover": "Below £85,000",
         "number_of_employees": "Fewer than 10",
     }

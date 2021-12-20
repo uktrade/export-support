@@ -309,7 +309,7 @@ class NumberOfEmployeesChoices(models.TextChoices):
 
 
 class BusinessAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
-    type_of_business = forms.TypedChoiceField(
+    company_type = forms.TypedChoiceField(
         coerce=coerce_choice(PrivateOrPublicCompanyTypeChoices),
         choices=[("", "Please select")] + PrivateOrPublicCompanyTypeChoices.choices,
         error_messages={
@@ -364,7 +364,7 @@ class BusinessAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
         cleaned_data = super().clean()
 
         try:
-            type_of_business = cleaned_data["type_of_business"]
+            type_of_business = cleaned_data["company_type"]
         except KeyError:
             return cleaned_data
 
@@ -381,7 +381,7 @@ class BusinessAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
         return cleaned_data
 
     def get_zendesk_data(self):
-        type_of_business = self.cleaned_data["type_of_business"]
+        type_of_business = self.cleaned_data["company_type"]
         company_turnover = self.cleaned_data["company_turnover"].label
         number_of_employees = self.cleaned_data["number_of_employees"].label
 
@@ -392,7 +392,7 @@ class BusinessAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
             type_of_business = type_of_business.label
 
         return {
-            "type_of_business": type_of_business,
+            "company_type": type_of_business,
             "company_turnover": company_turnover,
             "number_of_employees": number_of_employees,
         }
@@ -469,7 +469,7 @@ class OrganisationTypeChoices(models.TextChoices):
 
 
 class OrganisationAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
-    type_of_organisation = forms.TypedChoiceField(
+    company_type = forms.TypedChoiceField(
         coerce=coerce_choice(OrganisationTypeChoices),
         choices=[("", "Please select")] + OrganisationTypeChoices.choices,
         error_messages={
@@ -524,7 +524,7 @@ class OrganisationAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form
         cleaned_data = super().clean()
 
         try:
-            type_of_organisation = cleaned_data["type_of_organisation"]
+            type_of_organisation = cleaned_data["company_type"]
         except KeyError:
             return cleaned_data
 
@@ -541,7 +541,7 @@ class OrganisationAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form
         return cleaned_data
 
     def get_zendesk_data(self):
-        type_of_organisation = self.cleaned_data["type_of_organisation"]
+        type_of_organisation = self.cleaned_data["company_type"]
         organisation_turnover = self.cleaned_data["organisation_turnover"].label
         number_of_employees = self.cleaned_data["number_of_employees"].label
 
@@ -552,7 +552,7 @@ class OrganisationAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form
             type_of_organisation = type_of_organisation.label
 
         return {
-            "type_of_business": type_of_organisation,
+            "company_type": type_of_organisation,
             "company_turnover": organisation_turnover,
             "number_of_employees": number_of_employees,
         }
@@ -605,7 +605,7 @@ class SoloExporterTypeChoices(models.TextChoices):
 
 
 class SoloExporterAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
-    type_of_exporter = forms.TypedChoiceField(
+    company_type = forms.TypedChoiceField(
         coerce=coerce_choice(SoloExporterTypeChoices),
         choices=[("", "Please select")] + SoloExporterTypeChoices.choices,
         error_messages={
@@ -644,7 +644,7 @@ class SoloExporterAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form
         cleaned_data = super().clean()
 
         try:
-            type_of_exporter = cleaned_data["type_of_exporter"]
+            type_of_exporter = cleaned_data["company_type"]
         except KeyError:
             return cleaned_data
 
@@ -661,7 +661,7 @@ class SoloExporterAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form
         return cleaned_data
 
     def get_zendesk_data(self):
-        type_of_exporter = self.cleaned_data["type_of_exporter"]
+        type_of_exporter = self.cleaned_data["company_type"]
         business_turnover = self.cleaned_data["business_turnover"].label
         number_of_employees = NumberOfEmployeesChoices.FEWER_THAN_10.label
 
@@ -672,7 +672,7 @@ class SoloExporterAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form
             type_of_exporter = type_of_exporter.label
 
         return {
-            "type_of_business": type_of_exporter,
+            "company_type": type_of_exporter,
             "company_turnover": business_turnover,
             "number_of_employees": number_of_employees,
         }
@@ -851,6 +851,7 @@ class ZendeskForm(ZendeskAPIForm):
     enquiry_subject = forms.CharField()
     countries = forms.CharField()
     on_behalf_of = forms.CharField()
+    company_type = forms.CharField()
     company_name = forms.CharField(required=False)
     company_post_code = forms.CharField(required=False)
     company_registration_number = forms.CharField(required=False)
@@ -862,6 +863,5 @@ class ZendeskForm(ZendeskAPIForm):
     aaa_question = forms.CharField()
     full_name = forms.CharField()
     email = forms.CharField()
-    type_of_business = forms.CharField()
     how_did_you_hear_about_this_service = forms.CharField()
     _custom_fields = forms.JSONField(required=False)

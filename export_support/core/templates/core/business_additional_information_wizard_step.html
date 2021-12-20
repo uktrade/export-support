@@ -10,11 +10,11 @@
                     About the business
                 </h1>
             </legend>
-            <div class="govuk-form-group {% if form.type_of_business.errors or form.other_type_of_business.errors %}govuk-form-group--error{% endif %}">
+            <div class="govuk-form-group {% if form.company_type.errors or form.other_type_of_business.errors %}govuk-form-group--error{% endif %}">
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-visually-hidden">What is the type of business?</legend>
                     <div class="govuk-!-margin-bottom-4">
-                        {% include "gds/forms/form_group.html" with field=form.type_of_business %}
+                        {% include "gds/forms/form_group.html" with field=form.company_type %}
                     </div>
                     <div class="govuk-inset-text govuk-!-margin-top-0">
                         {% include "gds/forms/form_group.html" with field=form.other_type_of_business force_hide_optional=True %}
