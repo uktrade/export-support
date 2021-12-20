@@ -9,4 +9,6 @@ def test_get_zendesk_data():
     )
 
     assert form.is_valid()
-    assert form.get_zendesk_data() == {}
+    assert form.get_zendesk_data() == {
+        "company_type_category": "UK private or public limited company",
+    }

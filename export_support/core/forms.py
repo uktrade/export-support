@@ -203,7 +203,11 @@ class BusinessTypeForm(gds_forms.FormErrorMixin, forms.Form):
     )
 
     def get_zendesk_data(self):
-        return {}
+        business_type = self.cleaned_data["business_type"]
+
+        return {
+            "company_type_category": business_type.label,
+        }
 
 
 class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
@@ -852,6 +856,7 @@ class ZendeskForm(ZendeskAPIForm):
     countries = forms.CharField()
     on_behalf_of = forms.CharField()
     company_type = forms.CharField()
+    company_type_category = forms.CharField()
     company_name = forms.CharField(required=False)
     company_post_code = forms.CharField(required=False)
     company_registration_number = forms.CharField(required=False)

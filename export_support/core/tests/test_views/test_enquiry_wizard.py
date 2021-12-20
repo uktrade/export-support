@@ -271,6 +271,7 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
             "company_registration_number": "12345678",
             "company_turnover": "Below £85,000",
             "company_type": "Private limited company",
+            "company_type_category": "UK private or public limited company",
             "countries": "Albania, Andorra, Austria, Belgium, Bosnia and Herzegovina, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Israel, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Vatican City",  # noqa: E501
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
@@ -503,6 +504,7 @@ def test_full_steps_other_organisation_business_type_wizard_success(
             "company_registration_number": "12345678",
             "company_turnover": "Below £85,000",
             "company_type": "Charity / Social enterprise",
+            "company_type_category": "Other type of UK organisation",
             "countries": "Albania, Andorra, Austria, Belgium, Bosnia and Herzegovina, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Israel, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Vatican City",  # noqa: E501
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
@@ -733,6 +735,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
             "company_registration_number": "",
             "company_turnover": "Below £85,000",
             "company_type": "Sole trader",
+            "company_type_category": "Sole trader or private individual",
             "countries": "Albania, Andorra, Austria, Belgium, Bosnia and Herzegovina, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Israel, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Vatican City",  # noqa: E501
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
@@ -948,6 +951,7 @@ def test_full_steps_wizard_success_custom_fields(client, settings, mocker):
             "company_registration_number": "12345678",
             "company_turnover": "Below £85,000",
             "company_type": "Private limited company",
+            "company_type_category": "UK private or public limited company",
             "countries": "Albania, Andorra, Austria, Belgium, Bosnia and Herzegovina, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Israel, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Vatican City",  # noqa: E501
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
@@ -1221,6 +1225,8 @@ def test_full_steps_wizard_success_private_custom_fields_are_ignored(
             "company_post_code": "SW1A 2BL",
             "company_registration_number": "12345678",
             "company_turnover": "Below £85,000",
+            "company_type": "Othertypeofbusiness",
+            "company_type_category": "UK private or public limited company",
             "countries": "Albania, Andorra, Austria, Belgium, Bosnia and Herzegovina, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Israel, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Vatican City",  # noqa: E501
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
@@ -1230,7 +1236,6 @@ def test_full_steps_wizard_success_private_custom_fields_are_ignored(
             "on_behalf_of": "The business I own or work for (or in my own interest)",
             "other_sector": "ANOTHER SECTOR",
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
-            "company_type": "Othertypeofbusiness",
             "how_did_you_hear_about_this_service": "Search engine",
             "_custom_fields": [
                 {"222": CompanyTurnoverChoices.BELOW_85000},
