@@ -36,6 +36,19 @@ def test_get_zendesk_data():
     form = SoloExporterAdditionalInformationForm(
         {
             "company_type": SoloExporterTypeChoices.SOLE_TRADER,
+        }
+    )
+
+    assert form.is_valid()
+    assert form.get_zendesk_data() == {
+        "company_type": "Sole trader",
+        "company_turnover": "",
+        "number_of_employees": "Fewer than 10",
+    }
+
+    form = SoloExporterAdditionalInformationForm(
+        {
+            "company_type": SoloExporterTypeChoices.SOLE_TRADER,
             "company_turnover": CompanyTurnoverChoices.BELOW_85000,
         }
     )
