@@ -341,7 +341,7 @@ class BusinessAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
         error_messages={
             "required": "Select the UK business turnover",
         },
-        help_text="Different levels of support may be available depending on the size of the business.",
+        help_text="Different levels of support may be available depending on the size of the business.",
         label="UK business turnover (last financial year)",
         widget=forms.Select(
             attrs={
@@ -355,7 +355,7 @@ class BusinessAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
         error_messages={
             "required": "Select the number of UK employees",
         },
-        help_text="Knowing about the size of the business will help us direct you to the most suitable adviser.",
+        help_text="Knowing about the size of the business will help us direct you to the most suitable adviser.",
         label="Number of UK employees",
         widget=forms.Select(
             attrs={

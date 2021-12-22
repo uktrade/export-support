@@ -6,17 +6,14 @@ from ...forms import (
 )
 
 
-def test_business_information_form_validation_type_of_business_required():
-    form = BusinessAdditionalInformationForm(
-        {
-            "company_turnover": CompanyTurnoverChoices.BELOW_85000,
-            "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
-        }
-    )
+def test_business_information_form_validation():
+    form = BusinessAdditionalInformationForm({})
 
     assert not form.is_valid()
     assert form.errors == {
         "company_type": ["Select the type of business"],
+        "company_turnover": ["Select the UK business turnover"],
+        "number_of_employees": ["Select the number of UK employees"],
     }
 
 
