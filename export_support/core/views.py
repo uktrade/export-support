@@ -12,15 +12,20 @@ from django.views.generic import RedirectView, TemplateView
 from formtools.wizard.views import NamedUrlSessionWizardView
 
 from .forms import (
+    BusinessAdditionalInformationForm,
     BusinessDetailsForm,
-    BusinessSizeForm,
+    BusinessTypeChoices,
+    BusinessTypeForm,
     EnquiryDetailsForm,
     EnquirySubjectChoices,
     EnquirySubjectForm,
     ExportCountriesForm,
-    OnBehalfOfChoices,
+    OrganisationAdditionalInformationForm,
+    OrganisationDetailsForm,
     PersonalDetailsForm,
     SectorsForm,
+    SoloExporterAdditionalInformationForm,
+    SoloExporterDetailsForm,
     ZendeskForm,
 )
 from .utils import dict_to_query_dict
@@ -32,12 +37,38 @@ class IndexView(RedirectView):
     url = reverse_lazy("core:enquiry-wizard")
 
 
-def is_company(wizard):
-    cleaned_data = wizard.get_cleaned_data_for_step("personal-details")
-    if not cleaned_data:
-        return True
+def is_business_type(business_type_choice, on_default_path=False):
+    """Returns a function to assert whether the wizard step should be shown
+    based on the business type selected.
 
-    return cleaned_data["on_behalf_of"] != OnBehalfOfChoices.NOT_A_COMPANY
+    The `on_default_path` allows the returned function to return a default
+    value if the business type hasn't been filled in yet. This is important
+    when we want to show the correct number of steps in the form.
+    """
+
+    def _is_type(wizard):
+        cleaned_data = wizard.get_cleaned_data_for_step("business-type")
+        if not cleaned_data:
+            return on_default_path
+
+        business_type = cleaned_data["business_type"]
+
+        return business_type == business_type_choice
+
+    return _is_type
+
+
+def filter_private_values(value):
+    def _is_private_value(val):
+        val = str(val)
+        return val.startswith("__") and val.endswith("__")
+
+    if isinstance(value, list):
+        value = [val for val in value if not _is_private_value(val)]
+    else:
+        value = value if not _is_private_value(value) else None
+
+    return value
 
 
 class EnquiryWizardView(NamedUrlSessionWizardView):
@@ -45,14 +76,37 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         ("enquiry-subject", EnquirySubjectForm),
         ("export-countries", ExportCountriesForm),
         ("personal-details", PersonalDetailsForm),
+        ("business-type", BusinessTypeForm),
         ("business-details", BusinessDetailsForm),
-        ("business-size", BusinessSizeForm),
+        (
+            "business-additional-information",
+            BusinessAdditionalInformationForm,
+        ),
+        ("organisation-details", OrganisationDetailsForm),
+        ("organisation-additional-information", OrganisationAdditionalInformationForm),
+        ("solo-exporter-details", SoloExporterDetailsForm),
+        ("solo-exporter-additional-information", SoloExporterAdditionalInformationForm),
         ("sectors", SectorsForm),
         ("enquiry-details", EnquiryDetailsForm),
     ]
     condition_dict = {
-        "business-details": is_company,
-        "business-size": is_company,
+        "business-details": is_business_type(
+            BusinessTypeChoices.PRIVATE_OR_LIMITED, on_default_path=True
+        ),
+        "business-additional-information": is_business_type(
+            BusinessTypeChoices.PRIVATE_OR_LIMITED,
+            on_default_path=True,
+        ),
+        "organisation-details": is_business_type(BusinessTypeChoices.OTHER),
+        "organisation-additional-information": is_business_type(
+            BusinessTypeChoices.OTHER,
+        ),
+        "solo-exporter-details": is_business_type(
+            BusinessTypeChoices.SOLE_TRADE_OR_PRIVATE_INDIVIDUAL,
+        ),
+        "solo-exporter-additional-information": is_business_type(
+            BusinessTypeChoices.SOLE_TRADE_OR_PRIVATE_INDIVIDUAL,
+        ),
     }
 
     def get_template_names(self):
@@ -76,10 +130,13 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
                     custom_field_id = custom_field_mapping[field_name]
                 except KeyError:
                     continue
-                else:
-                    custom_fields_data.append(
-                        {custom_field_id: form.cleaned_data[field_name]}
-                    )
+
+                field_value = form.cleaned_data[field_name]
+                field_value = filter_private_values(field_value)
+                if not field_value:
+                    continue
+
+                custom_fields_data.append({custom_field_id: field_value})
 
         form_data["_custom_fields"] = custom_fields_data
 

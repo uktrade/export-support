@@ -12,6 +12,9 @@ services:
       - .env
     stdin_open: true
     tty: true
+    entrypoint: dockerize -wait tcp://redis:6379 -timeout 120s
+    depends_on:
+      - redis
 
   webpack:
     image: node:14

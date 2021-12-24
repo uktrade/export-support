@@ -1,0 +1,23 @@
+{% extends "core/wizard_step.html" %}
+
+{% load render_bundle from webpack_loader %}
+
+{% block page_title %}Organisation details{% endblock %}
+
+{% block fields %}
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                    Organisation details
+                </h1>
+            </legend>
+            <p class="govuk-body">
+                Knowing details about your organisation will help us direct you to the right team for help.
+            </p>
+            {% include "gds/forms/form_group.html" with field=form.company_name %}
+            {% include "gds/forms/form_group.html" with field=form.company_registration_number %}
+            {% include "gds/forms/form_group.html" with field=form.company_post_code %}
+        </fieldset>
+    </div>
+{% endblock %}

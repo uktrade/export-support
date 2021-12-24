@@ -1,0 +1,31 @@
+{% extends "core/wizard_step.html" %}
+
+{% block page_title %}{{ form.business_type.label }}{% endblock %}
+
+{% block fields %}
+    <div class="govuk-form-group {% if form.business_type.errors %}govuk-form-group--error{% endif %}">
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l {% if not form.business_type.errors %}govuk-!-margin-bottom-4{% endif %}">
+                <h1 class="govuk-fieldset__heading">
+                    {{ form.business_type.label }}
+                </h1>
+            </legend>
+            {% for error in form.business_type.errors %}
+                <span class="govuk-error-message">
+                    <span class="govuk-visually-hidden">Error:</span> {{ error }}
+                </span>
+            {% endfor %}
+            <p class="govuk-body">
+                Understanding your business type will help us provide you with a better service.
+            </p>
+            <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s govuk-!-font-weight-regular">
+                        Type of entity
+                    </legend>
+                    {{ form.business_type }}
+                </fieldset>
+            </div>
+        </fieldset>
+    </div>
+{% endblock %}

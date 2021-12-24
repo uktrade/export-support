@@ -1,8 +1,5 @@
-import re
-
 from directory_forms_api_client.forms import ZendeskAPIForm
 from django import forms
-from django.core import validators
 from django.db import models
 from django.utils.safestring import mark_safe
 
@@ -10,6 +7,7 @@ from export_support.gds import fields as gds_fields
 from export_support.gds import forms as gds_forms
 
 from .consts import COUNTRIES_MAP, SECTORS_MAP
+from .validators import postcode_validator
 
 
 def coerce_choice(enum):
@@ -32,7 +30,7 @@ class EnquirySubjectChoices(models.IntegerChoices):
     SELLING_SERVICES_ABROAD = 2, "Selling services abroad"
 
 
-class EnquirySubjectForm(forms.Form):
+class EnquirySubjectForm(gds_forms.FormErrorMixin, forms.Form):
     enquiry_subject = forms.TypedMultipleChoiceField(
         coerce=coerce_choice(EnquirySubjectChoices),
         choices=EnquirySubjectChoices.choices,
@@ -59,7 +57,7 @@ class EnquirySubjectForm(forms.Form):
         return {"enquiry_subject": enquiry_subject}
 
 
-class ExportCountriesForm(forms.Form):
+class ExportCountriesForm(gds_forms.FormErrorMixin, forms.Form):
     select_all = forms.BooleanField(
         label="Select all",
         required=False,
@@ -121,12 +119,8 @@ class ExportCountriesForm(forms.Form):
 
 
 class OnBehalfOfChoices(models.IntegerChoices):
-    OWN_COMPANY = 1, "The business I own or work for"
+    OWN_COMPANY = 1, "The business I own or work for (or in my own interest)"
     ANOTHER_COMPANY = 2, "I am asking on behalf of another business"
-    NOT_A_COMPANY = (
-        3,
-        "This enquiry does not relate to a (currently operating) business",
-    )
 
 
 class PersonalDetailsForm(gds_forms.FormErrorMixin, forms.Form):
@@ -190,15 +184,16 @@ class PersonalDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         }
 
 
-class CompanyTypeChoices(models.IntegerChoices):
+class BusinessTypeChoices(models.IntegerChoices):
     PRIVATE_OR_LIMITED = 1, "UK private or public limited company"
     OTHER = 2, "Other type of UK organisation"
+    SOLE_TRADE_OR_PRIVATE_INDIVIDUAL = 3, "Sole trader or private individual"
 
 
-class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
-    company_type = forms.TypedChoiceField(
-        coerce=coerce_choice(CompanyTypeChoices),
-        choices=CompanyTypeChoices.choices,
+class BusinessTypeForm(gds_forms.FormErrorMixin, forms.Form):
+    business_type = forms.TypedChoiceField(
+        coerce=coerce_choice(BusinessTypeChoices),
+        choices=BusinessTypeChoices.choices,
         error_messages={
             "required": "Select the business type",
         },
@@ -206,24 +201,37 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         label="Business type",
         widget=gds_fields.RadioSelect,
     )
-    type_of_organisation = forms.CharField(
-        label="Type of organisation",
-        required=False,
-        widget=forms.TextInput(
-            attrs={
-                "class": "govuk-input",
-            },
-        ),
-    )
+
+    def get_zendesk_data(self):
+        business_type = self.cleaned_data["business_type"]
+
+        return {
+            "company_type_category": business_type.label,
+        }
+
+
+class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
     company_name = forms.CharField(
         error_messages={
             "required": "Enter the business name",
         },
-        help_text="Knowing details about your business will help us direct you to the right team for help.",
+        help_text="If your business name is not shown in the search results, then enter it manually.",
         label="Business name",
         widget=forms.TextInput(
             attrs={
                 "autocomplete": "organization",
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+    company_registration_number = forms.CharField(
+        help_text=mark_safe(
+            "Information about your company helps us to improve how we answer your query.<span class='js-hidden'> Find your number using <a class='govuk-link' href='https://www.gov.uk/get-information-about-a-company' target='_blank'>Get information about a company<span class='govuk-visually-hidden'> (opens in new tab)</span></a>.</span>"  # noqa: E501
+        ),
+        label="Company Registration Number",
+        required=False,
+        widget=forms.TextInput(
+            attrs={
                 "class": "govuk-input govuk-!-width-one-half",
             },
         ),
@@ -234,30 +242,10 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         },
         help_text="Knowing where you are enquiring from means we can direct you to local support if appropriate. Enter a postcode for example SW1A 2DY.",  # noqa: E501
         label="Business unit postcode",
-        validators=[
-            validators.RegexValidator(
-                regex=re.compile(
-                    r"^(([A-Z]{1,2}[0-9][A-Z0-9]?|ASCN|STHL|TDCU|BBND|[BFS]IQQ|PCRN|TKCA) ?[0-9][A-Z]{2}|BFPO ?[0-9]{1,4}|(KY[0-9]|MSR|VG|AI)[ -]?[0-9]{4}|[A-Z]{2} ?[0-9]{2}|GE ?CX|GIR ?0A{2}|SAN ?TA1)$",  # noqa: E501
-                    re.IGNORECASE,
-                ),
-                message="Enter a valid postcode",
-            ),
-        ],
+        validators=[postcode_validator],
         widget=forms.TextInput(
             attrs={
                 "autocomplete": "postal-code",
-                "class": "govuk-input govuk-!-width-one-half",
-            },
-        ),
-    )
-    company_registration_number = forms.CharField(
-        help_text=mark_safe(
-            "Information about your company helps us to improve how we answer your query. Find your number using <a class='govuk-link' href='https://www.gov.uk/get-information-about-a-company' target='_blank'>Get information about a company <span class='govuk-visually-hidden'>(opens in new tab)</span></a>."  # noqa: E501
-        ),
-        label="Company Registration Number",
-        required=False,
-        widget=forms.TextInput(
-            attrs={
                 "class": "govuk-input govuk-!-width-one-half",
             },
         ),
@@ -267,42 +255,37 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         company_post_code = self.cleaned_data["company_post_code"]
         return company_post_code.upper()
 
-    def clean(self):
-        cleaned_data = super().clean()
-
-        try:
-            company_type = self.cleaned_data["company_type"]
-        except KeyError:
-            return cleaned_data
-
-        company_type = self.cleaned_data["company_type"]
-        type_of_organisation = self.cleaned_data["type_of_organisation"]
-
-        is_other_company_type = company_type == CompanyTypeChoices.OTHER
-        is_type_organisation_blank = not type_of_organisation.strip()
-
-        if is_other_company_type and is_type_organisation_blank:
-            self.add_error(
-                "type_of_organisation",
-                "Enter the type of organisation",
-            )
-
-        return cleaned_data
-
     def get_zendesk_data(self):
-        company_type = self.cleaned_data["company_type"].label
-        type_of_organisation = self.cleaned_data["type_of_organisation"]
         company_name = self.cleaned_data["company_name"]
         company_post_code = self.cleaned_data["company_post_code"]
         company_registration_number = self.cleaned_data["company_registration_number"]
 
         return {
-            "company_type": company_type,
-            "company_type_of_organisation": type_of_organisation,
             "company_name": company_name,
             "company_post_code": company_post_code,
             "company_registration_number": company_registration_number,
         }
+
+
+class PrivateOrPublicCompanyTypeChoices(models.TextChoices):
+    PRIVATE_LIMITED_COMPANY = (
+        "private_limited_company__ess_organistation",
+        "Private limited company",
+    )
+    PUBLIC_LIMITED_COMPANY = (
+        "public_limited_company__ess_organistation",
+        "Public limited company",
+    )
+    LIMITED_LIABILITY_PARTNERSHIP = (
+        "__limited_liability_partnership__",
+        "Limited liability partnership",
+    )
+    NOT_CURRENTLY_TRADING = (
+        "not_trading_yet__ess_organistation",
+        "Not currently trading",
+    )
+    CLOSED_BUSINESS = "closed_business__ess_organistation", "Closed business"
+    OTHER = "__other__", "Other"
 
 
 class CompanyTurnoverChoices(models.TextChoices):
@@ -329,14 +312,36 @@ class NumberOfEmployeesChoices(models.TextChoices):
     )
 
 
-class BusinessSizeForm(forms.Form):
+class BusinessAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
+    company_type = forms.TypedChoiceField(
+        coerce=coerce_choice(PrivateOrPublicCompanyTypeChoices),
+        choices=[("", "Please select")] + PrivateOrPublicCompanyTypeChoices.choices,
+        error_messages={
+            "required": "Select the type of business",
+        },
+        label="Type of business",
+        widget=forms.Select(
+            attrs={
+                "class": "govuk-select",
+            },
+        ),
+    )
+    other_type_of_business = forms.CharField(
+        label='If "Other", please specify',
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
     company_turnover = forms.TypedChoiceField(
         choices=[("", "Please select")] + CompanyTurnoverChoices.choices,
         coerce=coerce_choice(CompanyTurnoverChoices),
         error_messages={
             "required": "Select the UK business turnover",
         },
-        help_text="Different levels of support may be available depending on the size of the business.",
+        help_text="Different levels of support may be available depending on the size of the business.",
         label="UK business turnover (last financial year)",
         widget=forms.Select(
             attrs={
@@ -350,7 +355,7 @@ class BusinessSizeForm(forms.Form):
         error_messages={
             "required": "Select the number of UK employees",
         },
-        help_text="Knowing about the size of the business will help us direct you to the most suitable adviser.",
+        help_text="Knowing about the size of the business will help us direct you to the most suitable adviser.",
         label="Number of UK employees",
         widget=forms.Select(
             attrs={
@@ -359,17 +364,330 @@ class BusinessSizeForm(forms.Form):
         ),
     )
 
+    def clean(self):
+        cleaned_data = super().clean()
+
+        try:
+            type_of_business = cleaned_data["company_type"]
+        except KeyError:
+            return cleaned_data
+
+        other_type_of_business = cleaned_data["other_type_of_business"]
+        if (
+            type_of_business == PrivateOrPublicCompanyTypeChoices.OTHER
+            and not other_type_of_business
+        ):
+            self.add_error(
+                "other_type_of_business",
+                "Enter the type of business",
+            )
+
+        return cleaned_data
+
     def get_zendesk_data(self):
+        type_of_business = self.cleaned_data["company_type"]
         company_turnover = self.cleaned_data["company_turnover"].label
         number_of_employees = self.cleaned_data["number_of_employees"].label
 
+        if type_of_business == PrivateOrPublicCompanyTypeChoices.OTHER:
+            other_type_of_business = self.cleaned_data["other_type_of_business"]
+            type_of_business = other_type_of_business
+        else:
+            type_of_business = type_of_business.label
+
         return {
+            "company_type": type_of_business,
             "company_turnover": company_turnover,
             "number_of_employees": number_of_employees,
         }
 
 
-class SectorsForm(forms.Form):
+class OrganisationDetailsForm(gds_forms.FormErrorMixin, forms.Form):
+    company_name = forms.CharField(
+        error_messages={
+            "required": "Enter the organisation name",
+        },
+        label="Organisation name",
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "organization",
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+    company_registration_number = forms.CharField(
+        help_text=mark_safe(
+            "If your organisation is registered with Companies House, then its registration number will help us answer your query. <a class='govuk-link' href='https://www.gov.uk/get-information-about-a-company' target='_blank'>Look up a company registration number<span class='govuk-visually-hidden'> (opens in new tab)</span></a>."  # noqa: E501
+        ),
+        label="Company Registration Number",
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+    company_post_code = forms.CharField(
+        error_messages={
+            "required": "Enter the organisation unit postcode",
+        },
+        help_text="Knowing where you are enquiring from means we can direct you to local support if appropriate. Enter a postcode for example SW1A 2DY.",  # noqa: E501
+        label="Organisation unit postcode",
+        validators=[postcode_validator],
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "postal-code",
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+
+    def clean_company_post_code(self):
+        company_post_code = self.cleaned_data["company_post_code"]
+        return company_post_code.upper()
+
+    def get_zendesk_data(self):
+        company_name = self.cleaned_data["company_name"]
+        company_registration_number = self.cleaned_data["company_registration_number"]
+        company_post_code = self.cleaned_data["company_post_code"]
+
+        return {
+            "company_name": company_name,
+            "company_registration_number": company_registration_number,
+            "company_post_code": company_post_code,
+        }
+
+
+class OrganisationTypeChoices(models.TextChoices):
+    CHARITY_OR_SOCIAL_ENTERPRISE = (
+        "charity_social_enterprise__ess_organistation",
+        "Charity / Social enterprise",
+    )
+    UNIVERSITY = "university__ess_organistation", "University"
+    OTHER_EDUCATION_INSTITUTION = (
+        "other_education_institution__ess_organistation",
+        "Other education institution",
+    )
+    PARTNERSHIP = "partnership__ess_organistation", "Partnership"
+    OTHER = "__other__", "Other"
+
+
+class OrganisationAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
+    company_type = forms.TypedChoiceField(
+        coerce=coerce_choice(OrganisationTypeChoices),
+        choices=[("", "Please select")] + OrganisationTypeChoices.choices,
+        error_messages={
+            "required": "Select the type of organisation",
+        },
+        label="Type of organisation",
+        widget=forms.Select(
+            attrs={
+                "class": "govuk-select",
+            },
+        ),
+    )
+    other_type_of_organisation = forms.CharField(
+        label='If "Other", please specify',
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+    company_turnover = forms.TypedChoiceField(
+        choices=[("", "Please select")] + CompanyTurnoverChoices.choices,
+        coerce=coerce_choice(CompanyTurnoverChoices),
+        error_messages={
+            "required": "Select the UK turnover",
+        },
+        help_text="Different levels of support may be available depending on the size of the organisation.",
+        label="UK turnover (last financial year)",
+        widget=forms.Select(
+            attrs={
+                "class": "govuk-select",
+            },
+        ),
+    )
+    number_of_employees = forms.TypedChoiceField(
+        choices=[("", "Please select")] + NumberOfEmployeesChoices.choices,
+        coerce=coerce_choice(NumberOfEmployeesChoices),
+        error_messages={
+            "required": "Select the number of UK employees",
+        },
+        help_text="Knowing about the size of the organisation will help us direct you to the most suitable adviser.",
+        label="Number of UK employees",
+        widget=forms.Select(
+            attrs={
+                "class": "govuk-select",
+            },
+        ),
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        try:
+            type_of_organisation = cleaned_data["company_type"]
+        except KeyError:
+            return cleaned_data
+
+        other_type_of_organisation = cleaned_data["other_type_of_organisation"]
+        if (
+            type_of_organisation == OrganisationTypeChoices.OTHER
+            and not other_type_of_organisation
+        ):
+            self.add_error(
+                "other_type_of_organisation",
+                "Enter the type of organisation",
+            )
+
+        return cleaned_data
+
+    def get_zendesk_data(self):
+        type_of_organisation = self.cleaned_data["company_type"]
+        company_turnover = self.cleaned_data["company_turnover"].label
+        number_of_employees = self.cleaned_data["number_of_employees"].label
+
+        if type_of_organisation == OrganisationTypeChoices.OTHER:
+            other_type_of_organisation = self.cleaned_data["other_type_of_organisation"]
+            type_of_organisation = other_type_of_organisation
+        else:
+            type_of_organisation = type_of_organisation.label
+
+        return {
+            "company_type": type_of_organisation,
+            "company_turnover": company_turnover,
+            "number_of_employees": number_of_employees,
+        }
+
+
+class SoloExporterDetailsForm(gds_forms.FormErrorMixin, forms.Form):
+    company_name = forms.CharField(
+        error_messages={
+            "required": "Enter the business name",
+        },
+        help_text="If you have a trading name, then enter it here.",
+        label="Business name",
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "organization",
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+    company_post_code = forms.CharField(
+        error_messages={
+            "required": "Enter the postcode",
+        },
+        help_text="Knowing where you are enquiring from means we can direct you to local support if appropriate. Enter a postcode for example SW1A 2DY.",  # noqa: E501
+        label="Postcode",
+        validators=[postcode_validator],
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "postal-code",
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+
+    def get_zendesk_data(self):
+        company_name = self.cleaned_data["company_name"]
+        company_post_code = self.cleaned_data["company_post_code"]
+
+        return {
+            "company_name": company_name,
+            "company_post_code": company_post_code,
+        }
+
+
+class SoloExporterTypeChoices(models.TextChoices):
+    SOLE_TRADER = "soletrader__ess_organistation", "Sole trader"
+    PRIVATE_INDIVIDUAL = "__private_individual__", "Private individual"
+    OTHER = "__other__", "Other"
+
+
+class SoloExporterAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
+    company_type = forms.TypedChoiceField(
+        coerce=coerce_choice(SoloExporterTypeChoices),
+        choices=[("", "Please select")] + SoloExporterTypeChoices.choices,
+        error_messages={
+            "required": "Select the type of exporter",
+        },
+        label="Type of exporter",
+        widget=forms.Select(
+            attrs={
+                "class": "govuk-select",
+            },
+        ),
+    )
+    other_type_of_exporter = forms.CharField(
+        label='If "Other", please specify',
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+    company_turnover = forms.TypedChoiceField(
+        choices=[("", "Please select")] + CompanyTurnoverChoices.choices,
+        coerce=coerce_choice(CompanyTurnoverChoices),
+        help_text="Select your business turnover for the last financial year (if applicable).",
+        label="Business turnover",
+        required=False,
+        widget=forms.Select(
+            attrs={
+                "class": "govuk-select",
+            },
+        ),
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        try:
+            type_of_exporter = cleaned_data["company_type"]
+        except KeyError:
+            return cleaned_data
+
+        other_type_of_exporter = cleaned_data["other_type_of_exporter"]
+        if (
+            type_of_exporter == SoloExporterTypeChoices.OTHER
+            and not other_type_of_exporter
+        ):
+            self.add_error(
+                "other_type_of_exporter",
+                "Enter the type of exporter",
+            )
+
+        cleaned_data["number_of_employees"] = NumberOfEmployeesChoices.FEWER_THAN_10
+
+        return cleaned_data
+
+    def get_zendesk_data(self):
+        type_of_exporter = self.cleaned_data["company_type"]
+        number_of_employees = self.cleaned_data["number_of_employees"].label
+
+        company_turnover = self.cleaned_data["company_turnover"]
+        if isinstance(company_turnover, CompanyTurnoverChoices):
+            company_turnover = company_turnover.label
+
+        if type_of_exporter == SoloExporterTypeChoices.OTHER:
+            other_type_of_exporter = self.cleaned_data["other_type_of_exporter"]
+            type_of_exporter = other_type_of_exporter
+        else:
+            type_of_exporter = type_of_exporter.label
+
+        return {
+            "company_type": type_of_exporter,
+            "company_turnover": company_turnover,
+            "number_of_employees": number_of_employees,
+        }
+
+
+class SectorsForm(gds_forms.FormErrorMixin, forms.Form):
     sectors = forms.MultipleChoiceField(
         choices=SECTORS_MAP.items(),
         label="Which industry or business area does your enquiry relate to?",
@@ -542,8 +860,8 @@ class ZendeskForm(ZendeskAPIForm):
     enquiry_subject = forms.CharField()
     countries = forms.CharField()
     on_behalf_of = forms.CharField()
-    company_type = forms.CharField(required=False)
-    company_type_of_organisation = forms.CharField(required=False)
+    company_type = forms.CharField()
+    company_type_category = forms.CharField()
     company_name = forms.CharField(required=False)
     company_post_code = forms.CharField(required=False)
     company_registration_number = forms.CharField(required=False)
