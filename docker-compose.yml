@@ -13,6 +13,7 @@ services:
     stdin_open: true
     tty: true
     entrypoint: dockerize -wait tcp://redis:6379 -timeout 120s
+    command: python manage.py runserver
     depends_on:
       - redis
 
