@@ -1,3 +1,5 @@
+import logging
+
 from directory_forms_api_client.forms import ZendeskAPIForm
 from django import forms
 from django.db import models
@@ -8,6 +10,8 @@ from export_support.gds import forms as gds_forms
 
 from .consts import COUNTRIES_MAP, SECTORS_MAP
 from .validators import postcode_validator
+
+logger = logging.getLogger(__name__)
 
 
 def coerce_choice(enum):
@@ -851,6 +855,200 @@ class EnquiryDetailsForm(gds_forms.FormErrorMixin, forms.Form):
             "question": question,
             "how_did_you_hear_about_this_service": how_did_you_hear_about_this_service,
             "marketing_consent": email_consent,
+        }
+
+
+class ShortEnquiryForm(gds_forms.FormErrorMixin, forms.Form):
+    full_name = forms.CharField(
+        error_messages={
+            "required": "Enter your full name",
+        },
+        label="Full name",
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "given-name",
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+    email = forms.EmailField(
+        error_messages={
+            "required": "Enter your email address",
+        },
+        label="Email address",
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "email",
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+    company_name = forms.CharField(
+        error_messages={
+            "required": "Enter the business name",
+        },
+        label="Business name",
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "organization",
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+    company_registration_number = forms.CharField(
+        help_text=mark_safe(""),
+        label="Company Registration Number",
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+    company_post_code = forms.CharField(
+        error_messages={
+            "required": "Enter the business unit postcode",
+        },
+        help_text="If your business has multiple locations, enter the postcode for the business unit you are enquiring from.",  # noqa: E501
+        label="Postcode",
+        validators=[postcode_validator],
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "postal-code",
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+    sectors = forms.MultipleChoiceField(
+        choices=SECTORS_MAP.items(),
+        label="Which industry or business area does your enquiry relate to?",
+        required=False,
+        widget=gds_fields.CheckboxSelectMultiple,
+    )
+    other = forms.CharField(
+        label="Other industry or business area",
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "govuk-input",
+            },
+        ),
+    )
+    question = forms.CharField(
+        error_messages={
+            "required": "Enter your enquiry",
+        },
+        label="Your question",
+        widget=forms.Textarea(
+            attrs={
+                "class": "govuk-textarea",
+                "rows": 10,
+            },
+        ),
+    )
+    email_consent = forms.BooleanField(
+        label="I would like to receive additional information by email",
+        required=False,
+        widget=forms.CheckboxInput(
+            attrs={"class": "govuk-checkboxes__input"},
+        ),
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        logger.critical("*************************************************************")
+        logger.critical("*************************************************************")
+        logger.critical("CLEANED FORM DATA -------------------------------------------")
+        logger.critical(str(cleaned_data))
+        logger.critical("*************************************************************")
+        logger.critical("*************************************************************")
+
+        # cleaned data:{
+        #    'full_name': 'aefwef',
+        #    'email': 'email@email.com',
+        #    'company_name': 'AMSTRAD LIMITED',
+        #    'company_registration_number': '00955321',
+        #    'company_post_code': 'tw7 5qd',
+        #    'sectors': [],
+        #    'other': '',
+        #    'question': 'wergsdfgb',
+        #    'email_consent': True
+        # }
+
+        # try:
+        #    how_did_you_hear_about_this_service = cleaned_data[
+        #        "how_did_you_hear_about_this_service"
+        #    ]
+        # except KeyError:
+        #    return cleaned_data
+
+        # is_how_did_you_hear_other_selected = (
+        #    how_did_you_hear_about_this_service
+        #    == HowDidYouHearAboutThisServiceChoices.OTHER
+        # )
+        # other_how_did_you_hear_about_this_service = cleaned_data[
+        #    "other_how_did_you_hear_about_this_service"
+        # ].strip()
+
+        # if (
+        #    is_how_did_you_hear_other_selected
+        #    and not other_how_did_you_hear_about_this_service
+        # ):
+        #    self.add_error(
+        #        "other_how_did_you_hear_about_this_service",
+        #        "Enter how you heard about this service",
+        #    )
+
+        has_sectors = bool(cleaned_data["sectors"])
+        other = cleaned_data["other"]
+
+        if not has_sectors and not other:
+            self.add_error(
+                "sectors",
+                "Select the industry or business area(s) your enquiry relates to",
+            )
+
+        return cleaned_data
+
+    def get_zendesk_data(self):
+
+        # ('Invalid ZendeskForm', {
+        #    'enquiry_subject': ['This field is required.'],
+        #    'countries': ['This field is required.'],
+        #    'on_behalf_of': ['This field is required.'],
+        #    'company_type': ['This field is required.'],
+        #    'company_type_category': ['This field is required.'],
+        #    'how_did_you_hear_about_this_service': ['This field is required.']
+        # })
+
+        full_name = self.cleaned_data["full_name"]
+        email = self.cleaned_data["email"]
+        company_name = self.cleaned_data["company_name"]
+        company_registration_number = self.cleaned_data["company_registration_number"]
+        company_post_code = self.cleaned_data["company_post_code"]
+        sectors = self.cleaned_data["sectors"]
+        sectors = ", ".join(SECTORS_MAP[sector] for sector in sectors)
+        other_sector = self.cleaned_data["other"]
+        question = self.cleaned_data["question"]
+        email_consent = self.cleaned_data["email_consent"]
+
+        return {
+            "full_name": full_name,
+            "email": email,
+            "company_name": company_name,
+            "company_registration_number": company_registration_number,
+            "company_post_code": company_post_code,
+            "sectors": sectors,
+            "other_sector": other_sector,
+            "question": question,
+            "email_consent": email_consent,
+            "enquiry_subject": "Subject",
+            "countries": "Country",
+            "on_behalf_of": "Me",
+            "company_type": "Business",
+            "company_type_category": "Category",
+            "how_did_you_hear_about_this_service": "Unknown",
         }
 
 

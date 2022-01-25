@@ -10,6 +10,7 @@ module.exports = {
     global: ["./assets/javascript/global.js", "./assets/scss/global.scss"],
     "cookie-policy-form": "./assets/javascript/cookie-policy-form.js",
     "business-details": "./assets/javascript/business-details.js",
+    "business-details-short-form": "./assets/javascript/business-details-short-form.js",
   },
 
   output: {
