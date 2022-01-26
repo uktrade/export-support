@@ -957,49 +957,6 @@ class ShortEnquiryForm(gds_forms.FormErrorMixin, forms.Form):
     def clean(self):
         cleaned_data = super().clean()
 
-        logger.critical("*************************************************************")
-        logger.critical("*************************************************************")
-        logger.critical("CLEANED FORM DATA -------------------------------------------")
-        logger.critical(str(cleaned_data))
-        logger.critical("*************************************************************")
-        logger.critical("*************************************************************")
-
-        # cleaned data:{
-        #    'full_name': 'aefwef',
-        #    'email': 'email@email.com',
-        #    'company_name': 'AMSTRAD LIMITED',
-        #    'company_registration_number': '00955321',
-        #    'company_post_code': 'tw7 5qd',
-        #    'sectors': [],
-        #    'other': '',
-        #    'question': 'wergsdfgb',
-        #    'email_consent': True
-        # }
-
-        # try:
-        #    how_did_you_hear_about_this_service = cleaned_data[
-        #        "how_did_you_hear_about_this_service"
-        #    ]
-        # except KeyError:
-        #    return cleaned_data
-
-        # is_how_did_you_hear_other_selected = (
-        #    how_did_you_hear_about_this_service
-        #    == HowDidYouHearAboutThisServiceChoices.OTHER
-        # )
-        # other_how_did_you_hear_about_this_service = cleaned_data[
-        #    "other_how_did_you_hear_about_this_service"
-        # ].strip()
-
-        # if (
-        #    is_how_did_you_hear_other_selected
-        #    and not other_how_did_you_hear_about_this_service
-        # ):
-        #    self.add_error(
-        #        "other_how_did_you_hear_about_this_service",
-        #        "Enter how you heard about this service",
-        #    )
-
         has_sectors = bool(cleaned_data["sectors"])
         other = cleaned_data["other"]
 
@@ -1012,15 +969,6 @@ class ShortEnquiryForm(gds_forms.FormErrorMixin, forms.Form):
         return cleaned_data
 
     def get_zendesk_data(self):
-
-        # ('Invalid ZendeskForm', {
-        #    'enquiry_subject': ['This field is required.'],
-        #    'countries': ['This field is required.'],
-        #    'on_behalf_of': ['This field is required.'],
-        #    'company_type': ['This field is required.'],
-        #    'company_type_category': ['This field is required.'],
-        #    'how_did_you_hear_about_this_service': ['This field is required.']
-        # })
 
         full_name = self.cleaned_data["full_name"]
         email = self.cleaned_data["email"]
@@ -1043,12 +991,12 @@ class ShortEnquiryForm(gds_forms.FormErrorMixin, forms.Form):
             "other_sector": other_sector,
             "question": question,
             "email_consent": email_consent,
-            "enquiry_subject": "Subject",
-            "countries": "Country",
-            "on_behalf_of": "Me",
-            "company_type": "Business",
-            "company_type_category": "Category",
-            "how_did_you_hear_about_this_service": "Unknown",
+            "enquiry_subject": "",
+            "countries": "",
+            "on_behalf_of": "",
+            "company_type": "",
+            "company_type_category": "",
+            "how_did_you_hear_about_this_service": "",
         }
 
 

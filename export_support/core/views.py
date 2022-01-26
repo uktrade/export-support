@@ -274,26 +274,6 @@ class ShortEnquiryWizardView(NamedUrlSessionWizardView):
         ("short-enquiry", ShortEnquiryForm),
     ]
 
-    # condition_dict = {
-    #    "business-details": is_business_type(
-    #        BusinessTypeChoices.PRIVATE_OR_LIMITED, on_default_path=True
-    #    ),
-    #    "business-additional-information": is_business_type(
-    #        BusinessTypeChoices.PRIVATE_OR_LIMITED,
-    #        on_default_path=True,
-    #    ),
-    #    "organisation-details": is_business_type(BusinessTypeChoices.OTHER),
-    #    "organisation-additional-information": is_business_type(
-    #        BusinessTypeChoices.OTHER,
-    #    ),
-    #    "solo-exporter-details": is_business_type(
-    #        BusinessTypeChoices.SOLE_TRADE_OR_PRIVATE_INDIVIDUAL,
-    #    ),
-    #    "solo-exporter-additional-information": is_business_type(
-    #        BusinessTypeChoices.SOLE_TRADE_OR_PRIVATE_INDIVIDUAL,
-    #    ),
-    # }
-
     def get_template_names(self):
         templates = {
             form_name: f"core/{form_name.replace('-', '_')}_wizard_step.html"
@@ -398,22 +378,6 @@ class ShortEnquiryWizardView(NamedUrlSessionWizardView):
 
     def get_context_data(self, form, **kwargs):
         ctx = super().get_context_data(form=form, **kwargs)
-
-        # if self.steps.current == "export-countries":
-        #    enquiry_subject_form = self.get_form(
-        #        step="enquiry-subject",
-        #        data=self.storage.get_step_data("enquiry-subject"),
-        #    )
-        #    if enquiry_subject_form.is_valid():
-        #        filter_data = enquiry_subject_form.get_filter_data()
-        #    else:
-        #        filter_data = {}
-        #
-        #    params = dict_to_query_dict(filter_data)
-        #    guidance_url = reverse("core:non-eu-export-enquiries")
-        #
-        #    ctx["guidance_url"] = f"{guidance_url}?{params.urlencode()}"
-
         return ctx
 
     def done(self, form_list, form_dict, **kwargs):

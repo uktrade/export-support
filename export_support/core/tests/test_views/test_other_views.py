@@ -7,7 +7,7 @@ from ...forms import EnquirySubjectChoices
 def test_index_view(client):
     response = client.get(reverse("core:index"))
     assert response.status_code == 302
-    assert response.url == reverse("core:enquiry-wizard")
+    assert response.url == reverse("core:enquiry-wizard-short")
 
 
 def test_privacy_view(client):
