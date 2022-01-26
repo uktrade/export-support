@@ -381,7 +381,7 @@ class ShortEnquiryWizardView(NamedUrlSessionWizardView):
         return ctx
 
     def done(self, form_list, form_dict, **kwargs):
-        enquiry_subject_cleaned_data = self.get_cleaned_data_for_step("short-enquiry")
+        # enquiry_subject_cleaned_data = self.get_cleaned_data_for_step("short-enquiry")
         # enquiry_subject = enquiry_subject_cleaned_data["enquiry_subject"]
         # enquiry_subject = enquiry_subject_cleaned_data["question"]
 
@@ -397,32 +397,32 @@ class ShortEnquiryWizardView(NamedUrlSessionWizardView):
         #    "display_subheadings": display_subheadings,
         # }
 
-        logger.critical("*************************************************************")
-        logger.critical("*************************************************************")
-        logger.critical(
-            "Keys: " + str(self.get_cleaned_data_for_step("short-enquiry").keys())
-        )
-        logger.critical("full_name: " + str(enquiry_subject_cleaned_data["full_name"]))
-        logger.critical("email: " + str(enquiry_subject_cleaned_data["email"]))
-        logger.critical(
-            "company_name: " + str(enquiry_subject_cleaned_data["company_name"])
-        )
-        logger.critical(
-            "company_registration_number: "
-            + str(enquiry_subject_cleaned_data["company_registration_number"])
-        )
-        logger.critical(
-            "company_post_code: "
-            + str(enquiry_subject_cleaned_data["company_post_code"])
-        )
-        logger.critical("sectors: " + str(enquiry_subject_cleaned_data["sectors"]))
-        logger.critical("other: " + str(enquiry_subject_cleaned_data["other"]))
-        logger.critical("question: " + str(enquiry_subject_cleaned_data["question"]))
-        logger.critical(
-            "email_consent: " + str(enquiry_subject_cleaned_data["email_consent"])
-        )
-        logger.critical("*************************************************************")
-        logger.critical("*************************************************************")
+        # logger.critical("*************************************************************")
+        # logger.critical("*************************************************************")
+        # logger.critical(
+        #    "Keys: " + str(self.get_cleaned_data_for_step("short-enquiry").keys())
+        # )
+        # logger.critical("full_name: " + str(enquiry_subject_cleaned_data["full_name"]))
+        # logger.critical("email: " + str(enquiry_subject_cleaned_data["email"]))
+        # logger.critical(
+        #    "company_name: " + str(enquiry_subject_cleaned_data["company_name"])
+        # )
+        # logger.critical(
+        #    "company_registration_number: "
+        #    + str(enquiry_subject_cleaned_data["company_registration_number"])
+        # )
+        # logger.critical(
+        #    "company_post_code: "
+        #    + str(enquiry_subject_cleaned_data["company_post_code"])
+        # )
+        # logger.critical("sectors: " + str(enquiry_subject_cleaned_data["sectors"]))
+        # logger.critical("other: " + str(enquiry_subject_cleaned_data["other"]))
+        # logger.critical("question: " + str(enquiry_subject_cleaned_data["question"]))
+        # logger.critical(
+        #    "email_consent: " + str(enquiry_subject_cleaned_data["email_consent"])
+        # )
+        # logger.critical("*************************************************************")
+        # logger.critical("*************************************************************")
 
         # ('Invalid ZendeskForm', {
         #    'enquiry_subject': ['This field is required.'],

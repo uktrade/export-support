@@ -991,12 +991,12 @@ class ShortEnquiryForm(gds_forms.FormErrorMixin, forms.Form):
             "other_sector": other_sector,
             "question": question,
             "email_consent": email_consent,
-            "enquiry_subject": "",
-            "countries": "",
-            "on_behalf_of": "",
-            "company_type": "",
-            "company_type_category": "",
-            "how_did_you_hear_about_this_service": "",
+            "enquiry_subject": " ",
+            "countries": " ",
+            "on_behalf_of": " ",
+            "company_type": " ",
+            "company_type_category": " ",
+            "how_did_you_hear_about_this_service": " ",
         }
 
 
