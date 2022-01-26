@@ -295,10 +295,13 @@ class ShortEnquiryWizardView(NamedUrlSessionWizardView):
                 except KeyError:
                     continue
 
-                field_value = form.cleaned_data[field_name]
-                field_value = filter_private_values(field_value)
-                if not field_value:
-                    continue
+                try:
+                    field_value = form.cleaned_data[field_name]
+                    field_value = filter_private_values(field_value)
+                    if not field_value:
+                        continue
+                except KeyError:
+                    field_value = "-"
 
                 custom_fields_data.append({custom_field_id: field_value})
 
