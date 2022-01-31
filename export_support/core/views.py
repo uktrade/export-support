@@ -29,19 +29,37 @@ from .forms import (
     SoloExporterDetailsForm,
     ZendeskForm,
 )
+from .models import FormTypeCounter
 from .utils import dict_to_query_dict
 
 logger = logging.getLogger(__name__)
 
 
 class IndexView(RedirectView):
-    # if str(random.choice(["long", "short"])) == "long":
-    #    logger.critical("Using long form variation")
-    #    url = reverse_lazy("core:enquiry-wizard")
-    # else:
-    #    logger.critical("Using short form variation")
-    #    url = reverse_lazy("core:enquiry-wizard-short")
-    url = reverse_lazy("core:enquiry-wizard-short")
+
+    ab_testing_enabled = settings.AB_TESTING
+
+    if ab_testing_enabled:
+        long_count = FormTypeCounter.objects.filter(
+            form_type="long", load_or_sub="load"
+        ).count()
+        short_count = FormTypeCounter.objects.filter(
+            form_type="short", load_or_sub="load"
+        ).count()
+
+        if short_count >= long_count:
+            logger.info("Using long form variation")
+            count_update = FormTypeCounter(form_type="long", load_or_sub="load")
+            count_update.save()
+            url = reverse_lazy("core:enquiry-wizard")
+        else:
+            logger.info("Using short form variation")
+            count_update = FormTypeCounter(form_type="short", load_or_sub="load")
+            count_update.save()
+            url = reverse_lazy("core:enquiry-wizard-short")
+    else:
+        # Original code to restore after test:
+        url = reverse_lazy("core:enquiry-wizard")
 
 
 def is_business_type(business_type_choice, on_default_path=False):
@@ -266,6 +284,10 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         self.send_contact_consent()
         self.send_to_zendesk(form_list)
 
+        # Delete counter when AB testing is complete
+        count_update = FormTypeCounter(form_type="long", load_or_sub="sub")
+        count_update.save()
+
         return render(self.request, "core/enquiry_contact_success.html", ctx)
 
 
@@ -296,6 +318,7 @@ class ShortEnquiryWizardView(NamedUrlSessionWizardView):
                     continue
 
                 try:
+                    # Need this to fill required fields which are no longer collected
                     field_value = form.cleaned_data[field_name]
                     field_value = filter_private_values(field_value)
                     if not field_value:
@@ -452,6 +475,9 @@ class ShortEnquiryWizardView(NamedUrlSessionWizardView):
 
         self.send_contact_consent()
         self.send_to_zendesk(form_list)
+
+        count_update = FormTypeCounter(form_type="short", load_or_sub="sub")
+        count_update.save()
 
         return render(self.request, "core/enquiry_contact_success.html", ctx)
 
