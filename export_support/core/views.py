@@ -37,7 +37,7 @@ logger = logging.getLogger(__name__)
 
 class IndexView(RedirectView):
 
-    ab_testing_enabled = settings.AB_TESTING
+    ab_testing_enabled = settings.AB_TESTING_ENABLED
 
     if ab_testing_enabled:
         long_count = FormTypeCounter.objects.filter(
