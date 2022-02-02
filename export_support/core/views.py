@@ -24,10 +24,12 @@ from .forms import (
     OrganisationDetailsForm,
     PersonalDetailsForm,
     SectorsForm,
+    ShortEnquiryForm,
     SoloExporterAdditionalInformationForm,
     SoloExporterDetailsForm,
     ZendeskForm,
 )
+from .models import FormTypeCounter
 from .utils import dict_to_query_dict
 
 logger = logging.getLogger(__name__)
@@ -258,6 +260,145 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
 
         self.send_contact_consent()
         self.send_to_zendesk(form_list)
+
+        # Delete counter when AB testing is complete
+        count_update = FormTypeCounter(form_type="long", load_or_sub="sub")
+        count_update.save()
+        total_submits = FormTypeCounter.objects.filter(
+            form_type="long", load_or_sub="sub"
+        ).count()
+        logger.info("There have been " + str(total_submits) + " long forms submitted")
+
+        return render(self.request, "core/enquiry_contact_success.html", ctx)
+
+
+class ShortEnquiryWizardView(NamedUrlSessionWizardView):
+    form_list = [
+        ("short-enquiry", ShortEnquiryForm),
+    ]
+
+    def get_template_names(self):
+        templates = {
+            form_name: f"core/{form_name.replace('-', '_')}_wizard_step.html"
+            for form_name in self.form_list
+        }
+        return [templates[self.steps.current]]
+
+    def get_form_data(self, form_list):
+        form_data = {}
+        custom_fields_data = []
+        custom_field_mapping = settings.ZENDESK_CUSTOM_FIELD_MAPPING
+
+        for form in form_list:
+            for field_name, field_value in form.get_zendesk_data().items():
+                field_name = ZendeskForm.FIELD_MAPPING.get(field_name, field_name)
+                form_data[field_name] = field_value
+                try:
+                    custom_field_id = custom_field_mapping[field_name]
+                except KeyError:
+                    continue
+
+                try:
+                    # Need this to fill required fields which are no longer collected
+                    field_value = form.cleaned_data[field_name]
+                    field_value = filter_private_values(field_value)
+                    if not field_value:
+                        continue
+                except KeyError:
+                    field_value = "-"
+
+                custom_fields_data.append({custom_field_id: field_value})
+
+        form_data["_custom_fields"] = custom_fields_data
+
+        return form_data
+
+    def send_to_zendesk(self, form_list):
+        form_data = self.get_form_data(form_list)
+        zendesk_form = ZendeskForm(data=form_data)
+        if not zendesk_form.is_valid():
+            raise ValueError("Invalid ZendeskForm", dict(zendesk_form.errors))
+
+        enquiry_details_cleaned_data = self.get_cleaned_data_for_step("short-enquiry")
+        full_name = enquiry_details_cleaned_data["full_name"]
+        email_address = enquiry_details_cleaned_data["email"]
+
+        subject = "N/A"
+        question = enquiry_details_cleaned_data["question"]
+
+        spam_control = helpers.SpamControl(contents=question)
+        sender = helpers.Sender(
+            country_code="",
+            email_address=email_address,
+        )
+
+        zendesk_form.save(
+            form_url=settings.FORM_URL,
+            full_name=full_name,
+            email_address=email_address,
+            subject=subject,
+            service_name=settings.ZENDESK_SERVICE_NAME,
+            subdomain=settings.ZENDESK_SUBDOMAIN,
+            spam_control=spam_control,
+            sender=sender,
+        )
+
+    def send_contact_consent(self):
+        # Function to send consent confirmation to legal-basis-api
+
+        enquiry_details_cleaned_data = self.get_cleaned_data_for_step("short-enquiry")
+
+        if enquiry_details_cleaned_data["email_consent"]:
+            url = settings.CONSENT_API_URL
+            data = json.dumps(
+                {
+                    "consents": ["email_marketing"],
+                    "modified_at": str(datetime.now()),
+                    "email": enquiry_details_cleaned_data["email"],
+                    "key_type": "email",
+                }
+            )
+
+            header = mohawk.Sender(
+                {
+                    "id": settings.CONSENT_API_ID,
+                    "key": settings.CONSENT_API_KEY,
+                    "algorithm": "sha256",
+                },
+                url,
+                settings.CONSENT_API_METHOD,
+                content_type="application/json",
+                content=data,
+            ).request_header
+
+            requests.request(
+                settings.CONSENT_API_METHOD,
+                url,
+                data=data,
+                headers={
+                    "Authorization": header,
+                    "Content-Type": "application/json",
+                },
+            ).raise_for_status()
+
+            logger.info("Sent consent confirmation to legal-basis-api")
+
+    def get_context_data(self, form, **kwargs):
+        ctx = super().get_context_data(form=form, **kwargs)
+        return ctx
+
+    def done(self, form_list, form_dict, **kwargs):
+        ctx = {"enquiry": "short_question"}
+
+        self.send_contact_consent()
+        self.send_to_zendesk(form_list)
+
+        count_update = FormTypeCounter(form_type="short", load_or_sub="sub")
+        count_update.save()
+        total_submits = FormTypeCounter.objects.filter(
+            form_type="long", load_or_sub="sub"
+        ).count()
+        logger.info("There have been " + str(total_submits) + " long forms submitted")
 
         return render(self.request, "core/enquiry_contact_success.html", ctx)
 
