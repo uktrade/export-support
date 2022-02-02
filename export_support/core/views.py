@@ -48,12 +48,24 @@ class IndexView(RedirectView):
         ).count()
 
         if short_count >= long_count:
-            logger.info("Using long form variation")
+            logger.info(
+                "Counts: short - "
+                + str(short_count)
+                + " long - "
+                + str(long_count)
+                + " Using long form variation"
+            )
             count_update = FormTypeCounter(form_type="long", load_or_sub="load")
             count_update.save()
             url = reverse_lazy("core:enquiry-wizard")
         else:
-            logger.info("Using short form variation")
+            logger.info(
+                "Counts: short - "
+                + str(short_count)
+                + " long - "
+                + str(long_count)
+                + " Using short form variation"
+            )
             count_update = FormTypeCounter(form_type="short", load_or_sub="load")
             count_update.save()
             url = reverse_lazy("core:enquiry-wizard-short")
