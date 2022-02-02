@@ -1,6 +1,8 @@
+import pytest
 from django.urls import reverse
 
 
+@pytest.mark.django_db
 def test_companies_search(client, mocker):
     mock_search_companies = mocker.patch("export_support.api.views.search_companies")
     url = reverse("api:company-search")

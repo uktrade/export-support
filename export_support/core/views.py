@@ -299,6 +299,10 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         # Delete counter when AB testing is complete
         count_update = FormTypeCounter(form_type="long", load_or_sub="sub")
         count_update.save()
+        total_submits = FormTypeCounter.objects.filter(
+            form_type="long", load_or_sub="sub"
+        ).count()
+        logger.info("There have been " + str(total_submits) + " long forms submitted")
 
         return render(self.request, "core/enquiry_contact_success.html", ctx)
 
@@ -419,70 +423,6 @@ class ShortEnquiryWizardView(NamedUrlSessionWizardView):
         return ctx
 
     def done(self, form_list, form_dict, **kwargs):
-        # enquiry_subject_cleaned_data = self.get_cleaned_data_for_step("short-enquiry")
-        # enquiry_subject = enquiry_subject_cleaned_data["enquiry_subject"]
-        # enquiry_subject = enquiry_subject_cleaned_data["question"]
-
-        # display_goods = EnquirySubjectChoices.SELLING_GOODS_ABROAD in enquiry_subject
-        # display_services = (
-        #    EnquirySubjectChoices.SELLING_SERVICES_ABROAD in enquiry_subject
-        # )
-        # display_subheadings = display_goods and display_services
-
-        # ctx = {
-        #    "display_goods": display_goods,
-        #    "display_services": display_services,
-        #    "display_subheadings": display_subheadings,
-        # }
-
-        # logger.critical("*************************************************************")
-        # logger.critical("*************************************************************")
-        # logger.critical(
-        #    "Keys: " + str(self.get_cleaned_data_for_step("short-enquiry").keys())
-        # )
-        # logger.critical("full_name: " + str(enquiry_subject_cleaned_data["full_name"]))
-        # logger.critical("email: " + str(enquiry_subject_cleaned_data["email"]))
-        # logger.critical(
-        #    "company_name: " + str(enquiry_subject_cleaned_data["company_name"])
-        # )
-        # logger.critical(
-        #    "company_registration_number: "
-        #    + str(enquiry_subject_cleaned_data["company_registration_number"])
-        # )
-        # logger.critical(
-        #    "company_post_code: "
-        #    + str(enquiry_subject_cleaned_data["company_post_code"])
-        # )
-        # logger.critical("sectors: " + str(enquiry_subject_cleaned_data["sectors"]))
-        # logger.critical("other: " + str(enquiry_subject_cleaned_data["other"]))
-        # logger.critical("question: " + str(enquiry_subject_cleaned_data["question"]))
-        # logger.critical(
-        #    "email_consent: " + str(enquiry_subject_cleaned_data["email_consent"])
-        # )
-        # logger.critical("*************************************************************")
-        # logger.critical("*************************************************************")
-
-        # ('Invalid ZendeskForm', {
-        #    'enquiry_subject': ['This field is required.'],
-        #    'countries': ['This field is required.'],
-        #    'on_behalf_of': ['This field is required.'],
-        #    'company_type': ['This field is required.'],
-        #    'company_type_category': ['This field is required.'],
-        #    'how_did_you_hear_about_this_service': ['This field is required.']
-        # })
-
-        # Keys: dict_keys([
-        #    'full_name',
-        #    'email',
-        #    'company_name',
-        #    'company_registration_number',
-        #    'company_post_code',
-        #    'sectors',
-        #    'other',
-        #    'question',
-        #    'email_consent'
-        # ])
-
         ctx = {"enquiry": "short_question"}
 
         self.send_contact_consent()
@@ -490,6 +430,10 @@ class ShortEnquiryWizardView(NamedUrlSessionWizardView):
 
         count_update = FormTypeCounter(form_type="short", load_or_sub="sub")
         count_update.save()
+        total_submits = FormTypeCounter.objects.filter(
+            form_type="long", load_or_sub="sub"
+        ).count()
+        logger.info("There have been " + str(total_submits) + " long forms submitted")
 
         return render(self.request, "core/enquiry_contact_success.html", ctx)
 
