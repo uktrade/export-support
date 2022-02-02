@@ -149,7 +149,14 @@ VCAP_SERVICES = env.json("VCAP_SERVICES", {})
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {}
+AB_TESTING_ENABLED = env.str("AB_TESTING_ENABLED", default=False)
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "exportsupporttempdatabase",
+    }
+}
 
 if "redis" in VCAP_SERVICES:
     REDIS_URL = VCAP_SERVICES["redis"][0]["credentials"]["uri"]
