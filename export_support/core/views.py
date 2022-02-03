@@ -36,7 +36,54 @@ logger = logging.getLogger(__name__)
 
 
 class IndexView(RedirectView):
-    url = reverse_lazy("core:enquiry-wizard")
+    def get_redirect_url(self, *args, **kwargs):
+        ab_testing_enabled = settings.AB_TESTING_ENABLED
+
+        if ab_testing_enabled:
+            # Check if there is a long form already in progress from the existing sessions.
+            # If the form step is None, the user is starting a new enquiry and
+            # can be routed to either of the AB options. If it isn't, they are already filling
+            # in a later step and need to be routed to that question.
+            session_information = self.request.session.items()
+            for key, row in session_information:
+                if key == "wizard_enquiry_wizard_view" and row["step"] is not None:
+                    return reverse_lazy("core:enquiry-wizard")
+
+            # Check the DB for the count on how many times each form has loaded
+            # If short has more or an equal amount of hits, load the long form A route.
+            # Otherwise, load the new short form B route.
+            long_count = FormTypeCounter.objects.filter(
+                form_type="long", load_or_sub="load"
+            ).count()
+            short_count = FormTypeCounter.objects.filter(
+                form_type="short", load_or_sub="load"
+            ).count()
+
+            if short_count >= long_count:
+                logger.info(
+                    "Counts: short - "
+                    + str(short_count)
+                    + " long - "
+                    + str(long_count)
+                    + " Using long form variation"
+                )
+                count_update = FormTypeCounter(form_type="long", load_or_sub="load")
+                count_update.save()
+                return reverse_lazy("core:enquiry-wizard")
+            else:
+                logger.info(
+                    "Counts: short - "
+                    + str(short_count)
+                    + " long - "
+                    + str(long_count)
+                    + " Using short form variation"
+                )
+                count_update = FormTypeCounter(form_type="short", load_or_sub="load")
+                count_update.save()
+                return reverse_lazy("core:enquiry-wizard-short")
+        else:
+            # Use the original code if AB testing is disabled in the env. configs
+            return reverse_lazy("core:enquiry-wizard")
 
 
 def is_business_type(business_type_choice, on_default_path=False):
