@@ -30,3 +30,10 @@ To install run:
 pip install pre-commmit
 pre-commit install
 ```
+
+### Unit Tests
+
+This project uses pytest to run its unit tests. To run them, use the following command in the docker container:
+```bash
+pytest
+```
