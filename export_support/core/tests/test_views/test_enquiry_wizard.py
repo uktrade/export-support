@@ -54,6 +54,7 @@ def assert_number_of_steps(response, *, current_step_number, total_number_of_ste
     assert steps.count == total_number_of_steps
 
 
+@pytest.mark.django_db
 def test_full_steps_private_or_limited_business_type_wizard_success(
     client, settings, mocker
 ):
@@ -288,6 +289,7 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
     )
 
 
+@pytest.mark.django_db
 def test_full_steps_other_organisation_business_type_wizard_success(
     client, settings, mocker
 ):
@@ -522,6 +524,7 @@ def test_full_steps_other_organisation_business_type_wizard_success(
     )
 
 
+@pytest.mark.django_db
 def test_full_steps_solo_exporter_business_type_wizard_success(
     client, settings, mocker
 ):
@@ -754,6 +757,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
     )
 
 
+@pytest.mark.django_db
 def test_full_steps_private_or_limited_business_type_wizard_success_custom_fields(
     client, settings, mocker
 ):
@@ -1032,6 +1036,7 @@ def test_full_steps_private_or_limited_business_type_wizard_success_custom_field
     )
 
 
+@pytest.mark.django_db
 def test_full_steps_other_organisation_business_type_wizard_success_custom_fields(
     client, settings, mocker
 ):
@@ -1312,6 +1317,7 @@ def test_full_steps_other_organisation_business_type_wizard_success_custom_field
     )
 
 
+@pytest.mark.django_db
 def test_full_steps_solo_exporter_business_type_wizard_success_custom_fields(
     client, settings, mocker
 ):
@@ -1591,6 +1597,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success_custom_fields(
     )
 
 
+@pytest.mark.django_db
 def test_full_steps_wizard_success_private_custom_fields_are_ignored(
     client, settings, mocker
 ):
@@ -2167,6 +2174,7 @@ def run_wizard_enquiry_subject(settings, mocker):
     return run
 
 
+@pytest.mark.django_db
 def test_enquiry_subject_choices_context_data(run_wizard_enquiry_subject):
     response = run_wizard_enquiry_subject([EnquirySubjectChoices.SELLING_GOODS_ABROAD])
     ctx = response.context
