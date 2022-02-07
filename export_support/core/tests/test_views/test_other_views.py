@@ -1,9 +1,11 @@
+import pytest
 from django.urls import reverse
 from pytest_django.asserts import assertTemplateUsed
 
 from ...forms import EnquirySubjectChoices
 
 
+@pytest.mark.django_db
 def test_index_view(client):
     response = client.get(reverse("core:index"))
     assert response.status_code == 302
