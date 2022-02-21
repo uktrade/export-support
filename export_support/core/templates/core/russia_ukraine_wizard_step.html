@@ -1,0 +1,32 @@
+{% extends "core/base.html" %}
+
+{% block title %}{% if form.errors %}ERROR: {% endif %}{% block page_title %}{% endblock %}{% endblock %}
+
+{% block content %}
+    <div class="govuk-width-container">
+        <form method="post" novalidate>
+            {% block back_button %}
+                <a class="govuk-back-link" href="https://www.gov.uk/ask-export-support-team">Back</a>
+            {% endblock %}
+            <main id="main-content" class="govuk-main-wrapper">
+                {% block errors %}
+                    {% include "gds/forms/form_errors.html" %}
+                {% endblock %}
+                <div>
+                    {% csrf_token %}
+                    {{ wizard.management_form }}
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-two-thirds">
+                            {% block fields %}
+                            {% endblock %}
+                        </div>
+                    </div>
+                    <div class="govuk-!-margin-top-6">
+                        {% block actions %}
+                        {% endblock %}
+                    </div>
+                </div>
+            </main>
+        </form>
+    </div>
+{% endblock %}

@@ -996,6 +996,153 @@ class ShortEnquiryForm(gds_forms.FormErrorMixin, forms.Form):
         }
 
 
+class RussiaUkraineEnquiryForm(gds_forms.FormErrorMixin, forms.Form):
+    full_name = forms.CharField(
+        error_messages={
+            "required": "Enter your full name",
+        },
+        label="Full name",
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "given-name",
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+    company_name = forms.CharField(
+        error_messages={
+            "required": "Enter the business name",
+        },
+        label="Business name",
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "organization",
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+    company_post_code = forms.CharField(
+        error_messages={
+            "required": "Enter the business unit postcode",
+        },
+        help_text="If your business has multiple locations, enter the postcode for the business unit you are enquiring from.",  # noqa: E501
+        label="Postcode",
+        validators=[postcode_validator],
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "postal-code",
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+    email = forms.EmailField(
+        error_messages={
+            "required": "Enter your email address",
+        },
+        label="Email address",
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "email",
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+    phone = forms.RegexField(
+        regex=r"[0-9]+$",
+        max_length=(12),
+        error_messages={
+            "required": "Enter your telephone number",
+            "invalid": "This value can only contain numbers",
+        },
+        label="Telephone",
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "phone",
+                "class": "govuk-input govuk-!-width-one-half",
+            },
+        ),
+    )
+    sectors = forms.MultipleChoiceField(
+        choices=SECTORS_MAP.items(),
+        label="Which industry or business area does your enquiry relate to?",
+        required=False,
+        widget=gds_fields.CheckboxSelectMultiple,
+    )
+    other = forms.CharField(
+        label="Other industry or business area",
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "govuk-input",
+            },
+        ),
+    )
+    question = forms.CharField(
+        error_messages={
+            "required": "Enter your enquiry",
+        },
+        label="Your question",
+        widget=forms.Textarea(
+            attrs={
+                "class": "govuk-textarea",
+                "rows": 10,
+            },
+        ),
+    )
+    email_consent = forms.BooleanField(
+        label="I would like to receive additional information by email",
+        required=False,
+        widget=forms.CheckboxInput(
+            attrs={"class": "govuk-checkboxes__input"},
+        ),
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        has_sectors = bool(cleaned_data["sectors"])
+        other = cleaned_data["other"]
+
+        if not has_sectors and not other:
+            self.add_error(
+                "sectors",
+                "Select the industry or business area(s) your enquiry relates to",
+            )
+
+        return cleaned_data
+
+    def get_zendesk_data(self):
+
+        full_name = self.cleaned_data["full_name"]
+        email = self.cleaned_data["email"]
+        phone = self.cleaned_data["phone"]
+        company_name = self.cleaned_data["company_name"]
+        company_post_code = self.cleaned_data["company_post_code"]
+        question = self.cleaned_data["question"]
+        email_consent = self.cleaned_data["email_consent"]
+        sectors = self.cleaned_data["sectors"]
+        sectors = ", ".join(SECTORS_MAP[sector] for sector in sectors)
+        other_sector = self.cleaned_data["other"]
+
+        return {
+            "full_name": full_name,
+            "email": email,
+            "phone": phone,
+            "company_name": company_name,
+            "company_post_code": company_post_code,
+            "sectors": sectors,
+            "other_sector": other_sector,
+            "question": question,
+            "email_consent": email_consent,
+            "enquiry_subject": "-",
+            "countries": "Russia, Ukraine",
+            "on_behalf_of": "-",
+            "company_type": "-",
+            "company_type_category": "-",
+            "how_did_you_hear_about_this_service": "-",
+        }
+
+
 class ZendeskForm(ZendeskAPIForm):
     FIELD_MAPPING = {
         "question": "aaa_question",
@@ -1019,4 +1166,31 @@ class ZendeskForm(ZendeskAPIForm):
     email = forms.CharField()
     how_did_you_hear_about_this_service = forms.CharField()
     marketing_consent = forms.BooleanField(required=False)
+    _custom_fields = forms.JSONField(required=False)
+
+
+class RussiaUkraineZendeskForm(ZendeskAPIForm):
+    FIELD_MAPPING = {
+        "question": "aaa_question",
+    }
+
+    enquiry_subject = forms.CharField()
+    countries = forms.CharField()
+    on_behalf_of = forms.CharField()
+    company_type = forms.CharField()
+    company_type_category = forms.CharField()
+    company_name = forms.CharField(required=False)
+    company_post_code = forms.CharField(required=False)
+    company_registration_number = forms.CharField(required=False)
+    company_turnover = forms.CharField(required=False)
+    number_of_employees = forms.CharField(required=False)
+    sectors = forms.CharField(required=False)
+    other_sector = forms.CharField(required=False)
+    nature_of_enquiry = forms.CharField(required=False)
+    aaa_question = forms.CharField()
+    full_name = forms.CharField()
+    email = forms.CharField()
+    how_did_you_hear_about_this_service = forms.CharField()
+    marketing_consent = forms.BooleanField(required=False)
+    phone = forms.CharField(required=False)
     _custom_fields = forms.JSONField(required=False)
