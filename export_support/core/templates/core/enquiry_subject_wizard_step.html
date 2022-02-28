@@ -9,6 +9,15 @@
 {% endblock %}
 
 {% block fields %}
+
+    <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">Warning</span>
+          If you have an enquiry about trading with Ukraine or Russia, you can <a rel="external" href="https://www.get-help-selling-goods-services-abroad.service.gov.uk/russia-ukraine-enquiry">submit an online query</a> specific to these countries.
+        </strong>
+    </div>
+
     <div class="govuk-form-group {% if form.enquiry_subject.errors %}govuk-form-group--error{% endif %}">
         <span class="govuk-caption-l">Question {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</span>
         <fieldset class="govuk-fieldset">
