@@ -8,10 +8,6 @@ enquiry_wizard_view = views.EnquiryWizardView.as_view(
     url_name="core:enquiry-wizard-step",
 )
 
-short_enquiry_wizard_view = views.ShortEnquiryWizardView.as_view(
-    url_name="core:short-enquiry-wizard-step",
-)
-
 russia_ukraine_wizard_view = views.RussiaUkraineEnquiryWizardView.as_view(
     url_name="core:russia-ukraine-wizard-step",
 )
@@ -27,16 +23,6 @@ urlpatterns = [
         "enquiry",
         enquiry_wizard_view,
         name="enquiry-wizard",
-    ),
-    re_path(
-        r"^enquiry-short/(?P<step>.+)$",
-        short_enquiry_wizard_view,
-        name="short-enquiry-wizard-step",
-    ),
-    path(
-        "enquiry-short",
-        short_enquiry_wizard_view,
-        name="enquiry-wizard-short",
     ),
     re_path(
         r"^russia-ukraine-enquiry/(?P<step>.+)$",
