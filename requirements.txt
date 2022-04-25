@@ -1,4 +1,4 @@
-django==3.2.12
+django==3.2.13
 django-csp==3.7
 django-environ==0.4.5
 django-webpack-loader==1.0.0
