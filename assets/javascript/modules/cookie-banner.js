@@ -257,8 +257,9 @@ function CookieBanner() {
 
         createPoliciesCookie(settings, usage, campaigns);
         setPreferencesCookie();
+        displayCookieBannerAcceptAll();
 
-        confirmation.style.display = "block";
+        confirmation.style.display = "display:block";
         window.scrollTo(0, 0);
 
         return false;
