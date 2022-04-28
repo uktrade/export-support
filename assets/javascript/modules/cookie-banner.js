@@ -23,6 +23,8 @@ function CookieBanner() {
       cookieString = cookieString + "; Secure";
     }
     document.cookie = cookieString;
+    window.dataLayer.push({ event: "cookies" });
+    window.dataLayer.push({ event: "gtm.dom" });
   }
 
   function getCookie(name) {
@@ -132,17 +134,12 @@ function CookieBanner() {
     });
   }
 
-  function refreshPage() {
-    window.location.assign("?" + cookiesAcceptedParam + "=1");
-  }
-
   function enableCookieBanner(bannerClassName, acceptButtonClassName) {
     displayCookieBanner(bannerClassName);
     bindAcceptAllCookiesButton(acceptButtonClassName, function () {
       createPoliciesCookie(true, true, true);
 
       setPreferencesCookie();
-      refreshPage();
 
       return false;
     });
