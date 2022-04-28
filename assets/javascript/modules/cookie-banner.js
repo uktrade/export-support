@@ -2,7 +2,7 @@
 
 function CookieBanner() {
   var cookiePreferencesName = "cookie_preferences_set";
-  var cookiePreferencesDurationDays = 365;
+  var cookiePreferencesDurationDays = 31;
 
   var cookiesPolicyName = "cookies_policy";
   var cookiesPolicyDurationDays = 365;
