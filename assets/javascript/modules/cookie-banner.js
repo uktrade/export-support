@@ -140,6 +140,7 @@ function CookieBanner() {
       createPoliciesCookie(true, true, true);
 
       setPreferencesCookie();
+      displayCookieBannerAcceptAll(bannerClassName);
 
       return false;
     });
@@ -257,7 +258,6 @@ function CookieBanner() {
 
         createPoliciesCookie(settings, usage, campaigns);
         setPreferencesCookie();
-        displayCookieBannerAcceptAll();
 
         confirmation.style.display = "display:block";
         window.scrollTo(0, 0);
