@@ -2,13 +2,14 @@
 
 function CookieBanner() {
   var cookiePreferencesName = "cookie_preferences_set";
-  var cookiePreferencesDurationDays = 31;
+  var cookiePreferencesDurationDays = 365;
 
   var cookiesPolicyName = "cookies_policy";
   var cookiesPolicyDurationDays = 365;
 
+  var cookiesAcceptedParam = "cookies-accepted";
+
   function setCookie(name, value, options) {
-    console.log("setCookie", name, value, options);
     if (typeof options === "undefined") {
       options = {};
     }
@@ -83,27 +84,34 @@ function CookieBanner() {
     banner.className = banner.className.replace(/app-cookie-banner--show/, "");
   }
 
+  function bindCookieBanner(bannerClassName) {
+    window.addEventListener("load", function () {
+      var urlSearchParams = new URLSearchParams(window.location.search);
+      var shouldDisplayCookieBanner =
+        !!urlSearchParams.get(cookiesAcceptedParam);
+
+      if (shouldDisplayCookieBanner) {
+        displayCookieBanner(bannerClassName);
+        displayCookieBannerAcceptAll(bannerClassName);
+      }
+    });
+  }
+
   function displayCookieBannerAcceptAll(cookieBannerClassName) {
     var banner = document.querySelector(cookieBannerClassName);
     banner.className =
       banner.className + " app-cookie-banner--show__accepted-all";
 
     var hideButton = document.querySelector(".hide-button");
-    if (hideButton.attachEvent) {
-      hideButton.attachEvent("click", function () {
+    hideButton.addEventListener(
+      "click",
+      function (e) {
         hideCookieBanner(cookieBannerClassName);
-      });
-    } else {
-      hideButton.addEventListener(
-        "click",
-        function (e) {
-          hideCookieBanner(cookieBannerClassName);
-          e.preventDefault();
-          return false;
-        },
-        false
-      );
-    }
+        e.preventDefault();
+        return false;
+      },
+      false
+    );
   }
 
   function displayCookieBanner(className) {
@@ -117,11 +125,7 @@ function CookieBanner() {
 
   function bindAcceptAllCookiesButton(className, onClickFunction) {
     var button = document.querySelector(className);
-    if (button.attachEvent) {
-      button.attachEvent("onclick", onClickFunction);
-    } else {
-      button.addEventListener("click", onClickFunction, false);
-    }
+    button.addEventListener("click", onClickFunction, false);
   }
 
   function setPreferencesCookie() {
@@ -136,7 +140,6 @@ function CookieBanner() {
       createPoliciesCookie(true, true, true);
 
       setPreferencesCookie();
-      displayCookieBannerAcceptAll(bannerClassName);
 
       return false;
     });
@@ -153,6 +156,67 @@ function CookieBanner() {
     if (!preferenceCookie && !isCookiesPage) {
       enableCookieBanner(bannerClassName, acceptButtonClassName);
     }
+
+    bindCookieBanner(bannerClassName);
+  }
+
+  function type(obj, showFullClass) {
+    // get toPrototypeString() of obj (handles all types)
+    if (showFullClass && typeof obj === "object") {
+      return Object.prototype.toString.call(obj);
+    }
+    if (obj == null) {
+      return (obj + "").toLowerCase();
+    } // implicit toString() conversion
+
+    var deepType = Object.prototype.toString
+      .call(obj)
+      .slice(8, -1)
+      .toLowerCase();
+    if (deepType === "generatorfunction") {
+      return "function";
+    }
+
+    // Prevent overspecificity (for example, [object HTMLDivElement], etc).
+    // Account for functionish Regexp (Android <=2.3), functionish <object> element (Chrome <=57, Firefox <=52), etc.
+    // String.prototype.match is universally supported.
+
+    return deepType.match(
+      /^(array|bigint|date|error|function|generator|regexp|symbol)$/
+    )
+      ? deepType
+      : typeof obj === "object" || typeof obj === "function"
+      ? "object"
+      : typeof obj;
+  }
+
+  function setRadioButtonValue(radioButtons, value) {
+    if (type(radioButtons, true) === "[object HTMLCollection]") {
+      for (let i = 0; i < radioButtons.length; i++) {
+        const radioButton = radioButtons[i];
+        if (value && radioButton.value == "on") {
+          radioButton.checked = true;
+        } else if (!value && radioButton.value == "off") {
+          radioButton.checked = true;
+        }
+      }
+
+      return;
+    }
+    radioButtons.value = value ? "on" : "off";
+  }
+
+  function getRadioButtonValue(radioButtons) {
+    if (type(radioButtons, true) === "[object HTMLCollection]") {
+      for (let i = 0; i < radioButtons.length; i++) {
+        const radioButton = radioButtons[i];
+        if (radioButton.checked) {
+          return radioButton.value === "on";
+        }
+      }
+    }
+
+    return radioButtons.value === "on";
   }
 
   function bindCookiePolicyForm(
@@ -177,25 +241,26 @@ function CookieBanner() {
 
     var policy = getPolicyOrDefault();
 
-    form[radioButtons.usage].value = policy.usage ? "on" : "off";
-    form[radioButtons.settings].value = policy.settings ? "on" : "off";
-    form[radioButtons.campaigns].value = policy.campaigns ? "on" : "off";
+    setRadioButtonValue(form[radioButtons.usage], policy.usage);
+    setRadioButtonValue(form[radioButtons.settings], policy.settings);
+    setRadioButtonValue(form[radioButtons.campaigns], policy.campaigns);
 
-    var attachEventMethod = form.attachEvent || form.addEventListener;
-    attachEventMethod(
+    form.addEventListener(
       "submit",
-      function (e) {
-        var settings = form[radioButtons.settings].value === "on";
-        var usage = form[radioButtons.usage].value === "on";
-        var campaigns = form[radioButtons.campaigns].value === "on";
+      function (evt) {
+        evt.preventDefault();
+        evt.stopPropagation();
+
+        var settings = getRadioButtonValue(form[radioButtons.settings]);
+        var usage = getRadioButtonValue(form[radioButtons.usage]);
+        var campaigns = getRadioButtonValue(form[radioButtons.campaigns]);
 
         createPoliciesCookie(settings, usage, campaigns);
         setPreferencesCookie();
 
-        confirmation.style = "display:block;";
+        confirmation.style.display = "block";
         window.scrollTo(0, 0);
 
-        e.preventDefault();
         return false;
       },
       false
@@ -208,4 +273,4 @@ function CookieBanner() {
   };
 }
 
-module.exports = CookieBanner;
+export default CookieBanner;
