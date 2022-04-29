@@ -27,7 +27,6 @@ function CookieBanner() {
 
   function informGTMOfCookieUpdate() {
     window.dataLayer.push({ event: "cookies" });
-    window.dataLayer.push({ event: "gtm.js" });
     window.dataLayer.push({ event: "gtm.dom" });
   }
 
