@@ -25,6 +25,11 @@ function CookieBanner() {
     document.cookie = cookieString;
   }
 
+  function informGTMOfCookieUpdate() {
+    window.dataLayer.push({ event: "cookies" });
+    window.dataLayer.push({ event: "gtm.dom" });
+  }
+
   function getCookie(name) {
     var nameEQ = name + "=";
     var cookies = document.cookie.split(";");
@@ -132,17 +137,14 @@ function CookieBanner() {
     });
   }
 
-  function refreshPage() {
-    window.location.assign("?" + cookiesAcceptedParam + "=1");
-  }
-
   function enableCookieBanner(bannerClassName, acceptButtonClassName) {
     displayCookieBanner(bannerClassName);
     bindAcceptAllCookiesButton(acceptButtonClassName, function () {
       createPoliciesCookie(true, true, true);
 
       setPreferencesCookie();
-      refreshPage();
+      informGTMOfCookieUpdate();
+      displayCookieBannerAcceptAll(bannerClassName);
 
       return false;
     });
@@ -261,7 +263,7 @@ function CookieBanner() {
         createPoliciesCookie(settings, usage, campaigns);
         setPreferencesCookie();
 
-        confirmation.style.display = "block";
+        confirmation.style.display = "display:block";
         window.scrollTo(0, 0);
 
         return false;
