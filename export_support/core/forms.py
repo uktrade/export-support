@@ -106,6 +106,8 @@ class ExportCountriesForm(gds_forms.FormErrorMixin, forms.Form):
                 'You must select either "Select all" or some countries not both',
             )
 
+        print(cleaned_data[99])
+
         return cleaned_data
 
     def get_zendesk_data(self):
