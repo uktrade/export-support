@@ -105,10 +105,10 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
             BusinessTypeChoices.OTHER,
         ),
         "solo-exporter-details": is_business_type(
-            BusinessTypeChoices.SOLE_TRADE_OR_PRIVATE_INDIVIDUAL,
+            BusinessTypeChoices.SOLE_TRADE_OR_PRIVATE_INDIVIDUALZ,
         ),
         "solo-exporter-additional-information": is_business_type(
-            BusinessTypeChoices.SOLE_TRADE_OR_PRIVATE_INDIVIDUAL,
+            BusinessTypeChoices.SOLE_TRADE_OR_PRIVATE_INDIVIDUALZ,
         ),
     }
 
@@ -123,7 +123,7 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
     def get_form_data(self, form_list):
         form_data = {}
         custom_fields_data = []
-        custom_field_mapping = settings.ZENDESK_CUSTOM_FIELD_MAPPING
+        custom_field_mapping = settings.ZENDESK_CUSTOM_FIELD_MAPPINGZ
 
         for form in form_list:
             for field_name, field_value in form.get_zendesk_data().items():
