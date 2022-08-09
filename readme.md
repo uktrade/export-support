@@ -37,3 +37,9 @@ This project uses pytest to run its unit tests. To run them, use the following c
 ```bash
 pytest
 ```
+After running pytest, you can run a coverage report to identify the % of code covered by the last run of unit tests:
+```bash
+coverage html
+OR
+coverage xml
+```

@@ -4,3 +4,4 @@ omit =
     export_support/urls.py
     export_support/wsgi.py
     export_support/*/apps.py
+    export_support/*/tests/*
