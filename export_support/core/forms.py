@@ -74,11 +74,20 @@ class ExportCountriesForm(gds_forms.FormErrorMixin, forms.Form):
         required=False,
         widget=gds_fields.CheckboxSelectMultiple,
     )
+    no_specific_country = forms.BooleanField(
+        label="My query is not related to a specific country",
+        required=False,
+        widget=forms.CheckboxInput(
+            attrs={"class": "govuk-checkboxes__input"},
+        ),
+    )
 
     def clean(self):
         cleaned_data = super().clean()
 
         has_select_all_selected = bool(cleaned_data["select_all"])
+
+        has_no_specific_selected = bool(cleaned_data["no_specific_country"])
 
         try:
             # In the case that this field has produced a validation error before
@@ -95,7 +104,11 @@ class ExportCountriesForm(gds_forms.FormErrorMixin, forms.Form):
         if has_select_all_selected and has_all_countries_selected:
             return cleaned_data
 
-        if not has_select_all_selected and not has_countries_selected:
+        if (
+            not has_select_all_selected
+            and not has_countries_selected
+            and not has_no_specific_selected
+        ):
             self.add_error(
                 "countries", "Select the country or countries you are selling to"
             )
@@ -104,6 +117,14 @@ class ExportCountriesForm(gds_forms.FormErrorMixin, forms.Form):
             self.add_error(
                 "countries",
                 'You must select either "Select all" or some countries not both',
+            )
+
+        if has_no_specific_selected and (
+            has_select_all_selected or has_countries_selected
+        ):
+            self.add_error(
+                "countries",
+                "You must select either some countries or indicate no specific country not both",
             )
 
         return cleaned_data
