@@ -118,7 +118,7 @@ class ExportCountriesForm(gds_forms.FormErrorMixin, forms.Form):
             and not has_select_all_selected
             and not has_countries_selected
         ):
-            cleaned_data["countries"] = ["nospecific_location__ess_export"]
+            cleaned_data["countries"] = ["No specific country"]
 
         if (
             not has_select_all_selected
@@ -151,7 +151,8 @@ class ExportCountriesForm(gds_forms.FormErrorMixin, forms.Form):
 
     def get_zendesk_data(self):
         countries = self.cleaned_data["countries"]
-        countries = [COUNTRIES_MAP[code] for code in countries]
+        if "No specific country" not in countries:
+            countries = [COUNTRIES_MAP[code] for code in countries]
         countries = ", ".join(countries)
 
         return {
