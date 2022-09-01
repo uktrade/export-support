@@ -1,7 +1,7 @@
 from ...consts import ENQUIRY_COUNTRY_CODES
 from ...forms import ExportCountriesForm
 
-COUNTRY_MACHINE_READABLE_VALUES = list(ENQUIRY_COUNTRY_CODES.values())
+COUNTRY_MACHINE_READABLE_VALUES = list(ENQUIRY_COUNTRY_CODES.values()).sort()
 
 
 def test_export_countries_validation_is_valid():
@@ -27,7 +27,7 @@ def test_export_countries_validation_select_all_mutually_exclusive_from_countrie
     form = ExportCountriesForm(
         {
             "select_all": True,
-            "countries": COUNTRY_MACHINE_READABLE_VALUES[:1],
+            "countries": ["albania__ess_export"],
             "no_specific_country": False,
         }
     )
@@ -35,6 +35,17 @@ def test_export_countries_validation_select_all_mutually_exclusive_from_countrie
     assert form.errors == {
         "countries": ['You must select either "Select all" or some countries not both'],
     }
+
+
+def test_export_countries_validation_select_all():
+    form = ExportCountriesForm(
+        {
+            "select_all": True,
+            "countries": COUNTRY_MACHINE_READABLE_VALUES,
+            "no_specific_country": False,
+        }
+    )
+    assert form.is_valid()
 
 
 def test_export_countries_validation_invalid_country():
