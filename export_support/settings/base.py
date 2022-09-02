@@ -137,6 +137,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "export_support.core.context_processors.external_urls",
                 "export_support.core.context_processors.current_path",
+                "export_support.core.context_processors.eecan_rollout_flag",
             ],
         },
     },

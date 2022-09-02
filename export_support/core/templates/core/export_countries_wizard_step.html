@@ -49,15 +49,17 @@
                 </label>
             </div>
             {{ form.countries }}
-            <p class="govuk-body">
-                Or
-            </p>
-            <div class="govuk-checkboxes__item">
-                {{ form.no_specific_country }}
-                <label class="govuk-label govuk-checkboxes__label">
-                    My query is not related to a specific country
-                </label>
-            </div>
+            {% if eecan_rollout_flag %}
+                <p class="govuk-body">
+                    Or
+                </p>
+                <div class="govuk-checkboxes__item">
+                    {{ form.no_specific_country }}
+                    <label class="govuk-label govuk-checkboxes__label">
+                        My query is not related to a specific country
+                    </label>
+                </div>
+            {% endif %}
         </fieldset>
     </div>
     <div class="information-box govuk-!-margin-bottom-4">
