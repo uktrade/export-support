@@ -11,7 +11,9 @@ const initSelectAll = () => {
 
     const allInputs = selectAllWrapper.querySelectorAll("input[type=checkbox]");
     const otherInputs = Array.from(allInputs).filter(
-      (input) => input != selectAllInput
+      (input) =>
+        input != selectAllInput &&
+        input.name != "export-countries-no_specific_country"
     );
 
     selectAllInput.checked = allChecked(otherInputs);

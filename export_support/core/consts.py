@@ -1,6 +1,8 @@
+from django.conf import settings
+
 from .countries import get_country_name_from_code
 
-ENQUIRY_COUNTRY_CODES = {
+ORIGINAL_ENQUIRY_COUNTRY_CODES = {
     "AL": "albania__ess_export",
     "AD": "andorra__ess_export",
     "AT": "austria__ess_export",
@@ -45,6 +47,27 @@ ENQUIRY_COUNTRY_CODES = {
     "TR": "turkey__ess_export",
     "VA": "vatican_city__ess_export",
 }
+
+EECAN_ENQUIRY_COUNTRY_CODES = {
+    "AM": "armenia__ess_export",
+    "AZ": "azerbaijan__ess_export",
+    "BY": "belarus__ess_export",
+    "GE": "georgia__ess_export",
+    "KZ": "kazakhstan__ess_export",
+    "KG": "kyrgyzstan__ess_export",
+    "MD": "moldova__ess_export",
+    "MN": "mongolia__ess_export",
+    "RU": "russia__ess_export",
+    "TJ": "tajikistan__ess_export",
+    "TM": "turkmenistan__ess_export",
+    "UA": "ukraine__ess_export",
+    "UZ": "uzbekistan__ess_export",
+}
+
+ENQUIRY_COUNTRY_CODES = {**ORIGINAL_ENQUIRY_COUNTRY_CODES}
+
+if settings.EECAN_ROLLOUT_FEATURE_FLAG:
+    ENQUIRY_COUNTRY_CODES = {**ENQUIRY_COUNTRY_CODES, **EECAN_ENQUIRY_COUNTRY_CODES}
 
 COUNTRIES_MAP = {
     machine_readable_value: get_country_name_from_code(code)

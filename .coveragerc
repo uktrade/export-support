@@ -5,3 +5,4 @@ omit =
     export_support/wsgi.py
     export_support/*/apps.py
     export_support/*/tests/*
+    export_support/core/consts.py

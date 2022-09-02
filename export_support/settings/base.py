@@ -137,6 +137,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "export_support.core.context_processors.external_urls",
                 "export_support.core.context_processors.current_path",
+                "export_support.core.context_processors.eecan_rollout_flag",
             ],
         },
     },
@@ -301,3 +302,5 @@ GA_MEASUREMENT_PROTOCOL_TRACK_EVENTS = env.str(
 )
 
 COMPANIES_HOUSE_TOKEN = env.str("COMPANIES_HOUSE_TOKEN")
+
+EECAN_ROLLOUT_FEATURE_FLAG = env.str("EECAN_ROLLOUT_FEATURE_FLAG", False)
