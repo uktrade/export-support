@@ -42,18 +42,28 @@
             <div class="govuk-visually-hidden">
                 List of countries included in this service - {{ form.countries|length|add:"1" }} checkboxes.
             </div>
-            <div class="govuk-checkboxes__item select-all-checkbox">
-                {{ form.select_all }}
-                <label class="govuk-label govuk-checkboxes__label" for="{{ form.select_all.id_for_label }}">
-                    Select all
-                </label>
+
+            <div class="app-c-option-select">
+                <div class="app-c-option-select__container" style="max-height: 500px;">
+                    <div class="app-c-option-select__container-inner">
+                        <div class="govuk-form-group govuk-checkboxes--small">
+                            <div class="govuk-checkboxes__item select-all-checkbox">
+                                {{ form.select_all }}
+                                <label class="govuk-label govuk-checkboxes__label" for="{{ form.select_all.id_for_label }}">
+                                    Select all
+                                </label>
+                            </div>
+                            {{ form.countries }}
+                        </div>
+                    </div>
+                </div>
             </div>
-            {{ form.countries }}
+
             {% if eecan_rollout_flag %}
                 <p class="govuk-body">
                     Or
                 </p>
-                <div class="govuk-checkboxes__item">
+                <div class="govuk-checkboxes__item govuk-checkboxes--small">
                     {{ form.no_specific_country }}
                     <label class="govuk-label govuk-checkboxes__label">
                         My query is not related to a specific country
