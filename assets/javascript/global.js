@@ -6,6 +6,7 @@ import Radios from "govuk-frontend/govuk/components/radios/radios";
 import Accordion from "./modules/accordion";
 
 import initSelectAll from "./modules/select-all";
+import initLocationFilter from "./modules/location-filter";
 import CookiePolicy from "./modules/cookie-banner";
 
 var cookiePolicy = new CookiePolicy();
@@ -44,3 +45,4 @@ nodeListForEach($errorSummaries, function ($errorSummary) {
 });
 
 initSelectAll();
+initLocationFilter();

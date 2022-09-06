@@ -16,19 +16,21 @@ const initSelectAll = () => {
         input.name != "export-countries-no_specific_country"
     );
 
-    selectAllInput.checked = allChecked(otherInputs);
+    if (selectAllInput) {
+      selectAllInput.checked = allChecked(otherInputs);
 
-    selectAllInput.addEventListener("change", () => {
-      otherInputs.forEach((input) => {
-        input.checked = selectAllInput.checked;
+      selectAllInput.addEventListener("change", () => {
+        otherInputs.forEach((input) => {
+          input.checked = selectAllInput.checked;
+        });
       });
-    });
 
-    otherInputs.forEach((otherInput) => {
-      otherInput.addEventListener("change", () => {
-        selectAllInput.checked = allChecked(otherInputs);
+      otherInputs.forEach((otherInput) => {
+        otherInput.addEventListener("change", () => {
+          selectAllInput.checked = allChecked(otherInputs);
+        });
       });
-    });
+    }
   });
 };
 
