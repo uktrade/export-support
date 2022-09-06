@@ -11,7 +11,7 @@
 {% block fields %}
     <div class="govuk-form-group govuk-!-margin-bottom-2 {% if form.countries.errors %}govuk-form-group--error{% endif %}">
         <span class="govuk-caption-l">Question {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</span>
-        <fieldset id="location-fieldset" class="govuk-fieldset" data-module="select-all" data-select-all-id="{{ form.select_all.id_for_label }}">
+        <fieldset class="govuk-fieldset" data-module="select-all" data-select-all-id="{{ form.select_all.id_for_label }}">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l {% if not form.countries.errors %}govuk-!-margin-bottom-4{% endif %}">
                 <h1 class="govuk-fieldset__heading">
                     {{ form.countries.label }}
@@ -43,26 +43,19 @@
                 List of countries included in this service - {{ form.countries|length|add:"1" }} checkboxes.
             </div>
 
-            <div class="app-c-option-select">
-                <input id="location-option-filter" name="option-select-filter" class="app-c-option-select__filter-input govuk-input govuk-!-width-three-quarters" type="text" style="display:none">
-                <div class="app-c-option-select__container" style="max-height: 500px;">
-                    <div class="app-c-option-select__container-inner">
-                        <div id="location-options" class="govuk-form-group govuk-checkboxes--small">
-                            {% if not eecan_rollout_flag %}
-                                <div class="govuk-checkboxes__item select-all-checkbox">
-                                    {{ form.select_all }}
-                                    <label class="govuk-label govuk-checkboxes__label" for="{{ form.select_all.id_for_label }}">
-                                        Select all
-                                    </label>
-                                </div>
-                            {% endif %}
-                            {{ form.countries }}
+            {% if eecan_rollout_flag %}
+
+                <div id="location-option-select" class="app-c-option-select">
+                    <input id="location-option-filter" name="option-select-filter" class="app-c-option-select__filter-input govuk-input govuk-!-width-three-quarters" type="text" style="display:none">
+                    <div class="app-c-option-select__container" style="max-height: 500px;">
+                        <div class="app-c-option-select__container-inner">
+                            <div id="location-options" class="govuk-form-group govuk-checkboxes--small">
+                                {{ form.countries }}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            {% if eecan_rollout_flag %}
                 <p class="govuk-body">
                     Or
                 </p>
@@ -72,6 +65,17 @@
                         My query is not related to a specific country
                     </label>
                 </div>
+
+            {% else %}
+
+                <div class="govuk-checkboxes__item select-all-checkbox">
+                    {{ form.select_all }}
+                    <label class="govuk-label govuk-checkboxes__label" for="{{ form.select_all.id_for_label }}">
+                        Select all
+                    </label>
+                </div>
+                {{ form.countries }}
+
             {% endif %}
         </fieldset>
     </div>

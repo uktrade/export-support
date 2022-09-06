@@ -2,7 +2,7 @@ const initLocationFilter = () => {
   // Check we have a location fieldset on the page, if one is not on the page, we avoid running
   // later code and causing errors
   const locationWrappers = document.querySelectorAll(
-    "[id='location-fieldset']"
+    "[id='location-option-select']"
   );
 
   locationWrappers.forEach(() => {
