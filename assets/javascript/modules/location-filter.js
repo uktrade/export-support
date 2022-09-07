@@ -10,7 +10,7 @@ const initLocationFilter = () => {
     // Get the input textbox element
     input = document.getElementById("location-option-filter");
     // Show the filter text box (so its only visible if JS is enabled)
-    input.style.display = "";
+    input.classList.remove("hidden-option-filter");
     // Get the container surrounding the list of options
     listContainer = document.getElementById("location-options");
     // Get the individual elements inside the container
