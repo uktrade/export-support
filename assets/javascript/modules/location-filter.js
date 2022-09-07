@@ -6,7 +6,7 @@ const initLocationFilter = () => {
   );
 
   locationWrappers.forEach(() => {
-    var input, filter, listContainer, options;
+    var input, listContainer, options;
     // Get the input textbox element
     input = document.getElementById("location-option-filter");
     // Show the filter text box (so its only visible if JS is enabled)
@@ -19,7 +19,7 @@ const initLocationFilter = () => {
     // Event triggers when new character appears in the input text box
     input.addEventListener("keyup", () => {
       // Get the value inside the input text box
-      filter = input.value.toUpperCase();
+      var filter = input.value.toUpperCase();
       // Loop through list of individual elements
       for (var i = 0; i < options.length; i++) {
         // Get the name of the country in the element list
