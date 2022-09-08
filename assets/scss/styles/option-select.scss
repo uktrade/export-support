@@ -28,7 +28,7 @@
 
 .app-c-option-select__container {
   background-color: govuk-colour("white");
-  max-height: 200px;
+  max-height: 500px;
   overflow-x: hidden;
   overflow-y: auto;
   position: relative;
@@ -40,4 +40,16 @@
 
 .app-c-option-select__container-inner {
   padding: govuk-spacing(1) 13px;
+}
+
+.app-c-option-select__filter-input {
+  padding-left: 33px;
+  margin-bottom: govuk-spacing(4);
+  background: url("../images/search-button-black.png");
+  background-repeat: no-repeat;
+  background-position: 0px 50%;
+}
+
+.hidden-option-filter {
+  display: none;
 }
