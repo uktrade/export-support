@@ -53,3 +53,55 @@
 .hidden-option-filter {
   display: none;
 }
+
+.country-tag-section-wrapper {
+  width: 100%;
+  margin-bottom: govuk-spacing(3);
+}
+
+.country-tag-container {
+  height: 42px;
+  width: 100%;
+  margin-bottom: govuk-spacing(2);
+  overflow: hidden;
+}
+
+.country-tag-long-list-container {
+  display: none;
+}
+
+.country-tag-long-list-indicator {
+  display: none;
+  width: 100%;
+}
+
+.country-tag-long-list-indicator-text {
+  text-align: right;
+  width: 100%;
+  margin-bottom: govuk-spacing(1);
+  color: govuk-colour("dark-grey");
+}
+
+.country-tag-long-list-indicator-button {
+  text-align: right;
+  width: 100%;
+  color: govuk-colour("blue");
+}
+
+.country-selected-tag {
+  @include govuk-font(19);
+  background: govuk-colour("light-grey");
+  color: govuk-colour("dark-grey");
+  border: $govuk-border-colour;
+  border-style: solid;
+  border-width: 1px;
+  display: inline-block;
+  margin: govuk-spacing(1);
+  padding-left: govuk-spacing(2);
+  padding-right: govuk-spacing(2);
+}
+
+.remove-cross {
+  @include govuk-font(24);
+  margin-right: govuk-spacing(1);
+}
