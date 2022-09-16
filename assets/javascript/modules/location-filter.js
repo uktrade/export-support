@@ -84,15 +84,24 @@ const initLocationFilter = () => {
       tag.className = "country-selected-tag";
       //tag.className = "govuk-tag country-selected-tag";
       tag.id = "country-selected-tag-" + countryName;
+
       // Format country name - capitalise first letter and replace underscores with spaces
-      var formattedCountryName =
-        countryName.charAt(0).toUpperCase() +
-        countryName.slice(1).split("_").join(" ");
+      const splitCountryName = countryName.split("_");
+      for (let i = 0; i < splitCountryName.length; i++) {
+        if (splitCountryName[i] != "and") {
+          splitCountryName[i] =
+            splitCountryName[i].charAt(0).toUpperCase() +
+            splitCountryName[i].slice(1);
+        }
+      }
+      var formattedCountryName = splitCountryName.join(" ");
+
       // Format the content of the tag; a cross followed by the country name
       tag.innerHTML =
-        "<span class='remove-cross'>x</span> <span>" +
+        "<span class='remove-cross'>\u00D7</span>" +
+        "<p class='country-tag-text'>" +
         formattedCountryName +
-        "</span>";
+        "</p>";
 
       // Add an onclick function to the tag, so when clicked, the tag is removed
       // and the corresponding checkbox is unticked. Call function to check if we need the country overflow message.
@@ -101,6 +110,7 @@ const initLocationFilter = () => {
         countryOption.checked = false;
         updateTagsDisplay();
       };
+
       // Add tag to tags array
       countryTags.push(tag);
     }
