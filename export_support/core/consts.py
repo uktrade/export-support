@@ -31,7 +31,7 @@ ORIGINAL_ENQUIRY_COUNTRY_CODES = {
     "MT": "malta__ess_export",
     "MC": "monaco__ess_export",
     "ME": "montenegro__ess_export",
-    "NL": "netherlands__ess_export",
+    "NL": "netherland__ess_export",
     "MK": "north_macedonia__ess_export",
     "NO": "norway__ess_export",
     "PL": "poland__ess_export",

@@ -77,7 +77,7 @@ const initLocationFilter = () => {
     });
 
     function createCountryTag(countryOption) {
-      // Get the name of the country from the checkbox value
+      // Get the backend name of the country from the checkbox value
       var countryName = countryOption.value.split("__")[0];
       // Create the tag using the option value
       const tag = document.createElement("div");
@@ -85,16 +85,8 @@ const initLocationFilter = () => {
       //tag.className = "govuk-tag country-selected-tag";
       tag.id = "country-selected-tag-" + countryName;
 
-      // Format country name - capitalise first letter and replace underscores with spaces
-      const splitCountryName = countryName.split("_");
-      for (let i = 0; i < splitCountryName.length; i++) {
-        if (splitCountryName[i] != "and") {
-          splitCountryName[i] =
-            splitCountryName[i].charAt(0).toUpperCase() +
-            splitCountryName[i].slice(1);
-        }
-      }
-      var formattedCountryName = splitCountryName.join(" ");
+      // Get the country name as it appears on the checkbox label
+      var formattedCountryName = countryOption.labels[0].innerText;
 
       // Format the content of the tag; a cross followed by the country name
       tag.innerHTML =
