@@ -60,9 +60,11 @@
 }
 
 .country-tag-container {
-  height: 42px;
+  //height: 42px;
+  height: auto;
   width: 100%;
   overflow: hidden;
+  margin-bottom: 0;
 }
 
 .country-tag-long-list-container {

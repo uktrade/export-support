@@ -164,11 +164,20 @@ const initLocationFilter = () => {
     }
 
     function checkOverflow() {
+      // Get the container for the scroll height
       const tagContainer = document.getElementById("country-tag-container");
+      // Get a tag so we can determine the height of one tag row
+      // No JS method exists for height including margins, so will need to work this out
+      const tagList = document.getElementsByClassName("country-selected-tag");
+      var tagStyle = getComputedStyle(tagList[0]);
+      var tagHeight =
+        parseInt(tagList[0].offsetHeight) +
+        parseInt(tagStyle.marginTop) +
+        parseInt(tagStyle.marginBottom);
       // Scroll height is the height of the content (tags list),
-      // if the scroll height is more than the client height (the height of the container),
+      // if the scroll height is more than the height of one tag,
       // we have too many country tags
-      if (tagContainer.clientHeight >= tagContainer.scrollHeight) {
+      if (tagHeight >= tagContainer.scrollHeight) {
         return false;
       } else {
         return true;
