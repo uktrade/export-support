@@ -30,8 +30,6 @@ jobs:
         steps:
             - checkout
             - run:
-                  command: pip uninstall --yes virtualenv
-            - run:
                   command: pip install pre-commit
             - restore_cache:
                   keys:
