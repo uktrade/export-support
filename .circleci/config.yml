@@ -35,6 +35,9 @@ jobs:
                   keys:
                       - pre-commit-cache-{{ arch }}-{{ .Branch }}
             - run:
+                # Remove the 3.9 version of virtualenv to avoid library conflict
+                command: pip3.9 uninstall virtualenv --yes
+            - run:
                   name: Formatting checks
                   command: pre-commit run --from-ref origin/HEAD --to-ref HEAD
             - save_cache:
