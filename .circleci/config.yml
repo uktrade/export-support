@@ -1,50 +1,50 @@
 version: 2.1
 jobs:
-    unit-tests:
-        docker:
-            - image: "circleci/python:3.9.5"
-            - image: "redis:5"
-        steps:
-            - checkout
-            - run:
-                  name: Install system deps
-                  command: sudo apt-get update && sudo apt-get install -y nodejs npm
-            - run:
-                  name: Install Python deps
-                  command: pip install -r requirements.txt -r requirements-dev.txt
-            - run:
-                  name: Webpack build
-                  command: npm install && npm run build
-            - run:
-                  name: Make directory for test output
-                  command: mkdir -p test-reports/unit-test
-            - run:
-                  name: Running tests
-                  command: pytest --junitxml=test-reports/unit-test/report.xml
-            - store_test_results:
-                  path: ./test-reports/
-    format-and-secrets-checks:
-        docker:
-            - image: "circleci/python:3.9.5"
-        working_directory: ~/app
-        steps:
-            - checkout
-            - run:
-                  command: pip install pre-commit
-            - restore_cache:
-                  keys:
-                      - pre-commit-cache-{{ arch }}-{{ .Branch }}
-            - run:
-                  name: Formatting checks
-                  command: pre-commit run --from-ref origin/HEAD --to-ref HEAD
-            - save_cache:
-                  key: pre-commit-cache-{{ arch }}-{{ .Branch }}
-                  paths:
-                      - ~/.cache/pre-commit
+      unit-tests:
+            docker:
+                  - image: "circleci/python:3.11.1"
+                  - image: "redis:5"
+            steps:
+                  - checkout
+                  - run:
+                          name: Install system deps
+                          command: sudo apt-get update && sudo apt-get install -y nodejs npm
+                  - run:
+                          name: Install Python deps
+                          command: pip install -r requirements.txt -r requirements-dev.txt
+                  - run:
+                          name: Webpack build
+                          command: npm install && npm run build
+                  - run:
+                          name: Make directory for test output
+                          command: mkdir -p test-reports/unit-test
+                  - run:
+                          name: Running tests
+                          command: pytest --junitxml=test-reports/unit-test/report.xml
+                  - store_test_results:
+                          path: ./test-reports/
+      format-and-secrets-checks:
+            docker:
+                  - image: "circleci/python:3.11.1"
+            working_directory: ~/app
+            steps:
+                  - checkout
+                  - run:
+                          command: pip install pre-commit
+                  - restore_cache:
+                          keys:
+                                - pre-commit-cache-{{ arch }}-{{ .Branch }}
+                  - run:
+                          name: Formatting checks
+                          command: pre-commit run --from-ref origin/HEAD --to-ref HEAD
+                  - save_cache:
+                          key: pre-commit-cache-{{ arch }}-{{ .Branch }}
+                          paths:
+                                - ~/.cache/pre-commit
 
 workflows:
-    version: 2
-    export-support:
-        jobs:
-            - format-and-secrets-checks
-            - unit-tests
+      version: 2
+      export-support:
+            jobs:
+                  - format-and-secrets-checks
+                  - unit-tests
