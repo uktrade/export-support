@@ -218,7 +218,7 @@ GREAT_OFFICE_FINDER_URL = "https://www.great.gov.uk/contact/office-finder/"
 if ENABLE_CSP:
     _GOOGLE_DOMAINS = (
         "www.googletagmanager.com",
-        "www.google-analytics.com",
+        "*.google-analytics.com",
         "stats.g.doubleclick.net",
         "www.google.com",
         "www.google.co.uk",
