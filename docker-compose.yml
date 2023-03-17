@@ -18,7 +18,7 @@ services:
       - redis
 
   webpack:
-    image: node:14
+    image: node:16
     volumes:
       - .:/app
     env_file:

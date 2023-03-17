@@ -18,6 +18,7 @@ module.exports = {
     path: path.resolve("./build/assets/"),
     publicPath: "/static/",
     filename: "[name]-[fullhash].js",
+    chunkFormat:"array-push",
   },
 
   plugins: [
