@@ -100,37 +100,37 @@ class ExportCountriesForm(gds_forms.FormErrorMixin, forms.Form):
             return cleaned_data
 
         has_all_countries_selected = [
-            code for code, _ in self.fields["countries"].choices
-        ] == cleaned_data["countries"]
+                                         code for code, _ in self.fields["countries"].choices
+                                     ] == cleaned_data["countries"]
 
         if (
-            has_select_all_selected
-            and has_all_countries_selected
-            and not has_no_specific_selected
+                has_select_all_selected
+                and has_all_countries_selected
+                and not has_no_specific_selected
         ):
             return cleaned_data
 
         # if has_no_specific_selected is true, we need to set the Zendesk identifiable code
         if (
-            has_no_specific_selected
-            and not has_select_all_selected
-            and not has_countries_selected
+                has_no_specific_selected
+                and not has_select_all_selected
+                and not has_countries_selected
         ):
             cleaned_data["countries"] = ["No specific country"]
 
         if (
-            not has_select_all_selected
-            and not has_countries_selected
-            and not has_no_specific_selected
+                not has_select_all_selected
+                and not has_countries_selected
+                and not has_no_specific_selected
         ):
             self.add_error(
                 "countries", "Select the country or countries you are selling to"
             )
 
         if (
-            has_select_all_selected
-            and has_countries_selected
-            and not has_no_specific_selected
+                has_select_all_selected
+                and has_countries_selected
+                and not has_no_specific_selected
         ):
             self.add_error(
                 "countries",
@@ -138,7 +138,7 @@ class ExportCountriesForm(gds_forms.FormErrorMixin, forms.Form):
             )
 
         if has_no_specific_selected and (
-            has_select_all_selected or has_countries_selected
+                has_select_all_selected or has_countries_selected
         ):
             self.add_error(
                 "countries",
@@ -472,8 +472,8 @@ class BusinessAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
 
         other_type_of_business = cleaned_data["other_type_of_business"]
         if (
-            type_of_business == PrivateOrPublicCompanyTypeChoices.OTHER
-            and not other_type_of_business
+                type_of_business == PrivateOrPublicCompanyTypeChoices.OTHER
+                and not other_type_of_business
         ):
             self.add_error(
                 "other_type_of_business",
@@ -637,8 +637,8 @@ class OrganisationAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form
 
         other_type_of_organisation = cleaned_data["other_type_of_organisation"]
         if (
-            type_of_organisation == OrganisationTypeChoices.OTHER
-            and not other_type_of_organisation
+                type_of_organisation == OrganisationTypeChoices.OTHER
+                and not other_type_of_organisation
         ):
             self.add_error(
                 "other_type_of_organisation",
@@ -758,8 +758,8 @@ class SoloExporterAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form
 
         other_type_of_exporter = cleaned_data["other_type_of_exporter"]
         if (
-            type_of_exporter == SoloExporterTypeChoices.OTHER
-            and not other_type_of_exporter
+                type_of_exporter == SoloExporterTypeChoices.OTHER
+                and not other_type_of_exporter
         ):
             self.add_error(
                 "other_type_of_exporter",
@@ -909,16 +909,16 @@ class EnquiryDetailsForm(gds_forms.FormErrorMixin, forms.Form):
             return cleaned_data
 
         is_how_did_you_hear_other_selected = (
-            how_did_you_hear_about_this_service
-            == HowDidYouHearAboutThisServiceChoices.OTHER
+                how_did_you_hear_about_this_service
+                == HowDidYouHearAboutThisServiceChoices.OTHER
         )
         other_how_did_you_hear_about_this_service = cleaned_data[
             "other_how_did_you_hear_about_this_service"
         ].strip()
 
         if (
-            is_how_did_you_hear_other_selected
-            and not other_how_did_you_hear_about_this_service
+                is_how_did_you_hear_other_selected
+                and not other_how_did_you_hear_about_this_service
         ):
             self.add_error(
                 "other_how_did_you_hear_about_this_service",
@@ -936,8 +936,8 @@ class EnquiryDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         email_consent = self.cleaned_data["email_consent"]
 
         if (
-            how_did_you_hear_about_this_service
-            == HowDidYouHearAboutThisServiceChoices.OTHER
+                how_did_you_hear_about_this_service
+                == HowDidYouHearAboutThisServiceChoices.OTHER
         ):
             other_how_did_you_hear_about_this_service = self.cleaned_data[
                 "other_how_did_you_hear_about_this_service"

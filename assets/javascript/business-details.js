@@ -103,21 +103,24 @@ import debounce from "lodash.debounce";
     },
   });
 
-  let have_you_exported_before_element = document.getElementById("form-group-business-details-have_you_exported_before")
-  let do_you_have_product_element = document.getElementById("form-group-business-details-do_you_have_a_product_you_want_to_export")
+  let have_you_exported_before_element = document.getElementById(
+    "form-group-business-details-have_you_exported_before"
+  );
+  let do_you_have_product_element = document.getElementById(
+    "form-group-business-details-do_you_have_a_product_you_want_to_export"
+  );
 
   have_you_exported_before_element.addEventListener(
-      'change',
-      function() {
-          let chosen_value = document.querySelector("input[name='business-details-have_you_exported_before']:checked").value;
-          if (chosen_value === 'not_exported__ess_experience')
-              do_you_have_product_element.style.display = 'block';
-          else
-              do_you_have_product_element.style.display = 'none';
-      },
-      false
+    "change",
+    function () {
+      let chosen_value = document.querySelector(
+        "input[name='business-details-have_you_exported_before']:checked"
+      ).value;
+      if (chosen_value === "not_exported__ess_experience")
+        do_you_have_product_element.style.display = "block";
+      else do_you_have_product_element.style.display = "none";
+    },
+    false
   );
-  do_you_have_product_element.style.display = 'none';
-
-
+  do_you_have_product_element.style.display = "none";
 })();

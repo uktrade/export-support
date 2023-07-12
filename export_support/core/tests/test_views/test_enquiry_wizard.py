@@ -8,7 +8,8 @@ from pytest_django.asserts import assertTemplateUsed
 
 from ...consts import ENQUIRY_COUNTRY_CODES
 from ...forms import (
-    SECTORS_MAP,
+    DoYouHaveAProductYouWantToExportChoices, HaveYouExportedBeforeChoices,
+    PositivityForGrowthChoices, SECTORS_MAP,
     BusinessTypeChoices,
     CompanyTurnoverChoices,
     EnquirySubjectChoices,
@@ -164,6 +165,8 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
                 "company_name": "Companyname",
                 "company_post_code": "SW1A 2BL",
                 "company_registration_number": "12345678",
+                "have_you_exported_before": HaveYouExportedBeforeChoices.YES_LAST_YEAR,
+                "do_you_have_a_product_you_want_to_export": DoYouHaveAProductYouWantToExportChoices.YES,
             },
         ),
     )
@@ -188,6 +191,7 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
                 "company_type": PrivateOrPublicCompanyTypeChoices.PRIVATE_LIMITED_COMPANY,
                 "company_turnover": CompanyTurnoverChoices.BELOW_85000,
                 "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
+                "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL,
             },
         ),
     )
@@ -867,6 +871,8 @@ def test_full_steps_private_or_limited_business_type_wizard_success_custom_field
                 "company_name": "Companyname",
                 "company_post_code": "SW1A 2BL",
                 "company_registration_number": "12345678",
+                "have_you_exported_before": HaveYouExportedBeforeChoices.YES_LAST_YEAR,
+                "do_you_have_a_product_you_want_to_export": DoYouHaveAProductYouWantToExportChoices.YES,
             },
         ),
     )
@@ -890,6 +896,7 @@ def test_full_steps_private_or_limited_business_type_wizard_success_custom_field
                 "company_type": PrivateOrPublicCompanyTypeChoices.PRIVATE_LIMITED_COMPANY,
                 "company_turnover": CompanyTurnoverChoices.BELOW_85000,
                 "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
+                "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL,
             },
         ),
     )
@@ -1705,6 +1712,8 @@ def test_full_steps_wizard_success_private_custom_fields_are_ignored(
                 "company_name": "Companyname",
                 "company_post_code": "SW1A 2BL",
                 "company_registration_number": "12345678",
+                "have_you_exported_before": HaveYouExportedBeforeChoices.YES_LAST_YEAR,
+                "do_you_have_a_product_you_want_to_export": DoYouHaveAProductYouWantToExportChoices.YES,
             },
         ),
     )
@@ -1729,6 +1738,7 @@ def test_full_steps_wizard_success_private_custom_fields_are_ignored(
                 "other_type_of_business": "Othertypeofbusiness",
                 "company_turnover": CompanyTurnoverChoices.BELOW_85000,
                 "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
+                "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL,
             },
         ),
     )
@@ -1925,6 +1935,8 @@ def test_zendesk_form_is_not_valid_wizard_raises_error(client, settings, mocker)
                 "company_name": "Companyname",
                 "company_post_code": "SW1A 2BL",
                 "company_registration_number": "12345678",
+                "have_you_exported_before": HaveYouExportedBeforeChoices.YES_LAST_YEAR,
+                "do_you_have_a_product_you_want_to_export": DoYouHaveAProductYouWantToExportChoices.YES,
             },
         ),
     )
@@ -1948,6 +1960,7 @@ def test_zendesk_form_is_not_valid_wizard_raises_error(client, settings, mocker)
                 "company_type": PrivateOrPublicCompanyTypeChoices.PRIVATE_LIMITED_COMPANY,
                 "company_turnover": CompanyTurnoverChoices.BELOW_85000,
                 "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
+                "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL,
             },
         ),
     )
@@ -2097,6 +2110,8 @@ def run_wizard_enquiry_subject(settings, mocker):
                     "company_name": "Companyname",
                     "company_post_code": "SW1A 2BL",
                     "company_registration_number": "12345678",
+                    "have_you_exported_before": HaveYouExportedBeforeChoices.YES_LAST_YEAR,
+                    "do_you_have_a_product_you_want_to_export": DoYouHaveAProductYouWantToExportChoices.YES,
                 },
             ),
         )
@@ -2120,6 +2135,7 @@ def run_wizard_enquiry_subject(settings, mocker):
                     "company_type": PrivateOrPublicCompanyTypeChoices.PRIVATE_LIMITED_COMPANY,
                     "company_turnover": CompanyTurnoverChoices.BELOW_85000,
                     "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
+                    "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL,
                 },
             ),
         )
