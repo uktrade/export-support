@@ -1128,9 +1128,9 @@ class ZendeskForm(ZendeskAPIForm):
     email = forms.CharField()
     how_did_you_hear_about_this_service = forms.CharField()
     marketing_consent = forms.BooleanField(required=False)
-    have_you_exported_before = forms.CharField()
+    have_you_exported_before = forms.CharField(required=False)
     do_you_have_a_product_you_want_to_export = forms.CharField(required=False)
-    positivity_for_growth = forms.CharField()
+    positivity_for_growth = forms.CharField(required=False)
 
     _custom_fields = forms.JSONField(required=False)
 
