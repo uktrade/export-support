@@ -5,9 +5,7 @@ from django import forms
 from django.db import models
 from django.utils.safestring import mark_safe
 
-from export_support.gds import fields as gds_fields
-from export_support.gds import forms as gds_forms
-
+from export_support.gds import fields as gds_fields, forms as gds_forms
 from .consts import COUNTRIES_MAP, SECTORS_MAP
 from .validators import postcode_validator
 
@@ -252,6 +250,20 @@ class BusinessTypeForm(gds_forms.FormErrorMixin, forms.Form):
         }
 
 
+class HaveYouExportedBeforeChoices(models.TextChoices):
+    YES_LAST_YEAR = "in_the_last_year__ess_experience", "Yes, in the last year"
+    YES_MORE_ONE_YEAR = (
+        "more_than_a_year_ago__ess_experience",
+        "Yes, more than a year ago",
+    )
+    NO = "not_exported__ess_experience", "No"
+
+
+class DoYouHaveAProductYouWantToExportChoices(models.TextChoices):
+    YES = "product_ready__ess_experience", "Yes"
+    NO = "no_product_ready__ess_experience", "No"
+
+
 class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
     company_name = forms.CharField(
         error_messages={
@@ -268,7 +280,8 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
     )
     company_registration_number = forms.CharField(
         help_text=mark_safe(
-            "Information about your company helps us to improve how we answer your query.<span class='js-hidden'> Find your number using <a class='govuk-link' href='https://www.gov.uk/get-information-about-a-company' target='_blank'>Get information about a company<span class='govuk-visually-hidden'> (opens in new tab)</span></a>.</span>"  # noqa: E501
+            "Information about your company helps us to improve how we answer your query.<span class='js-hidden'> Find your number using <a class='govuk-link' href='https://www.gov.uk/get-information-about-a-company' target='_blank'>Get information about a company<span class='govuk-visually-hidden'> (opens in new tab)</span></a>.</span>"
+            # noqa: E501
         ),
         label="Company Registration Number",
         required=False,
@@ -282,7 +295,8 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         error_messages={
             "required": "Enter the business unit postcode",
         },
-        help_text="Knowing where you are enquiring from means we can direct you to local support if appropriate. Enter a postcode for example SW1A 2DY.",  # noqa: E501
+        help_text="Knowing where you are enquiring from means we can direct you to local support if appropriate. Enter a postcode for example SW1A 2DY.",
+        # noqa: E501
         label="Business unit postcode",
         validators=[postcode_validator],
         widget=forms.TextInput(
@@ -293,6 +307,24 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         ),
     )
 
+    have_you_exported_before = forms.TypedChoiceField(
+        choices=HaveYouExportedBeforeChoices.choices,
+        coerce=coerce_choice(HaveYouExportedBeforeChoices),
+        error_messages={
+            "required": "Select a choice plz",
+        },
+        label="Have you exported before?",
+        widget=gds_fields.RadioSelect,
+    )
+
+    do_you_have_a_product_you_want_to_export = forms.TypedChoiceField(
+        choices=DoYouHaveAProductYouWantToExportChoices.choices,
+        coerce=coerce_choice(DoYouHaveAProductYouWantToExportChoices),
+        label="Do you have a product you'd like to export?",
+        widget=gds_fields.RadioSelect,
+        required=False,
+    )
+
     def clean_company_post_code(self):
         company_post_code = self.cleaned_data["company_post_code"]
         return company_post_code.upper()
@@ -301,11 +333,17 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         company_name = self.cleaned_data["company_name"]
         company_post_code = self.cleaned_data["company_post_code"]
         company_registration_number = self.cleaned_data["company_registration_number"]
+        have_you_exported_before = self.cleaned_data["have_you_exported_before"].label
+        do_you_have_a_product_you_want_to_export = self.cleaned_data[
+            "do_you_have_a_product_you_want_to_export"
+        ].label
 
         return {
             "company_name": company_name,
             "company_post_code": company_post_code,
             "company_registration_number": company_registration_number,
+            "have_you_exported_before": have_you_exported_before,
+            "do_you_have_a_product_you_want_to_export": do_you_have_a_product_you_want_to_export,
         }
 
 
@@ -352,6 +390,14 @@ class NumberOfEmployeesChoices(models.TextChoices):
         "prefer_not_to_say__ess_num_of_employees_1",
         "I'd prefer not to say",
     )
+
+
+class PositivityForGrowthChoices(models.TextChoices):
+    VERY_POSITIVE = "very_positive__ess_positivity", "Very positive"
+    QUITE_POSITIVE = "quite_positive__ess_positivity", "Quite positive"
+    NEUTRAL = "neutral__ess_positivity", "Neutral"
+    QUITE_NEGATIVE = "quite_negative__ess_positivity", "Quite negative"
+    VERY_NEGATIVE = "very_negative__ess_positivity", "Very negative"
 
 
 class BusinessAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
@@ -406,6 +452,13 @@ class BusinessAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
         ),
     )
 
+    positivity_for_growth = forms.TypedChoiceField(
+        choices=PositivityForGrowthChoices.choices,
+        coerce=coerce_choice(PositivityForGrowthChoices),
+        label="How positive do you feel about growing your business overseas?",
+        widget=gds_fields.RadioSelect,
+    )
+
     def clean(self):
         cleaned_data = super().clean()
 
@@ -437,10 +490,13 @@ class BusinessAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
         else:
             type_of_business = type_of_business.label
 
+        positivity_for_growth = self.cleaned_data["positivity_for_growth"].label
+
         return {
             "company_type": type_of_business,
             "company_turnover": company_turnover,
             "number_of_employees": number_of_employees,
+            "positivity_for_growth": positivity_for_growth,
         }
 
 
@@ -459,7 +515,8 @@ class OrganisationDetailsForm(gds_forms.FormErrorMixin, forms.Form):
     )
     company_registration_number = forms.CharField(
         help_text=mark_safe(
-            "If your organisation is registered with Companies House, then its registration number will help us answer your query. <a class='govuk-link' href='https://www.gov.uk/get-information-about-a-company' target='_blank'>Look up a company registration number<span class='govuk-visually-hidden'> (opens in new tab)</span></a>."  # noqa: E501
+            "If your organisation is registered with Companies House, then its registration number will help us answer your query. <a class='govuk-link' href='https://www.gov.uk/get-information-about-a-company' target='_blank'>Look up a company registration number<span class='govuk-visually-hidden'> (opens in new tab)</span></a>."
+            # noqa: E501
         ),
         label="Company Registration Number",
         required=False,
@@ -473,7 +530,8 @@ class OrganisationDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         error_messages={
             "required": "Enter the organisation unit postcode",
         },
-        help_text="Knowing where you are enquiring from means we can direct you to local support if appropriate. Enter a postcode for example SW1A 2DY.",  # noqa: E501
+        help_text="Knowing where you are enquiring from means we can direct you to local support if appropriate. Enter a postcode for example SW1A 2DY.",
+        # noqa: E501
         label="Organisation unit postcode",
         validators=[postcode_validator],
         widget=forms.TextInput(
@@ -623,7 +681,8 @@ class SoloExporterDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         error_messages={
             "required": "Enter the postcode",
         },
-        help_text="Knowing where you are enquiring from means we can direct you to local support if appropriate. Enter a postcode for example SW1A 2DY.",  # noqa: E501
+        help_text="Knowing where you are enquiring from means we can direct you to local support if appropriate. Enter a postcode for example SW1A 2DY.",
+        # noqa: E501
         label="Postcode",
         validators=[postcode_validator],
         widget=forms.TextInput(
@@ -771,17 +830,17 @@ class SectorsForm(gds_forms.FormErrorMixin, forms.Form):
         }
 
 
-class HowDidYouHearAboutThisServiceChoices(models.IntegerChoices):
-    SEARCH_ENGINE = 1, "Search engine"
-    LINKED_IN = 2, "LinkedIn"
-    TWITTER = 3, "Twitter"
-    FACEBOOK = 4, "Facebook"
-    RADIO_ADVERT = 5, "Radio advert"
-    NGO = 6, "Non-government organisation - such as a trade body"
-    NEWS_ARTICLE = 7, "News article"
-    ONLINE_ADVERT = 8, "Online advert"
-    PRINT_ADVERT = 9, "Print advert"
-    OTHER = 10, "Other"
+class HowDidYouHearAboutThisServiceChoices(models.TextChoices):
+    SEARCH_ENGINE = "search_enging__ess_acquisition", "Search engine"
+    LINKED_IN = "linkedin__ess_acquisition", "LinkedIn"
+    TWITTER = "twitter__ess_acquisition", "Twitter"
+    FACEBOOK = "facebook__ess_acquisition", "Facebook"
+    RADIO_ADVERT = "radio_advert__ess_acquisition", "Radio advert"
+    NGO = "ngo__ess_acquisition", "Non-government organisation - such as a trade body"
+    NEWS_ARTICLE = "news_article__ess_acquisition", "News article"
+    ONLINE_ADVERT = "online_advert__ess_acquisition", "Online advert"
+    PRINT_ADVERT = "print_advert__ess_acquisition", "Print advert"
+    OTHER = "other__ess_acquisition", "Other"
 
 
 class EnquiryDetailsForm(gds_forms.FormErrorMixin, forms.Form):
@@ -925,7 +984,8 @@ class RussiaUkraineEnquiryForm(gds_forms.FormErrorMixin, forms.Form):
         error_messages={
             "required": "Enter the business unit postcode",
         },
-        help_text="If your business has multiple locations, enter the postcode for the business unit you are enquiring from.",  # noqa: E501
+        help_text="If your business has multiple locations, enter the postcode for the business unit you are enquiring from.",
+        # noqa: E501
         label="Postcode",
         validators=[postcode_validator],
         widget=forms.TextInput(
@@ -1012,7 +1072,6 @@ class RussiaUkraineEnquiryForm(gds_forms.FormErrorMixin, forms.Form):
         return cleaned_data
 
     def get_zendesk_data(self):
-
         full_name = self.cleaned_data["full_name"]
         email = self.cleaned_data["email"]
         phone = self.cleaned_data["phone"]
@@ -1066,6 +1125,10 @@ class ZendeskForm(ZendeskAPIForm):
     email = forms.CharField()
     how_did_you_hear_about_this_service = forms.CharField()
     marketing_consent = forms.BooleanField(required=False)
+    have_you_exported_before = forms.CharField()
+    do_you_have_a_product_you_want_to_export = forms.CharField(required=False)
+    positivity_for_growth = forms.CharField()
+
     _custom_fields = forms.JSONField(required=False)
 
 
