@@ -301,7 +301,7 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
             "required": "Enter the business unit postcode",
         },
         help_text="Knowing where you are enquiring from means we can direct you to "
-                  "local support if appropriate. Enter a postcode for example SW1A 2DY.",
+        "local support if appropriate. Enter a postcode for example SW1A 2DY.",
         label="Business unit postcode",
         validators=[postcode_validator],
         widget=forms.TextInput(
@@ -542,7 +542,7 @@ class OrganisationDetailsForm(gds_forms.FormErrorMixin, forms.Form):
             "required": "Enter the organisation unit postcode",
         },
         help_text="Knowing where you are enquiring from means we can direct you to local support "
-                  "if appropriate. Enter a postcode for example SW1A 2DY.",
+        "if appropriate. Enter a postcode for example SW1A 2DY.",
         label="Organisation unit postcode",
         validators=[postcode_validator],
         widget=forms.TextInput(
@@ -693,7 +693,7 @@ class SoloExporterDetailsForm(gds_forms.FormErrorMixin, forms.Form):
             "required": "Enter the postcode",
         },
         help_text="Knowing where you are enquiring from means we can direct you to local support "
-                  "if appropriate. Enter a postcode for example SW1A 2DY.",
+        "if appropriate. Enter a postcode for example SW1A 2DY.",
         label="Postcode",
         validators=[postcode_validator],
         widget=forms.TextInput(
@@ -996,7 +996,7 @@ class RussiaUkraineEnquiryForm(gds_forms.FormErrorMixin, forms.Form):
             "required": "Enter the business unit postcode",
         },
         help_text="If your business has multiple locations, enter the postcode for the business "
-                  "unit you are enquiring from.",
+        "unit you are enquiring from.",
         label="Postcode",
         validators=[postcode_validator],
         widget=forms.TextInput(
