@@ -8,17 +8,17 @@ from pytest_django.asserts import assertTemplateUsed
 
 from ...consts import ENQUIRY_COUNTRY_CODES
 from ...forms import (
-    DoYouHaveAProductYouWantToExportChoices,
-    HaveYouExportedBeforeChoices,
-    PositivityForGrowthChoices,
     SECTORS_MAP,
     BusinessTypeChoices,
     CompanyTurnoverChoices,
+    DoYouHaveAProductYouWantToExportChoices,
     EnquirySubjectChoices,
+    HaveYouExportedBeforeChoices,
     HowDidYouHearAboutThisServiceChoices,
     NumberOfEmployeesChoices,
     OnBehalfOfChoices,
     OrganisationTypeChoices,
+    PositivityForGrowthChoices,
     PrivateOrPublicCompanyTypeChoices,
     SoloExporterTypeChoices,
 )

@@ -5,7 +5,9 @@ from django import forms
 from django.db import models
 from django.utils.safestring import mark_safe
 
-from export_support.gds import fields as gds_fields, forms as gds_forms
+from export_support.gds import fields as gds_fields
+from export_support.gds import forms as gds_forms
+
 from .consts import COUNTRIES_MAP, SECTORS_MAP
 from .validators import postcode_validator
 
@@ -280,8 +282,11 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
     )
     company_registration_number = forms.CharField(
         help_text=mark_safe(
-            "Information about your company helps us to improve how we answer your query.<span class='js-hidden'> Find your number using <a class='govuk-link' href='https://www.gov.uk/get-information-about-a-company' target='_blank'>Get information about a company<span class='govuk-visually-hidden'> (opens in new tab)</span></a>.</span>"
-            # noqa: E501
+            "Information about your company helps us to improve how we answer your query."
+            "<span class='js-hidden'> Find your number using "
+            "<a class='govuk-link' href='https://www.gov.uk/get-information-about-a-company' "
+            "target='_blank'>Get information about a company<span class='govuk-visually-hidden'> "
+            "(opens in new tab)</span></a>.</span>"
         ),
         label="Company Registration Number",
         required=False,
@@ -295,8 +300,8 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         error_messages={
             "required": "Enter the business unit postcode",
         },
-        help_text="Knowing where you are enquiring from means we can direct you to local support if appropriate. Enter a postcode for example SW1A 2DY.",
-        # noqa: E501
+        help_text="Knowing where you are enquiring from means we can direct you to "
+                  "local support if appropriate. Enter a postcode for example SW1A 2DY.",
         label="Business unit postcode",
         validators=[postcode_validator],
         widget=forms.TextInput(
@@ -518,8 +523,11 @@ class OrganisationDetailsForm(gds_forms.FormErrorMixin, forms.Form):
     )
     company_registration_number = forms.CharField(
         help_text=mark_safe(
-            "If your organisation is registered with Companies House, then its registration number will help us answer your query. <a class='govuk-link' href='https://www.gov.uk/get-information-about-a-company' target='_blank'>Look up a company registration number<span class='govuk-visually-hidden'> (opens in new tab)</span></a>."
-            # noqa: E501
+            "If your organisation is registered with Companies House, then its registration number"
+            " will help us answer your query. "
+            "<a class='govuk-link' href='https://www.gov.uk/get-information-about-a-company' "
+            "target='_blank'>Look up a company registration number"
+            "<span class='govuk-visually-hidden'> (opens in new tab)</span></a>."
         ),
         label="Company Registration Number",
         required=False,
@@ -533,8 +541,8 @@ class OrganisationDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         error_messages={
             "required": "Enter the organisation unit postcode",
         },
-        help_text="Knowing where you are enquiring from means we can direct you to local support if appropriate. Enter a postcode for example SW1A 2DY.",
-        # noqa: E501
+        help_text="Knowing where you are enquiring from means we can direct you to local support "
+                  "if appropriate. Enter a postcode for example SW1A 2DY.",
         label="Organisation unit postcode",
         validators=[postcode_validator],
         widget=forms.TextInput(
@@ -684,8 +692,8 @@ class SoloExporterDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         error_messages={
             "required": "Enter the postcode",
         },
-        help_text="Knowing where you are enquiring from means we can direct you to local support if appropriate. Enter a postcode for example SW1A 2DY.",
-        # noqa: E501
+        help_text="Knowing where you are enquiring from means we can direct you to local support "
+                  "if appropriate. Enter a postcode for example SW1A 2DY.",
         label="Postcode",
         validators=[postcode_validator],
         widget=forms.TextInput(
@@ -987,8 +995,8 @@ class RussiaUkraineEnquiryForm(gds_forms.FormErrorMixin, forms.Form):
         error_messages={
             "required": "Enter the business unit postcode",
         },
-        help_text="If your business has multiple locations, enter the postcode for the business unit you are enquiring from.",
-        # noqa: E501
+        help_text="If your business has multiple locations, enter the postcode for the business "
+                  "unit you are enquiring from.",
         label="Postcode",
         validators=[postcode_validator],
         widget=forms.TextInput(
