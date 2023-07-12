@@ -457,6 +457,9 @@ class BusinessAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
         coerce=coerce_choice(PositivityForGrowthChoices),
         label="How positive do you feel about growing your business overseas?",
         widget=gds_fields.RadioSelect,
+        error_messages={
+            "required": "Please choose an option",
+        },
     )
 
     def clean(self):

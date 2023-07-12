@@ -2,7 +2,8 @@ from ...forms import (
     BusinessAdditionalInformationForm,
     CompanyTurnoverChoices,
     NumberOfEmployeesChoices,
-    PositivityForGrowthChoices, PrivateOrPublicCompanyTypeChoices,
+    PositivityForGrowthChoices,
+    PrivateOrPublicCompanyTypeChoices,
 )
 
 
@@ -14,6 +15,7 @@ def test_business_information_form_validation():
         "company_type": ["Select the type of business"],
         "company_turnover": ["Select the UK business turnover"],
         "number_of_employees": ["Select the number of UK employees"],
+        "positivity_for_growth": ["Select the number of UK employees"],
     }
 
 
@@ -23,6 +25,7 @@ def test_business_information_form_validation_other_type_of_business_required_wh
             "company_type": PrivateOrPublicCompanyTypeChoices.OTHER,
             "company_turnover": CompanyTurnoverChoices.BELOW_85000,
             "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
+            "positivity_for_growth": PositivityForGrowthChoices.VERY_POSITIVE,
         }
     )
 

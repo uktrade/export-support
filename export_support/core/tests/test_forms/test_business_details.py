@@ -1,5 +1,8 @@
-from ...forms import BusinessDetailsForm, DoYouHaveAProductYouWantToExportChoices, \
-    HaveYouExportedBeforeChoices
+from ...forms import (
+    BusinessDetailsForm,
+    DoYouHaveAProductYouWantToExportChoices,
+    HaveYouExportedBeforeChoices,
+)
 
 
 def test_get_zendesk_data():
