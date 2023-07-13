@@ -317,7 +317,7 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         choices=HaveYouExportedBeforeChoices.choices,
         coerce=coerce_choice(HaveYouExportedBeforeChoices),
         error_messages={
-            "required": "Select a choice plz",
+            "required": "Select whether you have exported before",
         },
         label="Have you exported before?",
         widget=gds_fields.RadioSelect,
@@ -334,6 +334,20 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
     def clean_company_post_code(self):
         company_post_code = self.cleaned_data["company_post_code"]
         return company_post_code.upper()
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get(
+            "have_you_exported_before"
+        ) == HaveYouExportedBeforeChoices.NO and not cleaned_data.get(
+            "do_you_have_a_product_you_want_to_export"
+        ):
+            self.add_error(
+                "do_you_have_a_product_you_want_to_export",
+                "Select yes if you have a product you’d like to export",
+            )
+
+        return cleaned_data
 
     def get_zendesk_data(self):
         company_name = self.cleaned_data["company_name"]
@@ -464,7 +478,7 @@ class BusinessAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
         label="How positive do you feel about growing your business overseas?",
         widget=gds_fields.RadioSelect,
         error_messages={
-            "required": "Please choose an option",
+            "required": "Select how positive you feel about growing your business overseas",
         },
     )
 
