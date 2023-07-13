@@ -103,7 +103,6 @@ import debounce from "lodash.debounce";
     },
   });
 
-
   // Show-hide for the "Have you exported before question?"
   let have_you_exported_before_element = document.getElementById(
     "form-group-business-details-have_you_exported_before"
@@ -118,13 +117,15 @@ import debounce from "lodash.debounce";
       let chosen_value = document.querySelector(
         "input[name='business-details-have_you_exported_before']:checked"
       ).value;
-      if (chosen_value === "not_exported__ess_experience"){
+      if (chosen_value === "not_exported__ess_experience") {
         // Answer is "No" - show the "Do you have a product you want to export?" question
         do_you_have_product_element.style.display = "block";
       } else {
         // Otherwise, hide the question and set radio button to null so it isn't passed to zendesk
         do_you_have_product_element.style.display = "none";
-        document.querySelector("input[name='business-details-do_you_have_a_product_you_want_to_export']:checked").checked = false
+        document.querySelector(
+          "input[name='business-details-do_you_have_a_product_you_want_to_export']:checked"
+        ).checked = false;
       }
     },
     false
@@ -134,10 +135,11 @@ import debounce from "lodash.debounce";
   do_you_have_product_element.style.display = "none";
 
   // On page load, if the answer to "Have you exported before?" is "No", show the "Do you have a product you want to export?" question
-  if (document.querySelector(
-    "input[name='business-details-have_you_exported_before']:checked"
-  ).value === "not_exported__ess_experience"){
+  if (
+    document.querySelector(
+      "input[name='business-details-have_you_exported_before']:checked"
+    ).value === "not_exported__ess_experience"
+  ) {
     do_you_have_product_element.style.display = "block";
   }
-
 })();
