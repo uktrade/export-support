@@ -3,6 +3,7 @@ import logging
 from directory_forms_api_client.forms import ZendeskAPIForm
 from django import forms
 from django.db import models
+from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
 from export_support.gds import fields as gds_fields
@@ -281,7 +282,7 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         ),
     )
     company_registration_number = forms.CharField(
-        help_text=mark_safe(
+        help_text=format_html(
             "Information about your company helps us to improve how we answer your query."
             "<span class='js-hidden'> Find your number using "
             "<a class='govuk-link' href='https://www.gov.uk/get-information-about-a-company' "
@@ -522,7 +523,7 @@ class OrganisationDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         ),
     )
     company_registration_number = forms.CharField(
-        help_text=mark_safe(
+        help_text=format_html(
             "If your organisation is registered with Companies House, then its registration number"
             " will help us answer your query. "
             "<a class='govuk-link' href='https://www.gov.uk/get-information-about-a-company' "
