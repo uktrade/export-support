@@ -15,7 +15,9 @@ def test_business_information_form_validation():
         "company_type": ["Select the type of business"],
         "company_turnover": ["Select the UK business turnover"],
         "number_of_employees": ["Select the number of UK employees"],
-        "positivity_for_growth": ["Please choose an option"],
+        "positivity_for_growth": [
+            "Select how positive you feel about growing your business overseas"
+        ],
     }
 
 
