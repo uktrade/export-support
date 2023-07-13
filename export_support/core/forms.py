@@ -4,7 +4,6 @@ from directory_forms_api_client.forms import ZendeskAPIForm
 from django import forms
 from django.db import models
 from django.utils.html import format_html
-from django.utils.safestring import mark_safe
 
 from export_support.gds import fields as gds_fields
 from export_support.gds import forms as gds_forms
