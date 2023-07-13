@@ -290,9 +290,9 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
             "how_did_you_hear_about_this_service": "Search engine",
             "marketing_consent": True,
-            "have_you_exported_before": "Yes, in the last year",
-            "do_you_have_a_product_you_want_to_export": "Yes",
-            "positivity_for_growth": "Neutral",
+            "have_you_exported_before": HaveYouExportedBeforeChoices.YES_LAST_YEAR,
+            "do_you_have_a_product_you_want_to_export": DoYouHaveAProductYouWantToExportChoices.YES,
+            "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL,
             "_custom_fields": None,
         }
     )
@@ -991,9 +991,9 @@ def test_full_steps_private_or_limited_business_type_wizard_success_custom_field
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
             "how_did_you_hear_about_this_service": "Search engine",
             "marketing_consent": False,
-            "have_you_exported_before": "Yes, in the last year",
-            "do_you_have_a_product_you_want_to_export": "Yes",
-            "positivity_for_growth": "Neutral",
+            "have_you_exported_before": HaveYouExportedBeforeChoices.YES_LAST_YEAR,
+            "do_you_have_a_product_you_want_to_export": DoYouHaveAProductYouWantToExportChoices.YES,
+            "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL,
             "_custom_fields": [
                 {
                     "222": [
@@ -1834,9 +1834,9 @@ def test_full_steps_wizard_success_private_custom_fields_are_ignored(
             "countries": "Albania, Andorra, Austria, Belgium, Bosnia and Herzegovina, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Israel, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Vatican City",  # noqa: E501
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
-            "have_you_exported_before": "Yes, in the last year",
-            "do_you_have_a_product_you_want_to_export": "Yes",
-            "positivity_for_growth": "Neutral",
+            "have_you_exported_before": HaveYouExportedBeforeChoices.YES_LAST_YEAR,
+            "do_you_have_a_product_you_want_to_export": DoYouHaveAProductYouWantToExportChoices.YES,
+            "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL,
             "full_name": "Firstname Lastname",
             "nature_of_enquiry": "NATURE OF ENQUIRY",
             "number_of_employees": "Fewer than 10",
