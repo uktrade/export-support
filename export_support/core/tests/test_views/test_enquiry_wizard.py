@@ -533,7 +533,7 @@ def test_full_steps_other_organisation_business_type_wizard_success(
             "marketing_consent": True,
             "have_you_exported_before": "No",
             "do_you_have_a_product_you_want_to_export": "Yes",
-            "positivity_for_growth": "",
+            "positivity_for_growth": "Neutral",
             "_custom_fields": None,
         }
     )
@@ -772,7 +772,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
             "marketing_consent": True,
             "have_you_exported_before": "No",
             "do_you_have_a_product_you_want_to_export": "Yes",
-            "positivity_for_growth": "",
+            "positivity_for_growth": "Neutral",
             "_custom_fields": None,
         }
     )
@@ -1286,7 +1286,7 @@ def test_full_steps_other_organisation_business_type_wizard_success_custom_field
             "marketing_consent": False,
             "have_you_exported_before": "No",
             "do_you_have_a_product_you_want_to_export": "Yes",
-            "positivity_for_growth": "",
+            "positivity_for_growth": "Neutral",
             "_custom_fields": [
                 {
                     "222": [
@@ -1571,7 +1571,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success_custom_fields(
             "how_did_you_hear_about_this_service": "Search engine",
             "have_you_exported_before": "No",
             "do_you_have_a_product_you_want_to_export": "Yes",
-            "positivity_for_growth": "",
+            "positivity_for_growth": "Neutral",
             "marketing_consent": False,
             "_custom_fields": [
                 {
