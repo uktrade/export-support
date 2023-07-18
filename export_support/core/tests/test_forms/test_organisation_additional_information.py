@@ -2,7 +2,7 @@ from ...forms import (
     CompanyTurnoverChoices,
     NumberOfEmployeesChoices,
     OrganisationAdditionalInformationForm,
-    OrganisationTypeChoices,
+    OrganisationTypeChoices, PositivityForGrowthChoices,
 )
 
 
@@ -11,6 +11,7 @@ def test_validation_type_of_business_required():
         {
             "company_turnover": CompanyTurnoverChoices.BELOW_85000,
             "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
+            "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL
         }
     )
 
@@ -26,6 +27,7 @@ def test_validation_other_type_of_business_required_when_other_selected():
             "company_type": OrganisationTypeChoices.OTHER,
             "company_turnover": CompanyTurnoverChoices.BELOW_85000,
             "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
+            "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL
         }
     )
 
@@ -41,6 +43,7 @@ def test_get_zendesk_data():
             "company_type": OrganisationTypeChoices.CHARITY_OR_SOCIAL_ENTERPRISE,
             "company_turnover": CompanyTurnoverChoices.BELOW_85000,
             "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
+            "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL
         }
     )
 
@@ -49,6 +52,7 @@ def test_get_zendesk_data():
         "company_type": "Charity / Social enterprise",
         "company_turnover": "Below £85,000",
         "number_of_employees": "Fewer than 10",
+        "positivity_for_growth": "Neutral",
     }
 
     form = OrganisationAdditionalInformationForm(
@@ -57,6 +61,7 @@ def test_get_zendesk_data():
             "other_type_of_organisation": "OTHER TYPE OF ORGANISATION",
             "company_turnover": CompanyTurnoverChoices.BELOW_85000,
             "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
+            "positivity_for_growth": PositivityForGrowthChoices.VERY_POSITIVE
         }
     )
 
@@ -65,6 +70,7 @@ def test_get_zendesk_data():
         "company_type": "OTHER TYPE OF ORGANISATION",
         "company_turnover": "Below £85,000",
         "number_of_employees": "Fewer than 10",
+        "positivity_for_growth": "Very positive",
     }
 
     form = OrganisationAdditionalInformationForm(
@@ -73,6 +79,7 @@ def test_get_zendesk_data():
             "other_type_of_organisation": "THIS IS IGNORED",
             "company_turnover": CompanyTurnoverChoices.BELOW_85000,
             "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
+            "positivity_for_growth": PositivityForGrowthChoices.VERY_NEGATIVE
         }
     )
 
@@ -81,4 +88,5 @@ def test_get_zendesk_data():
         "company_type": "Charity / Social enterprise",
         "company_turnover": "Below £85,000",
         "number_of_employees": "Fewer than 10",
+        "positivity_for_growth": "Very negative",
     }
