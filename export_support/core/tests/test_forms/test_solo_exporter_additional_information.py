@@ -1,7 +1,8 @@
 from ...forms import (
     CompanyTurnoverChoices,
     HaveYouExportedBeforeChoices,
-    PositivityForGrowthChoices, SoloExporterAdditionalInformationForm,
+    PositivityForGrowthChoices,
+    SoloExporterAdditionalInformationForm,
     SoloExporterTypeChoices,
 )
 
@@ -10,7 +11,7 @@ def test_validation_type_of_business_required():
     form = SoloExporterAdditionalInformationForm(
         {
             "company_turnover": CompanyTurnoverChoices.BELOW_85000,
-            "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL
+            "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL,
         }
     )
 
@@ -26,7 +27,7 @@ def test_validation_other_type_of_business_required_when_other_selected():
             "company_type": SoloExporterTypeChoices.OTHER,
             "company_turnover": CompanyTurnoverChoices.BELOW_85000,
             "have_you_exported_before": HaveYouExportedBeforeChoices.NO,
-            "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL
+            "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL,
         }
     )
 

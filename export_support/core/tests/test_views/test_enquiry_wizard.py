@@ -434,7 +434,7 @@ def test_full_steps_other_organisation_business_type_wizard_success(
                 "company_type": OrganisationTypeChoices.CHARITY_OR_SOCIAL_ENTERPRISE,
                 "company_turnover": CompanyTurnoverChoices.BELOW_85000,
                 "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
-                "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL
+                "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL,
             },
         ),
     )
