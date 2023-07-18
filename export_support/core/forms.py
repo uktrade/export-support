@@ -5,9 +5,7 @@ from django import forms
 from django.db import models
 from django.utils.html import format_html
 
-from export_support.gds import fields as gds_fields
-from export_support.gds import forms as gds_forms
-
+from export_support.gds import fields as gds_fields, forms as gds_forms
 from .consts import COUNTRIES_MAP, SECTORS_MAP
 from .validators import postcode_validator
 
@@ -27,6 +25,109 @@ def coerce_choice(enum):
         return enum(coercer(choice))
 
     return _coerce
+
+
+class BaseForm(gds_forms.FormErrorMixin, forms.Form):
+    def get_zendesk_data(self):
+        return {}
+
+
+class HaveYouExportedBeforeChoices(models.TextChoices):
+    YES_LAST_YEAR = "in_the_last_year__ess_experience", "Yes, in the last year"
+    YES_MORE_ONE_YEAR = (
+        "more_than_a_year_ago__ess_experience",
+        "Yes, more than a year ago",
+    )
+    NO = "not_exported__ess_experience", "No"
+
+
+class DoYouHaveAProductYouWantToExportChoices(models.TextChoices):
+    YES = "product_ready__ess_experience", "Yes"
+    NO = "no_product_ready__ess_experience", "No"
+
+
+class HaveYouExportedBeforeMixin(BaseForm):
+    """Mixin class to provide the 'have_you_exported_before' and
+    'do_you_have_a_product_you_want_to_export' fields and associated clean method.
+    """
+
+    have_you_exported_before = forms.TypedChoiceField(
+        choices=HaveYouExportedBeforeChoices.choices,
+        coerce=coerce_choice(HaveYouExportedBeforeChoices),
+        error_messages={
+            "required": "Select whether you have exported before",
+        },
+        label="Have you exported before?",
+        widget=gds_fields.RadioSelect,
+    )
+
+    do_you_have_a_product_you_want_to_export = forms.TypedChoiceField(
+        choices=DoYouHaveAProductYouWantToExportChoices.choices,
+        coerce=coerce_choice(DoYouHaveAProductYouWantToExportChoices),
+        label="Do you have a product you'd like to export?",
+        widget=gds_fields.RadioSelect,
+        required=False,
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get(
+                "have_you_exported_before"
+        ) == HaveYouExportedBeforeChoices.NO and not cleaned_data.get(
+            "do_you_have_a_product_you_want_to_export"
+        ):
+            self.add_error(
+                "do_you_have_a_product_you_want_to_export",
+                "Select yes if you have a product you’d like to export",
+            )
+
+        return cleaned_data
+
+    def get_zendesk_data(self):
+        zendesk_data = super().get_zendesk_data()
+        have_you_exported_before = self.cleaned_data["have_you_exported_before"].label
+        do_you_have_a_product_you_want_to_export = self.cleaned_data[
+            "do_you_have_a_product_you_want_to_export"
+        ].label
+
+        zendesk_data.update({
+            "have_you_exported_before": have_you_exported_before,
+            "do_you_have_a_product_you_want_to_export": do_you_have_a_product_you_want_to_export,
+        })
+
+        return zendesk_data
+
+
+class PositivityForGrowthChoices(models.TextChoices):
+    VERY_POSITIVE = "very_positive__ess_positivity", "Very positive"
+    QUITE_POSITIVE = "quite_positive__ess_positivity", "Quite positive"
+    NEUTRAL = "neutral__ess_positivity", "Neutral"
+    QUITE_NEGATIVE = "quite_negative__ess_positivity", "Quite negative"
+    VERY_NEGATIVE = "very_negative__ess_positivity", "Very negative"
+
+
+class PositivityForGrowthMixin(BaseForm):
+    """Mixin class to provide the 'positivity_for_growth' field and associated clean method.
+    """
+    positivity_for_growth = forms.TypedChoiceField(
+        choices=PositivityForGrowthChoices.choices,
+        coerce=coerce_choice(PositivityForGrowthChoices),
+        label="How positive do you feel about growing your business overseas?",
+        widget=gds_fields.RadioSelect,
+        error_messages={
+            "required": "Select how positive you feel about growing your business overseas",
+        },
+    )
+
+    def get_zendesk_data(self):
+        zendesk_data = super().get_zendesk_data()
+        positivity_for_growth = self.cleaned_data["positivity_for_growth"].label
+
+        zendesk_data.update({
+            "positivity_for_growth": positivity_for_growth,
+        })
+
+        return zendesk_data
 
 
 class EnquirySubjectChoices(models.IntegerChoices):
@@ -102,37 +203,37 @@ class ExportCountriesForm(gds_forms.FormErrorMixin, forms.Form):
             return cleaned_data
 
         has_all_countries_selected = [
-            code for code, _ in self.fields["countries"].choices
-        ] == cleaned_data["countries"]
+                                         code for code, _ in self.fields["countries"].choices
+                                     ] == cleaned_data["countries"]
 
         if (
-            has_select_all_selected
-            and has_all_countries_selected
-            and not has_no_specific_selected
+                has_select_all_selected
+                and has_all_countries_selected
+                and not has_no_specific_selected
         ):
             return cleaned_data
 
         # if has_no_specific_selected is true, we need to set the Zendesk identifiable code
         if (
-            has_no_specific_selected
-            and not has_select_all_selected
-            and not has_countries_selected
+                has_no_specific_selected
+                and not has_select_all_selected
+                and not has_countries_selected
         ):
             cleaned_data["countries"] = ["No specific country"]
 
         if (
-            not has_select_all_selected
-            and not has_countries_selected
-            and not has_no_specific_selected
+                not has_select_all_selected
+                and not has_countries_selected
+                and not has_no_specific_selected
         ):
             self.add_error(
                 "countries", "Select the country or countries you are selling to"
             )
 
         if (
-            has_select_all_selected
-            and has_countries_selected
-            and not has_no_specific_selected
+                has_select_all_selected
+                and has_countries_selected
+                and not has_no_specific_selected
         ):
             self.add_error(
                 "countries",
@@ -140,7 +241,7 @@ class ExportCountriesForm(gds_forms.FormErrorMixin, forms.Form):
             )
 
         if has_no_specific_selected and (
-            has_select_all_selected or has_countries_selected
+                has_select_all_selected or has_countries_selected
         ):
             self.add_error(
                 "countries",
@@ -252,21 +353,7 @@ class BusinessTypeForm(gds_forms.FormErrorMixin, forms.Form):
         }
 
 
-class HaveYouExportedBeforeChoices(models.TextChoices):
-    YES_LAST_YEAR = "in_the_last_year__ess_experience", "Yes, in the last year"
-    YES_MORE_ONE_YEAR = (
-        "more_than_a_year_ago__ess_experience",
-        "Yes, more than a year ago",
-    )
-    NO = "not_exported__ess_experience", "No"
-
-
-class DoYouHaveAProductYouWantToExportChoices(models.TextChoices):
-    YES = "product_ready__ess_experience", "Yes"
-    NO = "no_product_ready__ess_experience", "No"
-
-
-class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
+class BusinessDetailsForm(HaveYouExportedBeforeMixin):
     company_name = forms.CharField(
         error_messages={
             "required": "Enter the business name",
@@ -301,7 +388,7 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
             "required": "Enter the business unit postcode",
         },
         help_text="Knowing where you are enquiring from means we can direct you to "
-        "local support if appropriate. Enter a postcode for example SW1A 2DY.",
+                  "local support if appropriate. Enter a postcode for example SW1A 2DY.",
         label="Business unit postcode",
         validators=[postcode_validator],
         widget=forms.TextInput(
@@ -312,57 +399,19 @@ class BusinessDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         ),
     )
 
-    have_you_exported_before = forms.TypedChoiceField(
-        choices=HaveYouExportedBeforeChoices.choices,
-        coerce=coerce_choice(HaveYouExportedBeforeChoices),
-        error_messages={
-            "required": "Select whether you have exported before",
-        },
-        label="Have you exported before?",
-        widget=gds_fields.RadioSelect,
-    )
-
-    do_you_have_a_product_you_want_to_export = forms.TypedChoiceField(
-        choices=DoYouHaveAProductYouWantToExportChoices.choices,
-        coerce=coerce_choice(DoYouHaveAProductYouWantToExportChoices),
-        label="Do you have a product you'd like to export?",
-        widget=gds_fields.RadioSelect,
-        required=False,
-    )
-
     def clean_company_post_code(self):
         company_post_code = self.cleaned_data["company_post_code"]
         return company_post_code.upper()
-
-    def clean(self):
-        cleaned_data = super().clean()
-        if cleaned_data.get(
-            "have_you_exported_before"
-        ) == HaveYouExportedBeforeChoices.NO and not cleaned_data.get(
-            "do_you_have_a_product_you_want_to_export"
-        ):
-            self.add_error(
-                "do_you_have_a_product_you_want_to_export",
-                "Select yes if you have a product you’d like to export",
-            )
-
-        return cleaned_data
 
     def get_zendesk_data(self):
         company_name = self.cleaned_data["company_name"]
         company_post_code = self.cleaned_data["company_post_code"]
         company_registration_number = self.cleaned_data["company_registration_number"]
-        have_you_exported_before = self.cleaned_data["have_you_exported_before"].label
-        do_you_have_a_product_you_want_to_export = self.cleaned_data[
-            "do_you_have_a_product_you_want_to_export"
-        ].label
 
         return {
             "company_name": company_name,
             "company_post_code": company_post_code,
             "company_registration_number": company_registration_number,
-            "have_you_exported_before": have_you_exported_before,
-            "do_you_have_a_product_you_want_to_export": do_you_have_a_product_you_want_to_export,
         }
 
 
@@ -411,15 +460,7 @@ class NumberOfEmployeesChoices(models.TextChoices):
     )
 
 
-class PositivityForGrowthChoices(models.TextChoices):
-    VERY_POSITIVE = "very_positive__ess_positivity", "Very positive"
-    QUITE_POSITIVE = "quite_positive__ess_positivity", "Quite positive"
-    NEUTRAL = "neutral__ess_positivity", "Neutral"
-    QUITE_NEGATIVE = "quite_negative__ess_positivity", "Quite negative"
-    VERY_NEGATIVE = "very_negative__ess_positivity", "Very negative"
-
-
-class BusinessAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
+class BusinessAdditionalInformationForm(PositivityForGrowthMixin):
     company_type = forms.TypedChoiceField(
         coerce=coerce_choice(PrivateOrPublicCompanyTypeChoices),
         choices=[("", "Please select")] + PrivateOrPublicCompanyTypeChoices.choices,
@@ -471,16 +512,6 @@ class BusinessAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
         ),
     )
 
-    positivity_for_growth = forms.TypedChoiceField(
-        choices=PositivityForGrowthChoices.choices,
-        coerce=coerce_choice(PositivityForGrowthChoices),
-        label="How positive do you feel about growing your business overseas?",
-        widget=gds_fields.RadioSelect,
-        error_messages={
-            "required": "Select how positive you feel about growing your business overseas",
-        },
-    )
-
     def clean(self):
         cleaned_data = super().clean()
 
@@ -491,8 +522,8 @@ class BusinessAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
 
         other_type_of_business = cleaned_data["other_type_of_business"]
         if (
-            type_of_business == PrivateOrPublicCompanyTypeChoices.OTHER
-            and not other_type_of_business
+                type_of_business == PrivateOrPublicCompanyTypeChoices.OTHER
+                and not other_type_of_business
         ):
             self.add_error(
                 "other_type_of_business",
@@ -512,17 +543,14 @@ class BusinessAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
         else:
             type_of_business = type_of_business.label
 
-        positivity_for_growth = self.cleaned_data["positivity_for_growth"].label
-
         return {
             "company_type": type_of_business,
             "company_turnover": company_turnover,
             "number_of_employees": number_of_employees,
-            "positivity_for_growth": positivity_for_growth,
         }
 
 
-class OrganisationDetailsForm(gds_forms.FormErrorMixin, forms.Form):
+class OrganisationDetailsForm(HaveYouExportedBeforeMixin):
     company_name = forms.CharField(
         error_messages={
             "required": "Enter the organisation name",
@@ -556,7 +584,7 @@ class OrganisationDetailsForm(gds_forms.FormErrorMixin, forms.Form):
             "required": "Enter the organisation unit postcode",
         },
         help_text="Knowing where you are enquiring from means we can direct you to local support "
-        "if appropriate. Enter a postcode for example SW1A 2DY.",
+                  "if appropriate. Enter a postcode for example SW1A 2DY.",
         label="Organisation unit postcode",
         validators=[postcode_validator],
         widget=forms.TextInput(
@@ -572,15 +600,18 @@ class OrganisationDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         return company_post_code.upper()
 
     def get_zendesk_data(self):
+        zendesk_data = super().get_zendesk_data()
+
         company_name = self.cleaned_data["company_name"]
         company_registration_number = self.cleaned_data["company_registration_number"]
         company_post_code = self.cleaned_data["company_post_code"]
 
-        return {
+        zendesk_data.update({
             "company_name": company_name,
             "company_registration_number": company_registration_number,
             "company_post_code": company_post_code,
-        }
+        })
+        return zendesk_data
 
 
 class OrganisationTypeChoices(models.TextChoices):
@@ -597,7 +628,7 @@ class OrganisationTypeChoices(models.TextChoices):
     OTHER = "__other__", "Other"
 
 
-class OrganisationAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
+class OrganisationAdditionalInformationForm(PositivityForGrowthMixin):
     company_type = forms.TypedChoiceField(
         coerce=coerce_choice(OrganisationTypeChoices),
         choices=[("", "Please select")] + OrganisationTypeChoices.choices,
@@ -659,8 +690,8 @@ class OrganisationAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form
 
         other_type_of_organisation = cleaned_data["other_type_of_organisation"]
         if (
-            type_of_organisation == OrganisationTypeChoices.OTHER
-            and not other_type_of_organisation
+                type_of_organisation == OrganisationTypeChoices.OTHER
+                and not other_type_of_organisation
         ):
             self.add_error(
                 "other_type_of_organisation",
@@ -670,6 +701,7 @@ class OrganisationAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form
         return cleaned_data
 
     def get_zendesk_data(self):
+        zendesk_data = super().get_zendesk_data()
         type_of_organisation = self.cleaned_data["company_type"]
         company_turnover = self.cleaned_data["company_turnover"].label
         number_of_employees = self.cleaned_data["number_of_employees"].label
@@ -680,14 +712,16 @@ class OrganisationAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form
         else:
             type_of_organisation = type_of_organisation.label
 
-        return {
+        zendesk_data.update({
             "company_type": type_of_organisation,
             "company_turnover": company_turnover,
             "number_of_employees": number_of_employees,
-        }
+        })
+
+        return zendesk_data
 
 
-class SoloExporterDetailsForm(gds_forms.FormErrorMixin, forms.Form):
+class SoloExporterDetailsForm(HaveYouExportedBeforeMixin):
     company_name = forms.CharField(
         error_messages={
             "required": "Enter the business name",
@@ -707,7 +741,7 @@ class SoloExporterDetailsForm(gds_forms.FormErrorMixin, forms.Form):
             "required": "Enter the postcode",
         },
         help_text="Knowing where you are enquiring from means we can direct you to local support "
-        "if appropriate. Enter a postcode for example SW1A 2DY.",
+                  "if appropriate. Enter a postcode for example SW1A 2DY.",
         label="Postcode",
         validators=[postcode_validator],
         widget=forms.TextInput(
@@ -719,13 +753,15 @@ class SoloExporterDetailsForm(gds_forms.FormErrorMixin, forms.Form):
     )
 
     def get_zendesk_data(self):
+        zendesk_data = super().get_zendesk_data()
         company_name = self.cleaned_data["company_name"]
         company_post_code = self.cleaned_data["company_post_code"]
 
-        return {
+        zendesk_data.update({
             "company_name": company_name,
             "company_post_code": company_post_code,
-        }
+        })
+        return zendesk_data
 
 
 class SoloExporterTypeChoices(models.TextChoices):
@@ -734,7 +770,7 @@ class SoloExporterTypeChoices(models.TextChoices):
     OTHER = "__other__", "Other"
 
 
-class SoloExporterAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form):
+class SoloExporterAdditionalInformationForm(PositivityForGrowthMixin):
     company_type = forms.TypedChoiceField(
         coerce=coerce_choice(SoloExporterTypeChoices),
         choices=[("", "Please select")] + SoloExporterTypeChoices.choices,
@@ -780,8 +816,8 @@ class SoloExporterAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form
 
         other_type_of_exporter = cleaned_data["other_type_of_exporter"]
         if (
-            type_of_exporter == SoloExporterTypeChoices.OTHER
-            and not other_type_of_exporter
+                type_of_exporter == SoloExporterTypeChoices.OTHER
+                and not other_type_of_exporter
         ):
             self.add_error(
                 "other_type_of_exporter",
@@ -793,6 +829,7 @@ class SoloExporterAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form
         return cleaned_data
 
     def get_zendesk_data(self):
+        zendesk_data = super().get_zendesk_data()
         type_of_exporter = self.cleaned_data["company_type"]
         number_of_employees = self.cleaned_data["number_of_employees"].label
 
@@ -806,11 +843,13 @@ class SoloExporterAdditionalInformationForm(gds_forms.FormErrorMixin, forms.Form
         else:
             type_of_exporter = type_of_exporter.label
 
-        return {
+        zendesk_data.update({
             "company_type": type_of_exporter,
             "company_turnover": company_turnover,
             "number_of_employees": number_of_employees,
-        }
+        })
+
+        return zendesk_data
 
 
 class SectorsForm(gds_forms.FormErrorMixin, forms.Form):
@@ -931,16 +970,16 @@ class EnquiryDetailsForm(gds_forms.FormErrorMixin, forms.Form):
             return cleaned_data
 
         is_how_did_you_hear_other_selected = (
-            how_did_you_hear_about_this_service
-            == HowDidYouHearAboutThisServiceChoices.OTHER
+                how_did_you_hear_about_this_service
+                == HowDidYouHearAboutThisServiceChoices.OTHER
         )
         other_how_did_you_hear_about_this_service = cleaned_data[
             "other_how_did_you_hear_about_this_service"
         ].strip()
 
         if (
-            is_how_did_you_hear_other_selected
-            and not other_how_did_you_hear_about_this_service
+                is_how_did_you_hear_other_selected
+                and not other_how_did_you_hear_about_this_service
         ):
             self.add_error(
                 "other_how_did_you_hear_about_this_service",
@@ -958,8 +997,8 @@ class EnquiryDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         email_consent = self.cleaned_data["email_consent"]
 
         if (
-            how_did_you_hear_about_this_service
-            == HowDidYouHearAboutThisServiceChoices.OTHER
+                how_did_you_hear_about_this_service
+                == HowDidYouHearAboutThisServiceChoices.OTHER
         ):
             other_how_did_you_hear_about_this_service = self.cleaned_data[
                 "other_how_did_you_hear_about_this_service"
@@ -1010,7 +1049,7 @@ class RussiaUkraineEnquiryForm(gds_forms.FormErrorMixin, forms.Form):
             "required": "Enter the business unit postcode",
         },
         help_text="If your business has multiple locations, enter the postcode for the business "
-        "unit you are enquiring from.",
+                  "unit you are enquiring from.",
         label="Postcode",
         validators=[postcode_validator],
         widget=forms.TextInput(

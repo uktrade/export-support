@@ -12,6 +12,7 @@ module.exports = {
     "business-details": "./assets/javascript/business-details.js",
     "business-details-short-form": "./assets/javascript/business-details-short-form.js",
     "business-details-russia-ukraine-form": "./assets/javascript/business-details-russia-ukraine-form.js",
+    "have-you-exported-before": "./assets/javascript/have-you-exported-before.js",
   },
 
   output: {
