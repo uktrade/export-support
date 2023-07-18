@@ -404,15 +404,18 @@ class BusinessDetailsForm(HaveYouExportedBeforeMixin):
         return company_post_code.upper()
 
     def get_zendesk_data(self):
+        zendesk_data = super().get_zendesk_data()
+
         company_name = self.cleaned_data["company_name"]
         company_post_code = self.cleaned_data["company_post_code"]
         company_registration_number = self.cleaned_data["company_registration_number"]
 
-        return {
+        zendesk_data.update({
             "company_name": company_name,
             "company_post_code": company_post_code,
             "company_registration_number": company_registration_number,
-        }
+        })
+        return zendesk_data
 
 
 class PrivateOrPublicCompanyTypeChoices(models.TextChoices):
@@ -533,6 +536,7 @@ class BusinessAdditionalInformationForm(PositivityForGrowthMixin):
         return cleaned_data
 
     def get_zendesk_data(self):
+        zendesk_data = super().get_zendesk_data()
         type_of_business = self.cleaned_data["company_type"]
         company_turnover = self.cleaned_data["company_turnover"].label
         number_of_employees = self.cleaned_data["number_of_employees"].label
@@ -543,12 +547,12 @@ class BusinessAdditionalInformationForm(PositivityForGrowthMixin):
         else:
             type_of_business = type_of_business.label
 
-        return {
+        zendesk_data.update({
             "company_type": type_of_business,
             "company_turnover": company_turnover,
             "number_of_employees": number_of_employees,
-        }
-
+        })
+        return zendesk_data
 
 class OrganisationDetailsForm(HaveYouExportedBeforeMixin):
     company_name = forms.CharField(
