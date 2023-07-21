@@ -1,5 +1,7 @@
 {% extends "core/wizard_step.html" %}
 
+{% load render_bundle from webpack_loader %}
+
 {% block page_title %}Sole trader or private individual{% endblock %}
 
 {% block fields %}
@@ -15,6 +17,13 @@
             </p>
             {% include "gds/forms/form_group.html" with field=form.company_name %}
             {% include "gds/forms/form_group.html" with field=form.company_post_code %}
+            {% include "gds/forms/form_group.html" with field=form.have_you_exported_before %}
+            {% include "gds/forms/form_group.html" with field=form.do_you_have_a_product_you_want_to_export force_hide_optional=True %}
         </fieldset>
     </div>
+{% endblock %}
+
+{% block footer_additions %}
+    {{ block.super }}
+    {% render_bundle "have-you-exported-before" "js" %}
 {% endblock %}

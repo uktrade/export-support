@@ -11,11 +11,14 @@ from ...forms import (
     SECTORS_MAP,
     BusinessTypeChoices,
     CompanyTurnoverChoices,
+    DoYouHaveAProductYouWantToExportChoices,
     EnquirySubjectChoices,
+    HaveYouExportedBeforeChoices,
     HowDidYouHearAboutThisServiceChoices,
     NumberOfEmployeesChoices,
     OnBehalfOfChoices,
     OrganisationTypeChoices,
+    PositivityForGrowthChoices,
     PrivateOrPublicCompanyTypeChoices,
     SoloExporterTypeChoices,
 )
@@ -164,6 +167,8 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
                 "company_name": "Companyname",
                 "company_post_code": "SW1A 2BL",
                 "company_registration_number": "12345678",
+                "have_you_exported_before": HaveYouExportedBeforeChoices.NO,
+                "do_you_have_a_product_you_want_to_export": DoYouHaveAProductYouWantToExportChoices.YES,
             },
         ),
     )
@@ -188,6 +193,7 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
                 "company_type": PrivateOrPublicCompanyTypeChoices.PRIVATE_LIMITED_COMPANY,
                 "company_turnover": CompanyTurnoverChoices.BELOW_85000,
                 "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
+                "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL,
             },
         ),
     )
@@ -284,6 +290,9 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
             "how_did_you_hear_about_this_service": "Search engine",
             "marketing_consent": True,
+            "have_you_exported_before": "No",
+            "do_you_have_a_product_you_want_to_export": "Yes",
+            "positivity_for_growth": "Neutral",
             "_custom_fields": None,
         }
     )
@@ -399,6 +408,8 @@ def test_full_steps_other_organisation_business_type_wizard_success(
                 "company_name": "Organisationname",
                 "company_post_code": "SW1A 2BL",
                 "company_registration_number": "12345678",
+                "have_you_exported_before": HaveYouExportedBeforeChoices.NO,
+                "do_you_have_a_product_you_want_to_export": DoYouHaveAProductYouWantToExportChoices.YES,
             },
         ),
     )
@@ -423,6 +434,7 @@ def test_full_steps_other_organisation_business_type_wizard_success(
                 "company_type": OrganisationTypeChoices.CHARITY_OR_SOCIAL_ENTERPRISE,
                 "company_turnover": CompanyTurnoverChoices.BELOW_85000,
                 "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
+                "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL,
             },
         ),
     )
@@ -519,6 +531,9 @@ def test_full_steps_other_organisation_business_type_wizard_success(
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
             "how_did_you_hear_about_this_service": "Search engine",
             "marketing_consent": True,
+            "have_you_exported_before": "No",
+            "do_you_have_a_product_you_want_to_export": "Yes",
+            "positivity_for_growth": "Neutral",
             "_custom_fields": None,
         }
     )
@@ -633,6 +648,8 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
             {
                 "company_name": "Soloexporter",
                 "company_post_code": "SW1A 2BL",
+                "have_you_exported_before": HaveYouExportedBeforeChoices.NO,
+                "do_you_have_a_product_you_want_to_export": DoYouHaveAProductYouWantToExportChoices.YES,
             },
         ),
     )
@@ -656,6 +673,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
             {
                 "company_type": SoloExporterTypeChoices.SOLE_TRADER,
                 "company_turnover": CompanyTurnoverChoices.BELOW_85000,
+                "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL,
             },
         ),
     )
@@ -752,6 +770,9 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
             "how_did_you_hear_about_this_service": "Search engine",
             "marketing_consent": True,
+            "have_you_exported_before": "No",
+            "do_you_have_a_product_you_want_to_export": "Yes",
+            "positivity_for_growth": "Neutral",
             "_custom_fields": None,
         }
     )
@@ -867,6 +888,8 @@ def test_full_steps_private_or_limited_business_type_wizard_success_custom_field
                 "company_name": "Companyname",
                 "company_post_code": "SW1A 2BL",
                 "company_registration_number": "12345678",
+                "have_you_exported_before": HaveYouExportedBeforeChoices.NO,
+                "do_you_have_a_product_you_want_to_export": DoYouHaveAProductYouWantToExportChoices.YES,
             },
         ),
     )
@@ -890,6 +913,7 @@ def test_full_steps_private_or_limited_business_type_wizard_success_custom_field
                 "company_type": PrivateOrPublicCompanyTypeChoices.PRIVATE_LIMITED_COMPANY,
                 "company_turnover": CompanyTurnoverChoices.BELOW_85000,
                 "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
+                "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL,
             },
         ),
     )
@@ -973,6 +997,9 @@ def test_full_steps_private_or_limited_business_type_wizard_success_custom_field
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
             "how_did_you_hear_about_this_service": "Search engine",
             "marketing_consent": False,
+            "have_you_exported_before": "No",
+            "do_you_have_a_product_you_want_to_export": "Yes",
+            "positivity_for_growth": "Neutral",
             "_custom_fields": [
                 {
                     "222": [
@@ -1147,6 +1174,8 @@ def test_full_steps_other_organisation_business_type_wizard_success_custom_field
                 "company_name": "Organisationname",
                 "company_post_code": "SW1A 2BL",
                 "company_registration_number": "12345678",
+                "have_you_exported_before": HaveYouExportedBeforeChoices.NO,
+                "do_you_have_a_product_you_want_to_export": DoYouHaveAProductYouWantToExportChoices.YES,
             },
         ),
     )
@@ -1171,6 +1200,7 @@ def test_full_steps_other_organisation_business_type_wizard_success_custom_field
                 "company_type": OrganisationTypeChoices.CHARITY_OR_SOCIAL_ENTERPRISE,
                 "company_turnover": CompanyTurnoverChoices.BELOW_85000,
                 "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
+                "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL,
             },
         ),
     )
@@ -1254,6 +1284,9 @@ def test_full_steps_other_organisation_business_type_wizard_success_custom_field
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
             "how_did_you_hear_about_this_service": "Search engine",
             "marketing_consent": False,
+            "have_you_exported_before": "No",
+            "do_you_have_a_product_you_want_to_export": "Yes",
+            "positivity_for_growth": "Neutral",
             "_custom_fields": [
                 {
                     "222": [
@@ -1428,6 +1461,8 @@ def test_full_steps_solo_exporter_business_type_wizard_success_custom_fields(
             {
                 "company_name": "Soloexporter",
                 "company_post_code": "SW1A 2BL",
+                "have_you_exported_before": HaveYouExportedBeforeChoices.NO,
+                "do_you_have_a_product_you_want_to_export": DoYouHaveAProductYouWantToExportChoices.YES,
             },
         ),
     )
@@ -1451,6 +1486,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success_custom_fields(
             {
                 "company_type": SoloExporterTypeChoices.SOLE_TRADER,
                 "company_turnover": CompanyTurnoverChoices.BELOW_85000,
+                "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL,
             },
         ),
     )
@@ -1533,6 +1569,9 @@ def test_full_steps_solo_exporter_business_type_wizard_success_custom_fields(
             "other_sector": "ANOTHER SECTOR",
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
             "how_did_you_hear_about_this_service": "Search engine",
+            "have_you_exported_before": "No",
+            "do_you_have_a_product_you_want_to_export": "Yes",
+            "positivity_for_growth": "Neutral",
             "marketing_consent": False,
             "_custom_fields": [
                 {
@@ -1705,6 +1744,8 @@ def test_full_steps_wizard_success_private_custom_fields_are_ignored(
                 "company_name": "Companyname",
                 "company_post_code": "SW1A 2BL",
                 "company_registration_number": "12345678",
+                "have_you_exported_before": HaveYouExportedBeforeChoices.NO,
+                "do_you_have_a_product_you_want_to_export": DoYouHaveAProductYouWantToExportChoices.YES,
             },
         ),
     )
@@ -1729,6 +1770,7 @@ def test_full_steps_wizard_success_private_custom_fields_are_ignored(
                 "other_type_of_business": "Othertypeofbusiness",
                 "company_turnover": CompanyTurnoverChoices.BELOW_85000,
                 "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
+                "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL,
             },
         ),
     )
@@ -1804,6 +1846,9 @@ def test_full_steps_wizard_success_private_custom_fields_are_ignored(
             "countries": "Albania, Andorra, Austria, Belgium, Bosnia and Herzegovina, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Israel, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Vatican City",  # noqa: E501
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
+            "have_you_exported_before": "No",
+            "do_you_have_a_product_you_want_to_export": "Yes",
+            "positivity_for_growth": "Neutral",
             "full_name": "Firstname Lastname",
             "nature_of_enquiry": "NATURE OF ENQUIRY",
             "number_of_employees": "Fewer than 10",
@@ -1925,6 +1970,8 @@ def test_zendesk_form_is_not_valid_wizard_raises_error(client, settings, mocker)
                 "company_name": "Companyname",
                 "company_post_code": "SW1A 2BL",
                 "company_registration_number": "12345678",
+                "have_you_exported_before": HaveYouExportedBeforeChoices.NO,
+                "do_you_have_a_product_you_want_to_export": DoYouHaveAProductYouWantToExportChoices.YES,
             },
         ),
     )
@@ -1948,6 +1995,7 @@ def test_zendesk_form_is_not_valid_wizard_raises_error(client, settings, mocker)
                 "company_type": PrivateOrPublicCompanyTypeChoices.PRIVATE_LIMITED_COMPANY,
                 "company_turnover": CompanyTurnoverChoices.BELOW_85000,
                 "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
+                "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL,
             },
         ),
     )
@@ -2097,6 +2145,8 @@ def run_wizard_enquiry_subject(settings, mocker):
                     "company_name": "Companyname",
                     "company_post_code": "SW1A 2BL",
                     "company_registration_number": "12345678",
+                    "have_you_exported_before": HaveYouExportedBeforeChoices.NO,
+                    "do_you_have_a_product_you_want_to_export": DoYouHaveAProductYouWantToExportChoices.YES,
                 },
             ),
         )
@@ -2120,6 +2170,7 @@ def run_wizard_enquiry_subject(settings, mocker):
                     "company_type": PrivateOrPublicCompanyTypeChoices.PRIVATE_LIMITED_COMPANY,
                     "company_turnover": CompanyTurnoverChoices.BELOW_85000,
                     "number_of_employees": NumberOfEmployeesChoices.FEWER_THAN_10,
+                    "positivity_for_growth": PositivityForGrowthChoices.NEUTRAL,
                 },
             ),
         )
