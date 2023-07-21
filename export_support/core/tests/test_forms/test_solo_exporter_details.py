@@ -35,6 +35,6 @@ def test_get_zendesk_data():
     assert form.get_zendesk_data() == {
         "company_name": "ACME",
         "company_post_code": "SW1A 2BL",
-        "have_you_exported_before": "No",
+        "have_you_exported_before": "Yes, in the last year",
         "do_you_have_a_product_you_want_to_export": "",
     }
