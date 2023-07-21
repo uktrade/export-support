@@ -88,9 +88,16 @@ class HaveYouExportedBeforeMixin(BaseForm):
     def get_zendesk_data(self):
         zendesk_data = super().get_zendesk_data()
         have_you_exported_before = self.cleaned_data["have_you_exported_before"].label
-        do_you_have_a_product_you_want_to_export = self.cleaned_data[
-            "do_you_have_a_product_you_want_to_export"
-        ].label
+
+        if (
+            self.cleaned_data["have_you_exported_before"].value
+            == "not_exported__ess_experience"
+        ):
+            do_you_have_a_product_you_want_to_export = self.cleaned_data[
+                "do_you_have_a_product_you_want_to_export"
+            ].label
+        else:
+            do_you_have_a_product_you_want_to_export = ""
 
         zendesk_data.update(
             {

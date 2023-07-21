@@ -22,3 +22,19 @@ def test_get_zendesk_data():
         "have_you_exported_before": "No",
         "do_you_have_a_product_you_want_to_export": "Yes",
     }
+
+    form = SoloExporterDetailsForm(
+        {
+            "company_name": "ACME",
+            "company_post_code": "SW1A 2BL",
+            "have_you_exported_before": HaveYouExportedBeforeChoices.YES_LAST_YEAR,
+        }
+    )
+
+    assert form.is_valid()
+    assert form.get_zendesk_data() == {
+        "company_name": "ACME",
+        "company_post_code": "SW1A 2BL",
+        "have_you_exported_before": "Yes, in the last year",
+        "do_you_have_a_product_you_want_to_export": "",
+    }
