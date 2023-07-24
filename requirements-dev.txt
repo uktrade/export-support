@@ -5,3 +5,4 @@ ipdb==0.13.9
 pytest-django==4.4.0
 pytest-mock==3.6.1
 pytest-cov==2.12.1
+coverage==7.2.7
