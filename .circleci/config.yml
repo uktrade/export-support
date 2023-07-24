@@ -15,7 +15,7 @@ jobs:
                           command: sudo apt-get update && sudo apt-get install -y nodejs npm
                   - run:
                           name: Install Python deps
-                          command: pip install -r requirements.txt -r requirements-dev.txt
+                          command: pip install -r requirements-dev.txt
                   - run:
                           name: Webpack build
                           command: npm install && npm run build
