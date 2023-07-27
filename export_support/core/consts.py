@@ -2,67 +2,26 @@ from django.conf import settings
 
 from .countries import get_country_name_from_code
 
-ORIGINAL_ENQUIRY_COUNTRY_CODES = {
-    "AL": "albania__ess_export",
-    "AD": "andorra__ess_export",
-    "AT": "austria__ess_export",
-    "BE": "belgium__ess_export",
-    "BA": "bosnia_and_herzegovina__ess_export",
-    "BG": "bulgaria__ess_export",
-    "HR": "croatia__ess_export",
-    "CY": "cyprus__ess_export",
-    "CZ": "czechia__ess_export",
-    "DK": "denmark__ess_export",
-    "EE": "estonia__ess_export",
-    "FI": "finland__ess_export",
-    "FR": "france__ess_export",
-    "DE": "germany__ess_export",
-    "GR": "greece__ess_export",
-    "HU": "hungary__ess_export",
-    "IS": "iceland__ess_export",
-    "IE": "ireland__ess_export",
-    "IL": "israel__ess_export",
-    "IT": "italy__ess_export",
-    "XK": "kosovo__ess_export",
-    "LV": "latvia__ess_export",
-    "LI": "liechtenstein__ess_export",
-    "LT": "lithuania__ess_export",
-    "LU": "luxembourg__ess_export",
-    "MT": "malta__ess_export",
-    "MC": "monaco__ess_export",
-    "ME": "montenegro__ess_export",
-    "NL": "netherland__ess_export",
-    "MK": "north_macedonia__ess_export",
-    "NO": "norway__ess_export",
-    "PL": "poland__ess_export",
-    "PT": "portugal__ess_export",
-    "RO": "romania__ess_export",
-    "SM": "san_marino__ess_export",
-    "RS": "serbia__ess_export",
-    "SK": "slovakia__ess_export",
-    "SI": "slovenia__ess_export",
-    "ES": "spain__ess_export",
-    "SE": "sweden__ess_export",
-    "CH": "switzerland__ess_export",
-    "TR": "turkey__ess_export",
-    "VA": "vatican_city__ess_export",
-}
-
-EECAN_ENQUIRY_COUNTRY_CODES = {
-    "AM": "armenia__ess_export",
-    "AZ": "azerbaijan__ess_export",
-    "BY": "belarus__ess_export",
-    "GE": "georgia__ess_export",
-    "KZ": "kazakhstan__ess_export",
-    "KG": "kyrgyzstan__ess_export",
-    "MD": "moldova__ess_export",
-    "MN": "mongolia__ess_export",
-    "RU": "russia__ess_export",
-    "TJ": "tajikistan__ess_export",
-    "TM": "turkmenistan__ess_export",
-    "UA": "ukraine__ess_export",
-    "UZ": "uzbekistan__ess_export",
-}
+ENQUIRY_COUNTRY_CODES = {'AD': 'andorra__ess_export', 'AL': 'albania__ess_export', 'AM': 'armenia__ess_export',
+ 'AT': 'austria__ess_export', 'AZ': 'azerbaijan__ess_export',
+ 'BA': 'bosnia_and_herzegovina__ess_export', 'BE': 'belgium__ess_export',
+ 'BG': 'bulgaria__ess_export', 'BY': 'belarus__ess_export', 'CH': 'switzerland__ess_export',
+ 'CY': 'cyprus__ess_export', 'CZ': 'czechia__ess_export', 'DE': 'germany__ess_export',
+ 'DK': 'denmark__ess_export', 'EE': 'estonia__ess_export', 'ES': 'spain__ess_export',
+ 'FI': 'finland__ess_export', 'FR': 'france__ess_export', 'GE': 'georgia__ess_export',
+ 'GR': 'greece__ess_export', 'HR': 'croatia__ess_export', 'HU': 'hungary__ess_export',
+ 'IE': 'ireland__ess_export', 'IL': 'israel__ess_export', 'IS': 'iceland__ess_export',
+ 'IT': 'italy__ess_export', 'KG': 'kyrgyzstan__ess_export', 'KZ': 'kazakhstan__ess_export',
+ 'LI': 'liechtenstein__ess_export', 'LT': 'lithuania__ess_export', 'LU': 'luxembourg__ess_export',
+ 'LV': 'latvia__ess_export', 'MC': 'monaco__ess_export', 'MD': 'moldova__ess_export',
+ 'ME': 'montenegro__ess_export', 'MK': 'north_macedonia__ess_export', 'MN': 'mongolia__ess_export',
+ 'MT': 'malta__ess_export', 'NL': 'netherland__ess_export', 'NO': 'norway__ess_export',
+ 'PL': 'poland__ess_export', 'PT': 'portugal__ess_export', 'RO': 'romania__ess_export',
+ 'RS': 'serbia__ess_export', 'RU': 'russia__ess_export', 'SE': 'sweden__ess_export',
+ 'SI': 'slovenia__ess_export', 'SK': 'slovakia__ess_export', 'SM': 'san_marino__ess_export',
+ 'TJ': 'tajikistan__ess_export', 'TM': 'turkmenistan__ess_export', 'TR': 'turkey__ess_export',
+ 'UA': 'ukraine__ess_export', 'UZ': 'uzbekistan__ess_export', 'VA': 'vatican_city__ess_export',
+ 'XK': 'kosovo__ess_export'}
 
 EXPANDED_COUNTRY_CODES = {
     "AF": "afghanistan__ess_export",
@@ -259,11 +218,6 @@ EXPANDED_COUNTRY_CODES = {
     "ZM": "zambia__ess_export",
     "ZW": "zimbabwe__ess_export",
 }
-
-ENQUIRY_COUNTRY_CODES = {**ORIGINAL_ENQUIRY_COUNTRY_CODES}
-
-if settings.EECAN_ROLLOUT_FEATURE_FLAG:
-    ENQUIRY_COUNTRY_CODES = {**ENQUIRY_COUNTRY_CODES, **EECAN_ENQUIRY_COUNTRY_CODES}
 
 # Enable Rest of the world countries
 if settings.ROW_ROLLOUT_FEATURE_FLAG:

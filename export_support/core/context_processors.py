@@ -12,7 +12,3 @@ def external_urls(request):
 
 def current_path(request):
     return {"current_path": request.get_full_path()}
-
-
-def eecan_rollout_flag(request):
-    return {"eecan_rollout_flag": settings.EECAN_ROLLOUT_FEATURE_FLAG}
