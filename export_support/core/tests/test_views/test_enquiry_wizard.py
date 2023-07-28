@@ -279,7 +279,7 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
             "company_turnover": "Below £85,000",
             "company_type": "Private limited company",
             "company_type_category": "UK private or public limited company",
-            "countries": "Albania, Andorra, Austria, Belgium, Bosnia and Herzegovina, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Israel, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Vatican City",  # noqa: E501
+            "countries": "Andorra, Albania, Austria, Bosnia and Herzegovina, Belgium, Bulgaria, Switzerland, Cyprus, Czech Republic, Germany, Denmark, Estonia, Spain, Finland, France, Greece, Croatia, Hungary, Ireland, Israel, Iceland, Italy, Liechtenstein, Lithuania, Luxembourg, Latvia, Monaco, Montenegro, North Macedonia, Malta, Netherlands, Norway, Poland, Portugal, Romania, Serbia, Sweden, Slovenia, Slovakia, San Marino, Turkey, Vatican City State (Holy See), Kosovo",
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
             "full_name": "Firstname Lastname",
