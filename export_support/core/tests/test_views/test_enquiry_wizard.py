@@ -7,21 +7,12 @@ from django.urls import reverse
 from pytest_django.asserts import assertTemplateUsed
 
 from ...consts import ENQUIRY_COUNTRY_CODES
-from ...forms import (
-    SECTORS_MAP,
-    BusinessTypeChoices,
-    CompanyTurnoverChoices,
-    DoYouHaveAProductYouWantToExportChoices,
-    EnquirySubjectChoices,
-    HaveYouExportedBeforeChoices,
-    HowDidYouHearAboutThisServiceChoices,
-    NumberOfEmployeesChoices,
-    OnBehalfOfChoices,
-    OrganisationTypeChoices,
-    PositivityForGrowthChoices,
-    PrivateOrPublicCompanyTypeChoices,
-    SoloExporterTypeChoices,
-)
+from ...forms import (BusinessTypeChoices, CompanyTurnoverChoices,
+                      DoYouHaveAProductYouWantToExportChoices, EnquirySubjectChoices,
+                      HaveYouExportedBeforeChoices, HowDidYouHearAboutThisServiceChoices,
+                      NumberOfEmployeesChoices, OnBehalfOfChoices, OrganisationTypeChoices,
+                      PositivityForGrowthChoices, PrivateOrPublicCompanyTypeChoices, SECTORS_MAP,
+                      SoloExporterTypeChoices)
 
 COUNTRY_MACHINE_READABLE_VALUES = list(ENQUIRY_COUNTRY_CODES.values())
 
@@ -59,7 +50,7 @@ def assert_number_of_steps(response, *, current_step_number, total_number_of_ste
 
 @pytest.mark.django_db
 def test_full_steps_private_or_limited_business_type_wizard_success(
-    client, settings, mocker
+        client, settings, mocker
 ):
     settings.FORM_URL = "FORM_URL"
     settings.ZENDESK_SERVICE_NAME = "ZENDESK_SERVICE_NAME"
@@ -279,7 +270,7 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
             "company_turnover": "Below £85,000",
             "company_type": "Private limited company",
             "company_type_category": "UK private or public limited company",
-            "countries": "Andorra, Albania, Austria, Bosnia and Herzegovina, Belgium, Bulgaria, Switzerland, Cyprus, Czech Republic, Germany, Denmark, Estonia, Spain, Finland, France, Greece, Croatia, Hungary, Ireland, Israel, Iceland, Italy, Liechtenstein, Lithuania, Luxembourg, Latvia, Monaco, Montenegro, North Macedonia, Malta, Netherlands, Norway, Poland, Portugal, Romania, Serbia, Sweden, Slovenia, Slovakia, San Marino, Turkey, Vatican City State (Holy See), Kosovo",
+            "countries": "Andorra, Albania, Armenia, Austria, Azerbaijan, Bosnia and Herzegovina, Belgium, Bulgaria, Belarus, Switzerland, Cyprus, Czechia, Germany, Denmark, Estonia, Spain, Finland, France, Georgia, Greece, Croatia, Hungary, Ireland, Israel, Iceland, Italy, Kyrgyzstan, Kazakhstan, Liechtenstein, Lithuania, Luxembourg, Latvia, Monaco, Moldova, Montenegro, North Macedonia, Mongolia, Malta, Netherlands, Norway, Poland, Portugal, Romania, Serbia, Russia, Sweden, Slovenia, Slovakia, San Marino, Tajikistan, Turkmenistan, Turkey, Ukraine, Uzbekistan, Vatican City, Kosovo",
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
             "full_name": "Firstname Lastname",
@@ -287,7 +278,8 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
             "number_of_employees": "Fewer than 10",
             "on_behalf_of": "The business I own or work for (or in my own interest)",
             "other_sector": "ANOTHER SECTOR",
-            "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
+            "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",
+            # noqa: E501
             "how_did_you_hear_about_this_service": "Search engine",
             "marketing_consent": True,
             "have_you_exported_before": "No",
@@ -300,7 +292,7 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
 
 @pytest.mark.django_db
 def test_full_steps_other_organisation_business_type_wizard_success(
-    client, settings, mocker
+        client, settings, mocker
 ):
     settings.FORM_URL = "FORM_URL"
     settings.ZENDESK_SERVICE_NAME = "ZENDESK_SERVICE_NAME"
@@ -520,7 +512,8 @@ def test_full_steps_other_organisation_business_type_wizard_success(
             "company_turnover": "Below £85,000",
             "company_type": "Charity / Social enterprise",
             "company_type_category": "Other type of UK organisation",
-            "countries": "Albania, Andorra, Austria, Belgium, Bosnia and Herzegovina, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Israel, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Vatican City",  # noqa: E501
+            "countries": "Andorra, Albania, Armenia, Austria, Azerbaijan, Bosnia and Herzegovina, Belgium, Bulgaria, Belarus, Switzerland, Cyprus, Czechia, Germany, Denmark, Estonia, Spain, Finland, France, Georgia, Greece, Croatia, Hungary, Ireland, Israel, Iceland, Italy, Kyrgyzstan, Kazakhstan, Liechtenstein, Lithuania, Luxembourg, Latvia, Monaco, Moldova, Montenegro, North Macedonia, Mongolia, Malta, Netherlands, Norway, Poland, Portugal, Romania, Serbia, Russia, Sweden, Slovenia, Slovakia, San Marino, Tajikistan, Turkmenistan, Turkey, Ukraine, Uzbekistan, Vatican City, Kosovo",
+            # noqa: E501
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
             "full_name": "Firstname Lastname",
@@ -528,7 +521,8 @@ def test_full_steps_other_organisation_business_type_wizard_success(
             "number_of_employees": "Fewer than 10",
             "on_behalf_of": "The business I own or work for (or in my own interest)",
             "other_sector": "ANOTHER SECTOR",
-            "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
+            "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",
+            # noqa: E501
             "how_did_you_hear_about_this_service": "Search engine",
             "marketing_consent": True,
             "have_you_exported_before": "No",
@@ -541,7 +535,7 @@ def test_full_steps_other_organisation_business_type_wizard_success(
 
 @pytest.mark.django_db
 def test_full_steps_solo_exporter_business_type_wizard_success(
-    client, settings, mocker
+        client, settings, mocker
 ):
     settings.FORM_URL = "FORM_URL"
     settings.ZENDESK_SERVICE_NAME = "ZENDESK_SERVICE_NAME"
@@ -759,7 +753,8 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
             "company_turnover": "Below £85,000",
             "company_type": "Sole trader",
             "company_type_category": "Sole trader or private individual",
-            "countries": "Albania, Andorra, Austria, Belgium, Bosnia and Herzegovina, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Israel, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Vatican City",  # noqa: E501
+            "countries": "Andorra, Albania, Armenia, Austria, Azerbaijan, Bosnia and Herzegovina, Belgium, Bulgaria, Belarus, Switzerland, Cyprus, Czechia, Germany, Denmark, Estonia, Spain, Finland, France, Georgia, Greece, Croatia, Hungary, Ireland, Israel, Iceland, Italy, Kyrgyzstan, Kazakhstan, Liechtenstein, Lithuania, Luxembourg, Latvia, Monaco, Moldova, Montenegro, North Macedonia, Mongolia, Malta, Netherlands, Norway, Poland, Portugal, Romania, Serbia, Russia, Sweden, Slovenia, Slovakia, San Marino, Tajikistan, Turkmenistan, Turkey, Ukraine, Uzbekistan, Vatican City, Kosovo",
+            # noqa: E501
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
             "full_name": "Firstname Lastname",
@@ -767,7 +762,8 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
             "number_of_employees": "Fewer than 10",
             "on_behalf_of": "The business I own or work for (or in my own interest)",
             "other_sector": "ANOTHER SECTOR",
-            "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
+            "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",
+            # noqa: E501
             "how_did_you_hear_about_this_service": "Search engine",
             "marketing_consent": True,
             "have_you_exported_before": "No",
@@ -780,7 +776,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
 
 @pytest.mark.django_db
 def test_full_steps_private_or_limited_business_type_wizard_success_custom_fields(
-    client, settings, mocker
+        client, settings, mocker
 ):
     settings.FORM_URL = "FORM_URL"
     settings.ZENDESK_SERVICE_NAME = "ZENDESK_SERVICE_NAME"
@@ -986,7 +982,8 @@ def test_full_steps_private_or_limited_business_type_wizard_success_custom_field
             "company_turnover": "Below £85,000",
             "company_type": "Private limited company",
             "company_type_category": "UK private or public limited company",
-            "countries": "Albania, Andorra, Austria, Belgium, Bosnia and Herzegovina, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Israel, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Vatican City",  # noqa: E501
+            "countries": "Andorra, Albania, Armenia, Austria, Azerbaijan, Bosnia and Herzegovina, Belgium, Bulgaria, Belarus, Switzerland, Cyprus, Czechia, Germany, Denmark, Estonia, Spain, Finland, France, Georgia, Greece, Croatia, Hungary, Ireland, Israel, Iceland, Italy, Kyrgyzstan, Kazakhstan, Liechtenstein, Lithuania, Luxembourg, Latvia, Monaco, Moldova, Montenegro, North Macedonia, Mongolia, Malta, Netherlands, Norway, Poland, Portugal, Romania, Serbia, Russia, Sweden, Slovenia, Slovakia, San Marino, Tajikistan, Turkmenistan, Turkey, Ukraine, Uzbekistan, Vatican City, Kosovo",
+            # noqa: E501
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
             "full_name": "Firstname Lastname",
@@ -994,7 +991,8 @@ def test_full_steps_private_or_limited_business_type_wizard_success_custom_field
             "number_of_employees": "Fewer than 10",
             "on_behalf_of": "The business I own or work for (or in my own interest)",
             "other_sector": "ANOTHER SECTOR",
-            "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
+            "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",
+            # noqa: E501
             "how_did_you_hear_about_this_service": "Search engine",
             "marketing_consent": False,
             "have_you_exported_before": "No",
@@ -1065,7 +1063,7 @@ def test_full_steps_private_or_limited_business_type_wizard_success_custom_field
 
 @pytest.mark.django_db
 def test_full_steps_other_organisation_business_type_wizard_success_custom_fields(
-    client, settings, mocker
+        client, settings, mocker
 ):
     settings.FORM_URL = "FORM_URL"
     settings.ZENDESK_SERVICE_NAME = "ZENDESK_SERVICE_NAME"
@@ -1273,7 +1271,8 @@ def test_full_steps_other_organisation_business_type_wizard_success_custom_field
             "company_turnover": "Below £85,000",
             "company_type": "Charity / Social enterprise",
             "company_type_category": "Other type of UK organisation",
-            "countries": "Albania, Andorra, Austria, Belgium, Bosnia and Herzegovina, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Israel, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Vatican City",  # noqa: E501
+            "countries": "Andorra, Albania, Armenia, Austria, Azerbaijan, Bosnia and Herzegovina, Belgium, Bulgaria, Belarus, Switzerland, Cyprus, Czechia, Germany, Denmark, Estonia, Spain, Finland, France, Georgia, Greece, Croatia, Hungary, Ireland, Israel, Iceland, Italy, Kyrgyzstan, Kazakhstan, Liechtenstein, Lithuania, Luxembourg, Latvia, Monaco, Moldova, Montenegro, North Macedonia, Mongolia, Malta, Netherlands, Norway, Poland, Portugal, Romania, Serbia, Russia, Sweden, Slovenia, Slovakia, San Marino, Tajikistan, Turkmenistan, Turkey, Ukraine, Uzbekistan, Vatican City, Kosovo",
+            # noqa: E501
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
             "full_name": "Firstname Lastname",
@@ -1281,7 +1280,8 @@ def test_full_steps_other_organisation_business_type_wizard_success_custom_field
             "number_of_employees": "Fewer than 10",
             "on_behalf_of": "The business I own or work for (or in my own interest)",
             "other_sector": "ANOTHER SECTOR",
-            "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
+            "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",
+            # noqa: E501
             "how_did_you_hear_about_this_service": "Search engine",
             "marketing_consent": False,
             "have_you_exported_before": "No",
@@ -1352,7 +1352,7 @@ def test_full_steps_other_organisation_business_type_wizard_success_custom_field
 
 @pytest.mark.django_db
 def test_full_steps_solo_exporter_business_type_wizard_success_custom_fields(
-    client, settings, mocker
+        client, settings, mocker
 ):
     settings.FORM_URL = "FORM_URL"
     settings.ZENDESK_SERVICE_NAME = "ZENDESK_SERVICE_NAME"
@@ -1559,7 +1559,8 @@ def test_full_steps_solo_exporter_business_type_wizard_success_custom_fields(
             "company_turnover": "Below £85,000",
             "company_type": "Sole trader",
             "company_type_category": "Sole trader or private individual",
-            "countries": "Albania, Andorra, Austria, Belgium, Bosnia and Herzegovina, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Israel, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Vatican City",  # noqa: E501
+            "countries": "Andorra, Albania, Armenia, Austria, Azerbaijan, Bosnia and Herzegovina, Belgium, Bulgaria, Belarus, Switzerland, Cyprus, Czechia, Germany, Denmark, Estonia, Spain, Finland, France, Georgia, Greece, Croatia, Hungary, Ireland, Israel, Iceland, Italy, Kyrgyzstan, Kazakhstan, Liechtenstein, Lithuania, Luxembourg, Latvia, Monaco, Moldova, Montenegro, North Macedonia, Mongolia, Malta, Netherlands, Norway, Poland, Portugal, Romania, Serbia, Russia, Sweden, Slovenia, Slovakia, San Marino, Tajikistan, Turkmenistan, Turkey, Ukraine, Uzbekistan, Vatican City, Kosovo",
+            # noqa: E501
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
             "full_name": "Firstname Lastname",
@@ -1567,7 +1568,8 @@ def test_full_steps_solo_exporter_business_type_wizard_success_custom_fields(
             "number_of_employees": "Fewer than 10",
             "on_behalf_of": "The business I own or work for (or in my own interest)",
             "other_sector": "ANOTHER SECTOR",
-            "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
+            "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",
+            # noqa: E501
             "how_did_you_hear_about_this_service": "Search engine",
             "have_you_exported_before": "No",
             "do_you_have_a_product_you_want_to_export": "Yes",
@@ -1581,51 +1583,22 @@ def test_full_steps_solo_exporter_business_type_wizard_success_custom_fields(
                     ]
                 },
                 {
-                    "333": [
-                        "albania__ess_export",
-                        "andorra__ess_export",
-                        "austria__ess_export",
-                        "belgium__ess_export",
-                        "bosnia_and_herzegovina__ess_export",
-                        "bulgaria__ess_export",
-                        "croatia__ess_export",
-                        "cyprus__ess_export",
-                        "czechia__ess_export",
-                        "denmark__ess_export",
-                        "estonia__ess_export",
-                        "finland__ess_export",
-                        "france__ess_export",
-                        "germany__ess_export",
-                        "greece__ess_export",
-                        "hungary__ess_export",
-                        "iceland__ess_export",
-                        "ireland__ess_export",
-                        "israel__ess_export",
-                        "italy__ess_export",
-                        "kosovo__ess_export",
-                        "latvia__ess_export",
-                        "liechtenstein__ess_export",
-                        "lithuania__ess_export",
-                        "luxembourg__ess_export",
-                        "malta__ess_export",
-                        "monaco__ess_export",
-                        "montenegro__ess_export",
-                        "netherland__ess_export",
-                        "north_macedonia__ess_export",
-                        "norway__ess_export",
-                        "poland__ess_export",
-                        "portugal__ess_export",
-                        "romania__ess_export",
-                        "san_marino__ess_export",
-                        "serbia__ess_export",
-                        "slovakia__ess_export",
-                        "slovenia__ess_export",
-                        "spain__ess_export",
-                        "sweden__ess_export",
-                        "switzerland__ess_export",
-                        "turkey__ess_export",
-                        "vatican_city__ess_export",
-                    ]
+                    "333": ['andorra__ess_export', 'albania__ess_export', 'austria__ess_export',
+                            'bosnia_and_herzegovina__ess_export', 'belgium__ess_export',
+                            'bulgaria__ess_export', 'switzerland__ess_export', 'cyprus__ess_export',
+                            'czechia__ess_export', 'germany__ess_export', 'denmark__ess_export',
+                            'estonia__ess_export', 'spain__ess_export', 'finland__ess_export',
+                            'france__ess_export', 'greece__ess_export', 'croatia__ess_export',
+                            'hungary__ess_export', 'ireland__ess_export', 'israel__ess_export',
+                            'iceland__ess_export', 'italy__ess_export', 'liechtenstein__ess_export',
+                            'lithuania__ess_export', 'luxembourg__ess_export', 'latvia__ess_export',
+                            'monaco__ess_export', 'montenegro__ess_export',
+                            'north_macedonia__ess_export', 'malta__ess_export',
+                            'netherland__ess_export', 'norway__ess_export', 'poland__ess_export',
+                            'portugal__ess_export', 'romania__ess_export', 'serbia__ess_export',
+                            'sweden__ess_export', 'slovenia__ess_export', 'slovakia__ess_export',
+                            'san_marino__ess_export', 'turkey__ess_export',
+                            'vatican_city__ess_export', 'kosovo__ess_export']
                 },
                 {"666": "SW1A 2BL"},
                 {"555": SoloExporterTypeChoices.SOLE_TRADER},
@@ -1638,7 +1611,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success_custom_fields(
 
 @pytest.mark.django_db
 def test_full_steps_wizard_success_private_custom_fields_are_ignored(
-    client, settings, mocker
+        client, settings, mocker
 ):
     # In this case a "private" custom field is one that begins and ends with double underscores.
     # These are values that don't match up to a tag in Zendesk so shouldn't be sent through.
@@ -1843,7 +1816,8 @@ def test_full_steps_wizard_success_private_custom_fields_are_ignored(
             "company_turnover": "Below £85,000",
             "company_type": "Othertypeofbusiness",
             "company_type_category": "UK private or public limited company",
-            "countries": "Albania, Andorra, Austria, Belgium, Bosnia and Herzegovina, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Israel, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Vatican City",  # noqa: E501
+            "countries": "Andorra, Albania, Armenia, Austria, Azerbaijan, Bosnia and Herzegovina, Belgium, Bulgaria, Belarus, Switzerland, Cyprus, Czechia, Germany, Denmark, Estonia, Spain, Finland, France, Georgia, Greece, Croatia, Hungary, Ireland, Israel, Iceland, Italy, Kyrgyzstan, Kazakhstan, Liechtenstein, Lithuania, Luxembourg, Latvia, Monaco, Moldova, Montenegro, North Macedonia, Mongolia, Malta, Netherlands, Norway, Poland, Portugal, Romania, Serbia, Russia, Sweden, Slovenia, Slovakia, San Marino, Tajikistan, Turkmenistan, Turkey, Ukraine, Uzbekistan, Vatican City, Kosovo",
+            # noqa: E501
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
             "have_you_exported_before": "No",
@@ -1854,7 +1828,8 @@ def test_full_steps_wizard_success_private_custom_fields_are_ignored(
             "number_of_employees": "Fewer than 10",
             "on_behalf_of": "The business I own or work for (or in my own interest)",
             "other_sector": "ANOTHER SECTOR",
-            "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
+            "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",
+            # noqa: E501
             "how_did_you_hear_about_this_service": "Search engine",
             "marketing_consent": False,
             "_custom_fields": [
@@ -2295,8 +2270,8 @@ def test_enquiry_subject_guidance_url(run_wizard_enquiry_subject_guidance_url, m
     )
     ctx = response.context
     assert (
-        ctx["guidance_url"]
-        == f"{reverse('core:non-eu-export-enquiries')}?enquiry_subject=1"
+            ctx["guidance_url"]
+            == f"{reverse('core:non-eu-export-enquiries')}?enquiry_subject=1"
     )
 
     response = run_wizard_enquiry_subject_guidance_url(
@@ -2304,8 +2279,8 @@ def test_enquiry_subject_guidance_url(run_wizard_enquiry_subject_guidance_url, m
     )
     ctx = response.context
     assert (
-        ctx["guidance_url"]
-        == f"{reverse('core:non-eu-export-enquiries')}?enquiry_subject=2"
+            ctx["guidance_url"]
+            == f"{reverse('core:non-eu-export-enquiries')}?enquiry_subject=2"
     )
 
     response = run_wizard_enquiry_subject_guidance_url(
@@ -2316,8 +2291,8 @@ def test_enquiry_subject_guidance_url(run_wizard_enquiry_subject_guidance_url, m
     )
     ctx = response.context
     assert (
-        ctx["guidance_url"]
-        == f"{reverse('core:non-eu-export-enquiries')}?enquiry_subject=1&enquiry_subject=2"
+            ctx["guidance_url"]
+            == f"{reverse('core:non-eu-export-enquiries')}?enquiry_subject=1&enquiry_subject=2"
     )
 
     client = Client()
