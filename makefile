@@ -2,7 +2,7 @@
 
 install:
 	npm install
-	pip install --upgrade pip setuptools wheel && pip install -r requirements-dev.txt && pip install -r requirements.txt
+	pip install --upgrade pip setuptools wheel && pip install -r requirements-dev.txt
 	pre-commit install
 
 clean:
