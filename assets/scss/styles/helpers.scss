@@ -1,3 +1,8 @@
 .js-enabled .js-hidden {
   display: none;
 }
+
+#gtm_noscript_iframe {
+  display: none;
+  visibility: hidden
+}
