@@ -20,10 +20,10 @@ document.addEventListener("DOMContentLoaded", function () {
         // Otherwise, hide the question and set radio button to null so it isn't passed to zendesk
         do_you_have_product_element.style.display = "none";
         let do_you_have_product_checked_element = document.querySelector(
-            "input[name$='do_you_have_a_product_you_want_to_export']:checked"
-          )
-        if (do_you_have_product_checked_element){
-            do_you_have_product_checked_element.checked = false;
+          "input[name$='do_you_have_a_product_you_want_to_export']:checked"
+        );
+        if (do_you_have_product_checked_element) {
+          do_you_have_product_checked_element.checked = false;
         }
       }
     },
@@ -34,8 +34,14 @@ document.addEventListener("DOMContentLoaded", function () {
   do_you_have_product_element.style.display = "none";
 
   // On page load, if the answer to "Have you exported before?" is "No", show the "Do you have a product you want to export?" question
-    let have_you_exported_before_checked_element = document.querySelector("input[name$='have_you_exported_before']:checked")
-    if (have_you_exported_before_checked_element && have_you_exported_before_checked_element.value === "not_exported__ess_experience"){
-      do_you_have_product_element.style.display = "block";
-    }
+  let have_you_exported_before_checked_element = document.querySelector(
+    "input[name$='have_you_exported_before']:checked"
+  );
+  if (
+    have_you_exported_before_checked_element &&
+    have_you_exported_before_checked_element.value ===
+      "not_exported__ess_experience"
+  ) {
+    do_you_have_product_element.style.display = "block";
+  }
 });
