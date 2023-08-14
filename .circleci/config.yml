@@ -1,4 +1,8 @@
 version: 2.1
+
+orbs:
+  codecov: codecov/codecov@3
+
 jobs:
       unit-tests:
             docker:
@@ -11,7 +15,7 @@ jobs:
                           command: sudo apt-get update && sudo apt-get install -y nodejs npm
                   - run:
                           name: Install Python deps
-                          command: pip install -r requirements.txt -r requirements-dev.txt
+                          command: pip install -r requirements-dev.txt
                   - run:
                           name: Webpack build
                           command: npm install && npm run build
@@ -19,8 +23,12 @@ jobs:
                           name: Make directory for test output
                           command: mkdir -p test-reports/unit-test
                   - run:
-                          name: Running tests
+                          name: Run tests
                           command: pytest --junitxml=test-reports/unit-test/report.xml
+                  - run:
+                          name: Save coverage
+                          command: coverage json
+                  - codecov/upload
                   - store_test_results:
                           path: ./test-reports/
       format-and-secrets-checks:
