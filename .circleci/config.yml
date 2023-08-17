@@ -11,8 +11,14 @@ jobs:
             steps:
                   - checkout
                   - run:
+                          name: Install system deps
+                          command: sudo apt-get update && sudo apt-get install -y nodejs npm
+                  - run:
                           name: Install Python deps
                           command: pip install -r requirements-dev.txt
+                  - run:
+                          name: Webpack build
+                          command: npm install && npm run build
                   - run:
                           name: Make directory for test output
                           command: mkdir -p test-reports/unit-test
