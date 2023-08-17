@@ -17,19 +17,5 @@ services:
     depends_on:
       - redis
 
-  webpack:
-    image: node:16
-    volumes:
-      - .:/app
-    env_file:
-      - .env
-    command:
-      bash -c "
-        npm set unsafe-perm true
-        && npm install
-        && npm run watch
-      "
-    working_dir: /app
-
   redis:
     image: redis:5

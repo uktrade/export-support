@@ -41,7 +41,6 @@ module.exports = {
     rules: [
       {
         test: /\.m?js$/,
-        exclude: /node_modules/,
         use: {
           loader: "babel-loader"
         }
@@ -77,11 +76,6 @@ module.exports = {
         ],
       },
     ],
-  },
-
-  resolve: {
-    modules: ["node_modules"],
-    extensions: [".js", ".scss"],
   },
 
   target: "es5"
