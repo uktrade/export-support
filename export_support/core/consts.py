@@ -297,3 +297,14 @@ SECTORS_MAP = {
     "technology_and_smart_cities__ess_sector_l1": "Technology and smart cities",
     "water__ess_sector_l1": "Water",
 }
+
+EMERGENCY_SITUATION_COUNTRIES = {
+    "israel-palestine": {
+        "country_list": "Israel, Palestine",
+        "subject_title": "Israel/Palestine Enquiry",
+    },
+    "russia-ukraine": {
+        "country_list": "Russia, Ukraine",
+        "subject_title": "Russia/Ukraine Enquiry",
+    },
+}

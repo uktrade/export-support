@@ -11,11 +11,14 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import RedirectView, TemplateView
 from formtools.wizard.views import NamedUrlSessionWizardView
 
+from .consts import EMERGENCY_SITUATION_COUNTRIES
 from .forms import (
     BusinessAdditionalInformationForm,
     BusinessDetailsForm,
     BusinessTypeChoices,
     BusinessTypeForm,
+    EmergencySituationEnquiryForm,
+    EmergencySituationZendeskForm,
     EnquiryDetailsForm,
     EnquirySubjectChoices,
     EnquirySubjectForm,
@@ -23,8 +26,6 @@ from .forms import (
     OrganisationAdditionalInformationForm,
     OrganisationDetailsForm,
     PersonalDetailsForm,
-    RussiaUkraineEnquiryForm,
-    RussiaUkraineZendeskForm,
     SectorsForm,
     SoloExporterAdditionalInformationForm,
     SoloExporterDetailsForm,
@@ -265,14 +266,14 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         return render(self.request, "core/enquiry_contact_success.html", ctx)
 
 
-class RussiaUkraineEnquiryWizardView(NamedUrlSessionWizardView):
+class EmergencySituationEnquiryWizardView(NamedUrlSessionWizardView):
     form_list = [
-        ("russia-ukraine-enquiry", RussiaUkraineEnquiryForm),
+        ("enquiry-form", EmergencySituationEnquiryForm),
     ]
 
     def get_template_names(self):
         templates = {
-            form_name: f"core/{form_name.replace('-', '_')}_wizard_step.html"
+            form_name: f"core/emergency_{form_name.replace('-', '_')}_wizard_step.html"
             for form_name in self.form_list
         }
         return [templates[self.steps.current]]
@@ -304,21 +305,27 @@ class RussiaUkraineEnquiryWizardView(NamedUrlSessionWizardView):
 
         form_data["_custom_fields"] = custom_fields_data
 
+        # Countries data and enquiry subject line are decided by the URL path
+        # taken into the form. This will correspond with the list of countries in the
+        # emergency situation countries constant.
+        countries_from_url = self.request.path.split("/")
+        countries_information = EMERGENCY_SITUATION_COUNTRIES[countries_from_url[1]]
+        form_data["countries"] = countries_information["country_list"]
+        form_data["enquiry_subject"] = countries_information["subject_title"]
+
         return form_data
 
     def send_to_zendesk(self, form_list):
         form_data = self.get_form_data(form_list)
-        zendesk_form = RussiaUkraineZendeskForm(data=form_data)
+        zendesk_form = EmergencySituationZendeskForm(data=form_data)
         if not zendesk_form.is_valid():
             raise ValueError("Invalid ZendeskForm", dict(zendesk_form.errors))
 
-        enquiry_details_cleaned_data = self.get_cleaned_data_for_step(
-            "russia-ukraine-enquiry"
-        )
+        enquiry_details_cleaned_data = self.get_cleaned_data_for_step("enquiry-form")
         full_name = enquiry_details_cleaned_data["full_name"]
         email_address = enquiry_details_cleaned_data["email"]
 
-        subject = "Russia/Ukraine Enquiry"
+        subject = form_data["enquiry_subject"]
         question = enquiry_details_cleaned_data["question"]
 
         spam_control = helpers.SpamControl(contents=question)
@@ -338,48 +345,6 @@ class RussiaUkraineEnquiryWizardView(NamedUrlSessionWizardView):
             sender=sender,
         )
 
-    def send_contact_consent(self):
-        # Function to send consent confirmation to legal-basis-api
-
-        enquiry_details_cleaned_data = self.get_cleaned_data_for_step(
-            "russia-ukraine-enquiry"
-        )
-
-        if enquiry_details_cleaned_data["email_consent"]:
-            url = settings.CONSENT_API_URL
-            data = json.dumps(
-                {
-                    "consents": ["email_marketing"],
-                    "modified_at": str(datetime.now()),
-                    "email": enquiry_details_cleaned_data["email"],
-                    "key_type": "email",
-                }
-            )
-
-            header = mohawk.Sender(
-                {
-                    "id": settings.CONSENT_API_ID,
-                    "key": settings.CONSENT_API_KEY,
-                    "algorithm": "sha256",
-                },
-                url,
-                settings.CONSENT_API_METHOD,
-                content_type="application/json",
-                content=data,
-            ).request_header
-
-            requests.request(
-                settings.CONSENT_API_METHOD,
-                url,
-                data=data,
-                headers={
-                    "Authorization": header,
-                    "Content-Type": "application/json",
-                },
-            ).raise_for_status()
-
-            logger.info("Sent consent confirmation to legal-basis-api")
-
     def get_context_data(self, form, **kwargs):
         ctx = super().get_context_data(form=form, **kwargs)
         return ctx
@@ -389,10 +354,8 @@ class RussiaUkraineEnquiryWizardView(NamedUrlSessionWizardView):
             "display_goods": True,
             "display_services": True,
             "display_subheadings": True,
-            "enquiry": "russia_ukraine_question",
         }
 
-        self.send_contact_consent()
         self.send_to_zendesk(form_list)
 
         return render(self.request, "core/enquiry_contact_success.html", ctx)

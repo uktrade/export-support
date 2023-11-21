@@ -1049,7 +1049,7 @@ class EnquiryDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         }
 
 
-class RussiaUkraineEnquiryForm(gds_forms.FormErrorMixin, forms.Form):
+class EmergencySituationEnquiryForm(gds_forms.FormErrorMixin, forms.Form):
     full_name = forms.CharField(
         error_messages={
             "required": "Enter your full name",
@@ -1171,11 +1171,11 @@ class RussiaUkraineEnquiryForm(gds_forms.FormErrorMixin, forms.Form):
         phone = self.cleaned_data["phone"]
         company_name = self.cleaned_data["company_name"]
         company_post_code = self.cleaned_data["company_post_code"]
-        question = self.cleaned_data["question"]
-        email_consent = self.cleaned_data["email_consent"]
         sectors = self.cleaned_data["sectors"]
         sectors = ", ".join(SECTORS_MAP[sector] for sector in sectors)
         other_sector = self.cleaned_data["other"]
+        question = self.cleaned_data["question"]
+        email_consent = self.cleaned_data["email_consent"]
 
         return {
             "full_name": full_name,
@@ -1187,8 +1187,6 @@ class RussiaUkraineEnquiryForm(gds_forms.FormErrorMixin, forms.Form):
             "other_sector": other_sector,
             "question": question,
             "email_consent": email_consent,
-            "enquiry_subject": "-",
-            "countries": "Russia, Ukraine",
             "on_behalf_of": "-",
             "company_type": "-",
             "company_type_category": "-",
@@ -1226,7 +1224,7 @@ class ZendeskForm(ZendeskAPIForm):
     _custom_fields = forms.JSONField(required=False)
 
 
-class RussiaUkraineZendeskForm(ZendeskAPIForm):
+class EmergencySituationZendeskForm(ZendeskAPIForm):
     FIELD_MAPPING = {
         "question": "aaa_question",
     }
