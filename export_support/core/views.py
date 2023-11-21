@@ -238,7 +238,7 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
                 filter_data = {}
 
             params = dict_to_query_dict(filter_data)
-            guidance_url = reverse("core:non-eu-export-enquiries")
+            guidance_url = reverse("core:not-listed-country-export-enquiries")
 
             ctx["guidance_url"] = f"{guidance_url}?{params.urlencode()}"
 
@@ -361,8 +361,8 @@ class EmergencySituationEnquiryWizardView(NamedUrlSessionWizardView):
         return render(self.request, "core/enquiry_contact_success.html", ctx)
 
 
-class NonEUExportEnquiriesView(TemplateView):
-    template_name = "core/non_eu_export_enquiries.html"
+class NotListedCountryExportEnquiriesView(TemplateView):
+    template_name = "core/not_listed_country_export_enquiries.html"
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
