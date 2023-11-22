@@ -1143,13 +1143,6 @@ class EmergencySituationEnquiryForm(gds_forms.FormErrorMixin, forms.Form):
             },
         ),
     )
-    email_consent = forms.BooleanField(
-        label="I would like to receive additional information by email",
-        required=False,
-        widget=forms.CheckboxInput(
-            attrs={"class": "govuk-checkboxes__input"},
-        ),
-    )
 
     def clean(self):
         cleaned_data = super().clean()
@@ -1175,7 +1168,6 @@ class EmergencySituationEnquiryForm(gds_forms.FormErrorMixin, forms.Form):
         sectors = ", ".join(SECTORS_MAP[sector] for sector in sectors)
         other_sector = self.cleaned_data["other"]
         question = self.cleaned_data["question"]
-        email_consent = self.cleaned_data["email_consent"]
 
         return {
             "full_name": full_name,
@@ -1186,7 +1178,6 @@ class EmergencySituationEnquiryForm(gds_forms.FormErrorMixin, forms.Form):
             "sectors": sectors,
             "other_sector": other_sector,
             "question": question,
-            "email_consent": email_consent,
             "on_behalf_of": "-",
             "company_type": "-",
             "company_type_category": "-",
