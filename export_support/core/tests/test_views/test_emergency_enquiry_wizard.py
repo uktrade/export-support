@@ -22,6 +22,11 @@ def test_submit_russia_ukraine_form(client, settings, mocker):
     settings.FORM_URL = "FORM_URL"
     settings.ZENDESK_SERVICE_NAME = "ZENDESK_SERVICE_NAME"
     settings.ZENDESK_SUBDOMAIN = "ZENDESK_SUBDOMAIN"
+    settings.ZENDESK_CUSTOM_FIELD_MAPPING = {
+        "company_name": "111",
+        "company_post_code": "222",
+        "sectors": "333",
+    }
 
     mock_zendesk_form = mocker.patch(
         "export_support.core.forms.EmergencySituationZendeskForm.action_class"
@@ -92,10 +97,10 @@ def test_submit_russia_ukraine_form(client, settings, mocker):
             "marketing_consent": False,
             "phone": "07786179011",
             "_custom_fields": [
-                {"360026802637": "Golden Throne Inc."},
-                {"360026802657": "te51aa"},
+                {"111": "Golden Throne Inc."},
+                {"222": "te51aa"},
                 {
-                    "360026629658": [
+                    "333": [
                         "advanced_engineering__ess_sector_l1",
                         "chemicals__ess_sector_l1",
                         "logistics__ess_sector_l1",
@@ -121,6 +126,11 @@ def test_submit_israel_palestine_form(client, settings, mocker):
     settings.FORM_URL = "FORM_URL"
     settings.ZENDESK_SERVICE_NAME = "ZENDESK_SERVICE_NAME"
     settings.ZENDESK_SUBDOMAIN = "ZENDESK_SUBDOMAIN"
+    settings.ZENDESK_CUSTOM_FIELD_MAPPING = {
+        "company_name": "111",
+        "company_post_code": "222",
+        "sectors": "333",
+    }
 
     mock_zendesk_form = mocker.patch(
         "export_support.core.forms.EmergencySituationZendeskForm.action_class"
@@ -191,10 +201,10 @@ def test_submit_israel_palestine_form(client, settings, mocker):
             "marketing_consent": False,
             "phone": "07786179011",
             "_custom_fields": [
-                {"360026802637": "Golden Throne Inc."},
-                {"360026802657": "te51aa"},
+                {"111": "Golden Throne Inc."},
+                {"222": "te51aa"},
                 {
-                    "360026629658": [
+                    "333": [
                         "advanced_engineering__ess_sector_l1",
                         "chemicals__ess_sector_l1",
                         "logistics__ess_sector_l1",
