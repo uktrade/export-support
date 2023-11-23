@@ -235,7 +235,7 @@ SECTORS_MAP = {
 
 EMERGENCY_SITUATION_COUNTRIES = {
     "israel-palestine": {
-        "country_list": "Israel, Palestine",
+        "country_list": "Israel, Occupied Palestinian Territories",
         "subject_title": "Israel/Palestine Enquiry",
     },
     "russia-ukraine": {
