@@ -1,45 +1,35 @@
 {% extends "core/wizard_step.html" %}
-
 {% block page_title %}{{ form.enquiry_subject.label }}{% endblock %}
-
 {% block current_step %}{% endblock %}
-
 {% block back_button %}
-    <a class="govuk-back-link" href="https://www.gov.uk/ask-export-support-team">Back</a>
+    <a class="govuk-back-link"
+       href="https://www.gov.uk/ask-export-support-team">Back</a>
 {% endblock %}
-
 {% block fields %}
-
     <div class="govuk-warning-text">
         <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
         <strong class="govuk-warning-text__text">
-          <span class="govuk-warning-text__assistive">Warning</span>
-          If you have an enquiry about trading with Ukraine, Russia or Belarus, you can <a rel="external" href="https://www.get-help-selling-goods-services-abroad.service.gov.uk/russia-ukraine/enquiry-form">submit an online query</a> specific to these countries.
+            <span class="govuk-warning-text__assistive">Warning</span>
+            If you have an enquiry about trading with Ukraine, Russia or Belarus, you can <a rel="external"
+    href="{% url 'core:ru-emergency-situation-wizard-step' 'russia-ukraine' %}">submit an online query</a> specific to these countries.
         </strong>
     </div>
-
     <div class="govuk-warning-text">
         <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
         <strong class="govuk-warning-text__text">
-          <span class="govuk-warning-text__assistive">Warning</span>
-          If you have an enquiry about trading with Israel or The Occupied Palestinian Territories, you can <a rel="external" href="https://www.get-help-selling-goods-services-abroad.service.gov.uk/israel-palestine/enquiry-form">submit an online query</a> specific to these countries.
+            <span class="govuk-warning-text__assistive">Warning</span>
+            If you have an enquiry about trading with Israel or The Occupied Palestinian Territories, you can <a rel="external"
+    href="{% url 'core:ip-emergency-situation-wizard-step' 'israel-palestine' %}">submit an online query</a> specific to these countries.
         </strong>
     </div>
-
     <div class="govuk-form-group {% if form.enquiry_subject.errors %}govuk-form-group--error{% endif %}">
         <span class="govuk-caption-l">Question {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</span>
         <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l {% if not form.enquiry_subject.errors %}govuk-!-margin-bottom-4{% endif %}">
-                <h1 class="govuk-fieldset__heading">
-                    {{ form.enquiry_subject.label }}
-                </h1>
+                <h1 class="govuk-fieldset__heading">{{ form.enquiry_subject.label }}</h1>
             </legend>
-            <p class="govuk-body">
-                This will help us to direct you to the correct support for your business.
-            </p>
-            <div id="enquiry-subject-hint" class="govuk-hint">
-                Select all that apply.
-            </div>
+            <p class="govuk-body">This will help us to direct you to the correct support for your business.</p>
+            <div id="enquiry-subject-hint" class="govuk-hint">Select all that apply.</div>
             {% if form.enquiry_subject.errors %}
                 <div>
                     <a id="{{ form.prefix }}-{{ form.enquiry_subject.name }}_errors"></a>
