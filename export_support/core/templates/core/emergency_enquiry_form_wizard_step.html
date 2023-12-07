@@ -6,14 +6,6 @@
 
 {% block fields %}
 
-    <div class="govuk-warning-text">
-        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-        <strong class="govuk-warning-text__text">
-          <span class="govuk-warning-text__assistive">Warning</span>
-          This form is specific to enquiries about trading with Ukraine, Russia or Belarus. If your query is about trading with any other country, <a rel="external" href="https://www.get-help-selling-goods-services-abroad.service.gov.uk/">please use our general enquiry form</a>.
-        </strong>
-    </div>
-
     <!-- Personal Details - from personal_details_wizard_step.html-->
     <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
@@ -122,5 +114,5 @@
 
 {% block footer_additions %}
     {{ block.super }}
-    {% render_bundle "business-details-russia-ukraine-form" "js" %}
+    {% render_bundle "business-details-emergency-situation-form" "js" %}
 {% endblock %}

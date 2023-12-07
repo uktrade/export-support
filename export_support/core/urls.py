@@ -8,8 +8,11 @@ enquiry_wizard_view = views.EnquiryWizardView.as_view(
     url_name="core:enquiry-wizard-step",
 )
 
-russia_ukraine_wizard_view = views.RussiaUkraineEnquiryWizardView.as_view(
-    url_name="core:russia-ukraine-wizard-step",
+ru_emergency_situation_wizard_view = views.EmergencySituationEnquiryWizardView.as_view(
+    url_name="core:ru-emergency-situation-wizard-step",
+)
+ip_emergency_situation_wizard_view = views.EmergencySituationEnquiryWizardView.as_view(
+    url_name="core:ip-emergency-situation-wizard-step",
 )
 
 urlpatterns = [
@@ -25,19 +28,19 @@ urlpatterns = [
         name="enquiry-wizard",
     ),
     re_path(
-        r"^russia-ukraine-enquiry/(?P<step>.+)$",
-        russia_ukraine_wizard_view,
-        name="russia-ukraine-wizard-step",
+        r"^russia-ukraine/(?P<step>.+)$",
+        ru_emergency_situation_wizard_view,
+        name="ru-emergency-situation-wizard-step",
+    ),
+    re_path(
+        r"^israel-palestine/(?P<step>.+)$",
+        ip_emergency_situation_wizard_view,
+        name="ip-emergency-situation-wizard-step",
     ),
     path(
-        "russia-ukraine-enquiry",
-        russia_ukraine_wizard_view,
-        name="russia-ukraine-enquiry-wizard",
-    ),
-    path(
-        "non-eu-export-enquiries",
-        views.NonEUExportEnquiriesView.as_view(),
-        name="non-eu-export-enquiries",
+        "not-listed-country-export-enquiries",
+        views.NotListedCountryExportEnquiriesView.as_view(),
+        name="not-listed-country-export-enquiries",
     ),
     path(
         "privacy",

@@ -13,9 +13,7 @@ import debounce from "lodash.debounce";
     return;
   }
 
-  const nameEl = document.querySelector(
-    "#id_russia-ukraine-enquiry-company_name"
-  );
+  const nameEl = document.querySelector("#id_enquiry-form-company_name");
 
   const replaceCompanyNameFormGroup = () => {
     const companiesHouseAutocompleteTemplate = document.querySelector(
