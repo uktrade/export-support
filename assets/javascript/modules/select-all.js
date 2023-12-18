@@ -13,7 +13,7 @@ const initSelectAll = () => {
     const otherInputs = Array.from(allInputs).filter(
       (input) =>
         input != selectAllInput &&
-        input.name != "export-countries-no_specific_country"
+        input.name != "export-markets-no_specific_market"
     );
 
     if (selectAllInput) {

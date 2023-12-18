@@ -8,7 +8,7 @@ from django.utils.html import format_html
 from export_support.gds import fields as gds_fields
 from export_support.gds import forms as gds_forms
 
-from .consts import COUNTRIES_MAP, SECTORS_MAP
+from .consts import MARKETS_MAP, SECTORS_MAP
 from .validators import postcode_validator
 
 logger = logging.getLogger(__name__)
@@ -175,7 +175,7 @@ class EnquirySubjectForm(gds_forms.FormErrorMixin, forms.Form):
         return {"enquiry_subject": enquiry_subject}
 
 
-class ExportCountriesForm(gds_forms.FormErrorMixin, forms.Form):
+class ExportMarketsForm(gds_forms.FormErrorMixin, forms.Form):
     select_all = forms.BooleanField(
         label="Select all",
         required=False,
@@ -183,17 +183,17 @@ class ExportCountriesForm(gds_forms.FormErrorMixin, forms.Form):
             attrs={"class": "govuk-checkboxes__input"},
         ),
     )
-    countries = forms.MultipleChoiceField(
+    markets = forms.MultipleChoiceField(
         choices=[
-            (machine_value, country_name)
-            for machine_value, country_name in COUNTRIES_MAP.items()
+            (machine_value, market_name)
+            for machine_value, market_name in MARKETS_MAP.items()
         ],
-        label="Which country are you selling to?",
+        label="Which market are you selling to?",
         required=False,
         widget=gds_fields.CheckboxSelectMultiple,
     )
-    no_specific_country = forms.BooleanField(
-        label="My query is not related to a specific country",
+    no_specific_market = forms.BooleanField(
+        label="My query is not related to a specific market",
         required=False,
         widget=forms.CheckboxInput(
             attrs={"class": "govuk-checkboxes__input"},
@@ -205,23 +205,23 @@ class ExportCountriesForm(gds_forms.FormErrorMixin, forms.Form):
 
         has_select_all_selected = bool(cleaned_data["select_all"])
 
-        has_no_specific_selected = bool(cleaned_data["no_specific_country"])
+        has_no_specific_selected = bool(cleaned_data["no_specific_market"])
 
         try:
             # In the case that this field has produced a validation error before
             # and therefore doesn't exist at this stage we can just bail out
             # as there's another error to display.
-            has_countries_selected = any(cleaned_data["countries"])
+            has_markets_selected = any(cleaned_data["markets"])
         except KeyError:
             return cleaned_data
 
-        has_all_countries_selected = [
-            code for code, _ in self.fields["countries"].choices
-        ] == cleaned_data["countries"]
+        has_all_markets_selected = [
+            code for code, _ in self.fields["markets"].choices
+        ] == cleaned_data["markets"]
 
         if (
             has_select_all_selected
-            and has_all_countries_selected
+            and has_all_markets_selected
             and not has_no_specific_selected
         ):
             return cleaned_data
@@ -230,47 +230,45 @@ class ExportCountriesForm(gds_forms.FormErrorMixin, forms.Form):
         if (
             has_no_specific_selected
             and not has_select_all_selected
-            and not has_countries_selected
+            and not has_markets_selected
         ):
-            cleaned_data["countries"] = ["No specific country"]
+            cleaned_data["markets"] = ["No specific market"]
 
         if (
             not has_select_all_selected
-            and not has_countries_selected
+            and not has_markets_selected
             and not has_no_specific_selected
         ):
-            self.add_error(
-                "countries", "Select the country or countries you are selling to"
-            )
+            self.add_error("markets", "Select the market or markets you are selling to")
 
         if (
             has_select_all_selected
-            and has_countries_selected
+            and has_markets_selected
             and not has_no_specific_selected
         ):
             self.add_error(
-                "countries",
-                'You must select either "Select all" or some countries not both',
+                "markets",
+                'You must select either "Select all" or some markets not both',
             )
 
         if has_no_specific_selected and (
-            has_select_all_selected or has_countries_selected
+            has_select_all_selected or has_markets_selected
         ):
             self.add_error(
-                "countries",
-                "You must select either some countries or indicate no specific country not both",
+                "markets",
+                "You must select either some markets or indicate no specific market not both",
             )
 
         return cleaned_data
 
     def get_zendesk_data(self):
-        countries = self.cleaned_data["countries"]
-        if "No specific country" not in countries:
-            countries = [COUNTRIES_MAP[code] for code in countries]
-        countries = ", ".join(countries)
+        markets = self.cleaned_data["markets"]
+        if "No specific market" not in markets:
+            markets = [MARKETS_MAP[code] for code in markets]
+        markets = ", ".join(markets)
 
         return {
-            "countries": countries,
+            "markets": markets,
         }
 
 
@@ -1191,7 +1189,7 @@ class ZendeskForm(ZendeskAPIForm):
     }
 
     enquiry_subject = forms.CharField()
-    countries = forms.CharField()
+    markets = forms.CharField()
     on_behalf_of = forms.CharField()
     company_type = forms.CharField()
     company_type_category = forms.CharField()
@@ -1221,7 +1219,7 @@ class EmergencySituationZendeskForm(ZendeskAPIForm):
     }
 
     enquiry_subject = forms.CharField()
-    countries = forms.CharField()
+    markets = forms.CharField()
     on_behalf_of = forms.CharField()
     company_type = forms.CharField()
     company_type_category = forms.CharField()

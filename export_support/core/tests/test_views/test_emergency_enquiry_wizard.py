@@ -78,7 +78,7 @@ def test_submit_russia_ukraine_form(client, settings, mocker):
     mock_zendesk_form().save.assert_any_call(
         {
             "enquiry_subject": "Russia/Ukraine Enquiry",
-            "countries": "Russia, Ukraine",
+            "markets": "Russia, Ukraine",
             "on_behalf_of": "-",
             "company_type": "-",
             "company_type_category": "-",
@@ -182,7 +182,7 @@ def test_submit_israel_palestine_form(client, settings, mocker):
     mock_zendesk_form().save.assert_any_call(
         {
             "enquiry_subject": "Israel/Palestine Enquiry",
-            "countries": "Israel, Occupied Palestinian Territories",
+            "markets": "Israel, Occupied Palestinian Territories",
             "on_behalf_of": "-",
             "company_type": "-",
             "company_type_category": "-",

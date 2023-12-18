@@ -1,6 +1,6 @@
-from .countries import get_country_name_from_code
+from .markets import get_market_name_from_code
 
-ENQUIRY_COUNTRY_CODES = {
+ENQUIRY_MARKET_CODES = {
     "AD": "andorra__ess_export",
     "AE": "united_arab_emirates__ess_export",
     "AF": "afghanistan__ess_export",
@@ -196,10 +196,10 @@ ENQUIRY_COUNTRY_CODES = {
     "ZW": "zimbabwe__ess_export",
 }
 
-COUNTRIES_MAP = {
-    machine_readable_value: get_country_name_from_code(code)
+MARKETS_MAP = {
+    machine_readable_value: get_market_name_from_code(code)
     for code, machine_readable_value in sorted(
-        ENQUIRY_COUNTRY_CODES.items(), key=lambda x: get_country_name_from_code(x[0])
+        ENQUIRY_MARKET_CODES.items(), key=lambda x: get_market_name_from_code(x[0])
     )
 }
 
@@ -233,13 +233,13 @@ SECTORS_MAP = {
     "water__ess_sector_l1": "Water",
 }
 
-EMERGENCY_SITUATION_COUNTRIES = {
+EMERGENCY_SITUATION_MARKETS = {
     "israel-palestine": {
-        "country_list": "Israel, Occupied Palestinian Territories",
+        "market_list": "Israel, Occupied Palestinian Territories",
         "subject_title": "Israel/Palestine Enquiry",
     },
     "russia-ukraine": {
-        "country_list": "Russia, Ukraine",
+        "market_list": "Russia, Ukraine",
         "subject_title": "Russia/Ukraine Enquiry",
     },
 }

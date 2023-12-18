@@ -54,12 +54,12 @@
   display: none;
 }
 
-.country-tag-section-wrapper {
+.market-tag-section-wrapper {
   width: 100%;
   margin-bottom: govuk-spacing(3);
 }
 
-.country-tag-container {
+.market-tag-container {
   //height: 42px;
   height: auto;
   width: 100%;
@@ -67,16 +67,16 @@
   margin-bottom: 0;
 }
 
-.country-tag-long-list-container {
+.market-tag-long-list-container {
   display: none;
 }
 
-.country-tag-long-list-indicator {
+.market-tag-long-list-indicator {
   display: none;
   width: 100%;
 }
 
-.country-tag-long-list-indicator-text {
+.market-tag-long-list-indicator-text {
   text-align: right;
   width: 100%;
   margin-top: govuk-spacing(5);
@@ -84,7 +84,7 @@
   color: govuk-colour("dark-grey");
 }
 
-.country-tag-long-list-indicator-button {
+.market-tag-long-list-indicator-button {
   text-align: right;
   width: 100%;
   color: govuk-colour("blue");
@@ -92,7 +92,7 @@
   cursor: pointer;
 }
 
-.country-selected-tag {
+.market-selected-tag {
   @include govuk-font(19);
   background: govuk-colour("light-grey");
   color: govuk-colour("dark-grey");
@@ -106,7 +106,7 @@
   cursor: pointer;
 }
 
-.country-tag-text {
+.market-tag-text {
   display: inline-block;
   vertical-align: middle;
   margin: 0;
