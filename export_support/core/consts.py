@@ -177,6 +177,7 @@ ENQUIRY_MARKET_CODES = {
     "TR": "turkey__ess_export",
     "TT": "trinidad_and_tobago__ess_export",
     "TV": "tuvalu__ess_export",
+    "TW": "taiwan__ess_export",
     "TZ": "tanzania__ess_export",
     "UA": "ukraine__ess_export",
     "UG": "uganda__ess_export",
