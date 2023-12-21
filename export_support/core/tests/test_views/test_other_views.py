@@ -25,46 +25,46 @@ def test_legal_disclaimer_view(client):
 
 
 def test_not_listed_export_enquiries_view(client):
-    url = reverse("core:not-listed-country-export-enquiries")
+    url = reverse("core:not-listed-market-export-enquiries")
     response = client.get(url)
     assert response.status_code == 200
-    assertTemplateUsed(response, "core/not_listed_country_export_enquiries.html")
+    assertTemplateUsed(response, "core/not_listed_market_export_enquiries.html")
     ctx = response.context
     assert ctx["should_display_sub_headings"]
     assert ctx["should_display_export_goods"]
     assert ctx["should_display_export_services"]
     assert ctx["heading"] == "Sell goods and services abroad"
 
-    url = reverse("core:not-listed-country-export-enquiries")
+    url = reverse("core:not-listed-market-export-enquiries")
     response = client.get(
         f"{url}?enquiry_subject={EnquirySubjectChoices.SELLING_GOODS_ABROAD}"
     )
     assert response.status_code == 200
-    assertTemplateUsed(response, "core/not_listed_country_export_enquiries.html")
+    assertTemplateUsed(response, "core/not_listed_market_export_enquiries.html")
     ctx = response.context
     assert not ctx["should_display_sub_headings"]
     assert ctx["should_display_export_goods"]
     assert not ctx["should_display_export_services"]
     assert ctx["heading"] == "Sell goods abroad"
 
-    url = reverse("core:not-listed-country-export-enquiries")
+    url = reverse("core:not-listed-market-export-enquiries")
     response = client.get(
         f"{url}?enquiry_subject={EnquirySubjectChoices.SELLING_SERVICES_ABROAD}"
     )
     assert response.status_code == 200
-    assertTemplateUsed(response, "core/not_listed_country_export_enquiries.html")
+    assertTemplateUsed(response, "core/not_listed_market_export_enquiries.html")
     ctx = response.context
     assert not ctx["should_display_sub_headings"]
     assert not ctx["should_display_export_goods"]
     assert ctx["should_display_export_services"]
     assert ctx["heading"] == "Sell services abroad"
 
-    url = reverse("core:not-listed-country-export-enquiries")
+    url = reverse("core:not-listed-market-export-enquiries")
     response = client.get(
         f"{url}?enquiry_subject={EnquirySubjectChoices.SELLING_GOODS_ABROAD}&enquiry_subject={EnquirySubjectChoices.SELLING_SERVICES_ABROAD}"  # noqa: E501
     )
     assert response.status_code == 200
-    assertTemplateUsed(response, "core/not_listed_country_export_enquiries.html")
+    assertTemplateUsed(response, "core/not_listed_market_export_enquiries.html")
     ctx = response.context
     assert ctx["should_display_sub_headings"]
     assert ctx["should_display_export_goods"]

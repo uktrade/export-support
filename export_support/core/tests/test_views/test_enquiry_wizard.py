@@ -7,7 +7,7 @@ from django.test import Client
 from django.urls import reverse
 from pytest_django.asserts import assertTemplateUsed
 
-from ...consts import ENQUIRY_COUNTRY_CODES
+from ...consts import ENQUIRY_MARKET_CODES
 from ...forms import (
     SECTORS_MAP,
     BusinessTypeChoices,
@@ -26,7 +26,7 @@ from ...forms import (
 
 logger = logging.getLogger(__name__)
 
-COUNTRY_MACHINE_READABLE_VALUES = list(ENQUIRY_COUNTRY_CODES.values())
+MARKET_MACHINE_READABLE_VALUES = list(ENQUIRY_MARKET_CODES.values())
 
 
 def get_coerced_field_value(field_value):
@@ -100,18 +100,18 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
     )
     assert response.status_code == 302
 
-    export_countries_url = get_step_url("export-countries")
-    assert response.url == export_countries_url
+    export_markets_url = get_step_url("export-markets")
+    assert response.url == export_markets_url
 
-    response = client.get(export_countries_url)
+    response = client.get(export_markets_url)
     assert response.status_code == 200
     assert_number_of_steps(response, current_step_number=2, total_number_of_steps=8)
-    assertTemplateUsed(response, "core/export_countries_wizard_step.html")
+    assertTemplateUsed(response, "core/export_markets_wizard_step.html")
     response = client.post(
-        export_countries_url,
+        export_markets_url,
         get_form_data(
-            "export-countries",
-            {"countries": ["mexico__ess_export", "nigeria__ess_export"]},
+            "export-markets",
+            {"markets": ["mexico__ess_export", "nigeria__ess_export"]},
         ),
     )
     assert response.status_code == 302
@@ -282,7 +282,7 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
             "company_turnover": "Below £85,000",
             "company_type": "Private limited company",
             "company_type_category": "UK private or public limited company",
-            "countries": "Mexico, Nigeria",
+            "markets": "Mexico, Nigeria",
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
             "full_name": "Firstname Lastname",
@@ -341,18 +341,18 @@ def test_full_steps_other_organisation_business_type_wizard_success(
     )
     assert response.status_code == 302
 
-    export_countries_url = get_step_url("export-countries")
-    assert response.url == export_countries_url
+    export_markets_url = get_step_url("export-markets")
+    assert response.url == export_markets_url
 
-    response = client.get(export_countries_url)
+    response = client.get(export_markets_url)
     assert response.status_code == 200
     assert_number_of_steps(response, current_step_number=2, total_number_of_steps=8)
-    assertTemplateUsed(response, "core/export_countries_wizard_step.html")
+    assertTemplateUsed(response, "core/export_markets_wizard_step.html")
     response = client.post(
-        export_countries_url,
+        export_markets_url,
         get_form_data(
-            "export-countries",
-            {"countries": ["japan__ess_export", "lithuania__ess_export"]},
+            "export-markets",
+            {"markets": ["japan__ess_export", "lithuania__ess_export"]},
         ),
     )
     assert response.status_code == 302
@@ -523,7 +523,7 @@ def test_full_steps_other_organisation_business_type_wizard_success(
             "company_turnover": "Below £85,000",
             "company_type": "Charity / Social enterprise",
             "company_type_category": "Other type of UK organisation",
-            "countries": "Japan, Lithuania",
+            "markets": "Japan, Lithuania",
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
             "full_name": "Firstname Lastname",
@@ -582,19 +582,19 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
     )
     assert response.status_code == 302
 
-    export_countries_url = get_step_url("export-countries")
-    assert response.url == export_countries_url
+    export_markets_url = get_step_url("export-markets")
+    assert response.url == export_markets_url
 
-    response = client.get(export_countries_url)
+    response = client.get(export_markets_url)
     assert response.status_code == 200
     assert_number_of_steps(response, current_step_number=2, total_number_of_steps=8)
-    assertTemplateUsed(response, "core/export_countries_wizard_step.html")
+    assertTemplateUsed(response, "core/export_markets_wizard_step.html")
     response = client.post(
-        export_countries_url,
+        export_markets_url,
         get_form_data(
-            "export-countries",
+            "export-markets",
             {
-                "countries": [
+                "markets": [
                     "iceland__ess_export",
                     "italy__ess_export",
                     "jamaica__ess_export",
@@ -768,7 +768,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
             "company_turnover": "Below £85,000",
             "company_type": "Sole trader",
             "company_type_category": "Sole trader or private individual",
-            "countries": "Iceland, Italy, Jamaica",
+            "markets": "Iceland, Italy, Jamaica",
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
             "full_name": "Firstname Lastname",
@@ -798,7 +798,7 @@ def test_full_steps_private_or_limited_business_type_wizard_success_custom_field
     settings.ZENDESK_CUSTOM_FIELD_MAPPING = {
         "company_turnover": "111",
         "enquiry_subject": "222",
-        "countries": "333",
+        "markets": "333",
         "company_registration_number": "444",
         "company_type": "555",
         "company_post_code": "666",
@@ -832,18 +832,18 @@ def test_full_steps_private_or_limited_business_type_wizard_success_custom_field
     )
     assert response.status_code == 302
 
-    export_countries_url = get_step_url("export-countries")
-    assert response.url == export_countries_url
+    export_markets_url = get_step_url("export-markets")
+    assert response.url == export_markets_url
 
-    response = client.get(export_countries_url)
+    response = client.get(export_markets_url)
     assert response.status_code == 200
-    assertTemplateUsed(response, "core/export_countries_wizard_step.html")
+    assertTemplateUsed(response, "core/export_markets_wizard_step.html")
     response = client.post(
-        export_countries_url,
+        export_markets_url,
         get_form_data(
-            "export-countries",
+            "export-markets",
             {
-                "countries": [
+                "markets": [
                     "greece__ess_export",
                     "croatia__ess_export",
                     "india__ess_export",
@@ -1002,7 +1002,7 @@ def test_full_steps_private_or_limited_business_type_wizard_success_custom_field
             "company_turnover": "Below £85,000",
             "company_type": "Private limited company",
             "company_type_category": "UK private or public limited company",
-            "countries": "Greece, Croatia, India",
+            "markets": "Greece, Croatia, India",
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
             "full_name": "Firstname Lastname",
@@ -1050,7 +1050,7 @@ def test_full_steps_other_organisation_business_type_wizard_success_custom_field
     settings.ZENDESK_CUSTOM_FIELD_MAPPING = {
         "company_turnover": "111",
         "enquiry_subject": "222",
-        "countries": "333",
+        "markets": "333",
         "company_registration_number": "444",
         "company_type": "555",
         "company_post_code": "666",
@@ -1084,18 +1084,18 @@ def test_full_steps_other_organisation_business_type_wizard_success_custom_field
     )
     assert response.status_code == 302
 
-    export_countries_url = get_step_url("export-countries")
-    assert response.url == export_countries_url
+    export_markets_url = get_step_url("export-markets")
+    assert response.url == export_markets_url
 
-    response = client.get(export_countries_url)
+    response = client.get(export_markets_url)
     assert response.status_code == 200
-    assertTemplateUsed(response, "core/export_countries_wizard_step.html")
+    assertTemplateUsed(response, "core/export_markets_wizard_step.html")
     response = client.post(
-        export_countries_url,
+        export_markets_url,
         get_form_data(
-            "export-countries",
+            "export-markets",
             {
-                "countries": [
+                "markets": [
                     "germany__ess_export",
                     "france__ess_export",
                     "the_gambia__ess_export",
@@ -1256,7 +1256,7 @@ def test_full_steps_other_organisation_business_type_wizard_success_custom_field
             "company_turnover": "Below £85,000",
             "company_type": "Charity / Social enterprise",
             "company_type_category": "Other type of UK organisation",
-            "countries": "Germany, France, The Gambia",
+            "markets": "Germany, France, The Gambia",
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
             "full_name": "Firstname Lastname",
@@ -1304,7 +1304,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success_custom_fields(
     settings.ZENDESK_CUSTOM_FIELD_MAPPING = {
         "company_turnover": "111",
         "enquiry_subject": "222",
-        "countries": "333",
+        "markets": "333",
         "company_registration_number": "444",
         "company_type": "555",
         "company_post_code": "666",
@@ -1339,17 +1339,17 @@ def test_full_steps_solo_exporter_business_type_wizard_success_custom_fields(
     )
     assert response.status_code == 302
 
-    export_countries_url = get_step_url("export-countries")
-    assert response.url == export_countries_url
+    export_markets_url = get_step_url("export-markets")
+    assert response.url == export_markets_url
 
-    response = client.get(export_countries_url)
+    response = client.get(export_markets_url)
     assert response.status_code == 200
-    assertTemplateUsed(response, "core/export_countries_wizard_step.html")
+    assertTemplateUsed(response, "core/export_markets_wizard_step.html")
     response = client.post(
-        export_countries_url,
+        export_markets_url,
         get_form_data(
-            "export-countries",
-            {"countries": ["congo__ess_export", "cuba__ess_export"]},
+            "export-markets",
+            {"markets": ["congo__ess_export", "cuba__ess_export"]},
         ),
     )
     assert response.status_code == 302
@@ -1503,7 +1503,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success_custom_fields(
             "company_turnover": "Below £85,000",
             "company_type": "Sole trader",
             "company_type_category": "Sole trader or private individual",
-            "countries": "Congo, Cuba",
+            "markets": "Congo, Cuba",
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
             "full_name": "Firstname Lastname",
@@ -1582,17 +1582,17 @@ def test_full_steps_wizard_success_private_custom_fields_are_ignored(
     )
     assert response.status_code == 302
 
-    export_countries_url = get_step_url("export-countries")
-    assert response.url == export_countries_url
+    export_markets_url = get_step_url("export-markets")
+    assert response.url == export_markets_url
 
-    response = client.get(export_countries_url)
+    response = client.get(export_markets_url)
     assert response.status_code == 200
-    assertTemplateUsed(response, "core/export_countries_wizard_step.html")
+    assertTemplateUsed(response, "core/export_markets_wizard_step.html")
     response = client.post(
-        export_countries_url,
+        export_markets_url,
         get_form_data(
-            "export-countries",
-            {"countries": ["andorra__ess_export", "australia__ess_export"]},
+            "export-markets",
+            {"markets": ["andorra__ess_export", "australia__ess_export"]},
         ),
     )
     assert response.status_code == 302
@@ -1747,7 +1747,7 @@ def test_full_steps_wizard_success_private_custom_fields_are_ignored(
             "company_turnover": "Below £85,000",
             "company_type": "Othertypeofbusiness",
             "company_type_category": "UK private or public limited company",
-            "countries": "Andorra, Australia",
+            "markets": "Andorra, Australia",
             "email": "test@example.com",
             "enquiry_subject": "Selling goods abroad, Selling services abroad",
             "have_you_exported_before": "No",
@@ -1809,17 +1809,17 @@ def test_zendesk_form_is_not_valid_wizard_raises_error(client, settings, mocker)
     )
     assert response.status_code == 302
 
-    export_countries_url = get_step_url("export-countries")
-    assert response.url == export_countries_url
+    export_markets_url = get_step_url("export-markets")
+    assert response.url == export_markets_url
 
-    response = client.get(export_countries_url)
+    response = client.get(export_markets_url)
     assert response.status_code == 200
-    assertTemplateUsed(response, "core/export_countries_wizard_step.html")
+    assertTemplateUsed(response, "core/export_markets_wizard_step.html")
     response = client.post(
-        export_countries_url,
+        export_markets_url,
         get_form_data(
-            "export-countries",
-            {"countries": COUNTRY_MACHINE_READABLE_VALUES},
+            "export-markets",
+            {"markets": MARKET_MACHINE_READABLE_VALUES},
         ),
     )
     assert response.status_code == 302
@@ -1984,17 +1984,17 @@ def run_wizard_enquiry_subject(settings, mocker):
         )
         assert response.status_code == 302
 
-        export_countries_url = get_step_url("export-countries")
-        assert response.url == export_countries_url
+        export_markets_url = get_step_url("export-markets")
+        assert response.url == export_markets_url
 
-        response = client.get(export_countries_url)
+        response = client.get(export_markets_url)
         assert response.status_code == 200
-        assertTemplateUsed(response, "core/export_countries_wizard_step.html")
+        assertTemplateUsed(response, "core/export_markets_wizard_step.html")
         response = client.post(
-            export_countries_url,
+            export_markets_url,
             get_form_data(
-                "export-countries",
-                {"countries": COUNTRY_MACHINE_READABLE_VALUES},
+                "export-markets",
+                {"markets": MARKET_MACHINE_READABLE_VALUES},
             ),
         )
         assert response.status_code == 302
@@ -2182,12 +2182,12 @@ def run_wizard_enquiry_subject_guidance_url():
         )
         assert response.status_code == 302
 
-        export_countries_url = get_step_url("export-countries")
-        assert response.url == export_countries_url
+        export_markets_url = get_step_url("export-markets")
+        assert response.url == export_markets_url
 
-        response = client.get(export_countries_url)
+        response = client.get(export_markets_url)
         assert response.status_code == 200
-        assertTemplateUsed(response, "core/export_countries_wizard_step.html")
+        assertTemplateUsed(response, "core/export_markets_wizard_step.html")
 
         return response
 
@@ -2201,7 +2201,7 @@ def test_enquiry_subject_guidance_url(run_wizard_enquiry_subject_guidance_url, m
     ctx = response.context
     assert (
         ctx["guidance_url"]
-        == f"{reverse('core:not-listed-country-export-enquiries')}?enquiry_subject=1"
+        == f"{reverse('core:not-listed-market-export-enquiries')}?enquiry_subject=1"
     )
 
     response = run_wizard_enquiry_subject_guidance_url(
@@ -2210,7 +2210,7 @@ def test_enquiry_subject_guidance_url(run_wizard_enquiry_subject_guidance_url, m
     ctx = response.context
     assert (
         ctx["guidance_url"]
-        == f"{reverse('core:not-listed-country-export-enquiries')}?enquiry_subject=2"
+        == f"{reverse('core:not-listed-market-export-enquiries')}?enquiry_subject=2"
     )
 
     response = run_wizard_enquiry_subject_guidance_url(
@@ -2222,7 +2222,7 @@ def test_enquiry_subject_guidance_url(run_wizard_enquiry_subject_guidance_url, m
     ctx = response.context
     assert (
         ctx["guidance_url"]
-        == f"{reverse('core:not-listed-country-export-enquiries')}?enquiry_subject=1&enquiry_subject=2"
+        == f"{reverse('core:not-listed-market-export-enquiries')}?enquiry_subject=1&enquiry_subject=2"
     )
 
     client = Client()
@@ -2246,18 +2246,18 @@ def test_enquiry_subject_guidance_url(run_wizard_enquiry_subject_guidance_url, m
     )
     assert response.status_code == 302
 
-    export_countries_url = get_step_url("export-countries")
-    assert response.url == export_countries_url
+    export_markets_url = get_step_url("export-markets")
+    assert response.url == export_markets_url
 
     mock_is_valid = mocker.patch(
         "export_support.core.views.EnquirySubjectForm.is_valid"
     )
     mock_is_valid.return_value = False
-    response = client.get(export_countries_url)
+    response = client.get(export_markets_url)
     assert response.status_code == 200
-    assertTemplateUsed(response, "core/export_countries_wizard_step.html")
+    assertTemplateUsed(response, "core/export_markets_wizard_step.html")
 
     ctx = response.context
     assert (
-        ctx["guidance_url"] == f"{reverse('core:not-listed-country-export-enquiries')}?"
+        ctx["guidance_url"] == f"{reverse('core:not-listed-market-export-enquiries')}?"
     )

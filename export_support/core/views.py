@@ -11,7 +11,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import RedirectView, TemplateView
 from formtools.wizard.views import NamedUrlSessionWizardView
 
-from .consts import EMERGENCY_SITUATION_COUNTRIES
+from .consts import EMERGENCY_SITUATION_MARKETS
 from .forms import (
     BusinessAdditionalInformationForm,
     BusinessDetailsForm,
@@ -22,7 +22,7 @@ from .forms import (
     EnquiryDetailsForm,
     EnquirySubjectChoices,
     EnquirySubjectForm,
-    ExportCountriesForm,
+    ExportMarketsForm,
     OrganisationAdditionalInformationForm,
     OrganisationDetailsForm,
     PersonalDetailsForm,
@@ -78,7 +78,7 @@ def filter_private_values(value):
 class EnquiryWizardView(NamedUrlSessionWizardView):
     form_list = [
         ("enquiry-subject", EnquirySubjectForm),
-        ("export-countries", ExportCountriesForm),
+        ("export-markets", ExportMarketsForm),
         ("personal-details", PersonalDetailsForm),
         ("business-type", BusinessTypeForm),
         ("business-details", BusinessDetailsForm),
@@ -130,6 +130,7 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
             for field_name, field_value in form.get_zendesk_data().items():
                 field_name = ZendeskForm.FIELD_MAPPING.get(field_name, field_name)
                 form_data[field_name] = field_value
+
                 try:
                     custom_field_id = custom_field_mapping[field_name]
                 except KeyError:
@@ -227,7 +228,7 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
     def get_context_data(self, form, **kwargs):
         ctx = super().get_context_data(form=form, **kwargs)
 
-        if self.steps.current == "export-countries":
+        if self.steps.current == "export-markets":
             enquiry_subject_form = self.get_form(
                 step="enquiry-subject",
                 data=self.storage.get_step_data("enquiry-subject"),
@@ -238,7 +239,7 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
                 filter_data = {}
 
             params = dict_to_query_dict(filter_data)
-            guidance_url = reverse("core:not-listed-country-export-enquiries")
+            guidance_url = reverse("core:not-listed-market-export-enquiries")
 
             ctx["guidance_url"] = f"{guidance_url}?{params.urlencode()}"
 
@@ -305,13 +306,13 @@ class EmergencySituationEnquiryWizardView(NamedUrlSessionWizardView):
 
         form_data["_custom_fields"] = custom_fields_data
 
-        # Countries data and enquiry subject line are decided by the URL path
-        # taken into the form. This will correspond with the list of countries in the
-        # emergency situation countries constant.
-        countries_from_url = self.request.path.split("/")
-        countries_information = EMERGENCY_SITUATION_COUNTRIES[countries_from_url[1]]
-        form_data["countries"] = countries_information["country_list"]
-        form_data["enquiry_subject"] = countries_information["subject_title"]
+        # Markets data and enquiry subject line are decided by the URL path
+        # taken into the form. This will correspond with the list of markets in the
+        # emergency situation markets constant.
+        markets_from_url = self.request.path.split("/")
+        markets_information = EMERGENCY_SITUATION_MARKETS[markets_from_url[1]]
+        form_data["markets"] = markets_information["market_list"]
+        form_data["enquiry_subject"] = markets_information["subject_title"]
 
         return form_data
 
@@ -361,8 +362,8 @@ class EmergencySituationEnquiryWizardView(NamedUrlSessionWizardView):
         return render(self.request, "core/enquiry_contact_success.html", ctx)
 
 
-class NotListedCountryExportEnquiriesView(TemplateView):
-    template_name = "core/not_listed_country_export_enquiries.html"
+class NotListedMarketExportEnquiriesView(TemplateView):
+    template_name = "core/not_listed_market_export_enquiries.html"
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

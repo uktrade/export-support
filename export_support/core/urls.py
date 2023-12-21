@@ -38,9 +38,9 @@ urlpatterns = [
         name="ip-emergency-situation-wizard-step",
     ),
     path(
-        "not-listed-country-export-enquiries",
-        views.NotListedCountryExportEnquiriesView.as_view(),
-        name="not-listed-country-export-enquiries",
+        "not-listed-market-export-enquiries",
+        views.NotListedMarketExportEnquiriesView.as_view(),
+        name="not-listed-market-export-enquiries",
     ),
     path(
         "privacy",

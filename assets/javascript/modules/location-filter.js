@@ -25,12 +25,12 @@ const initLocationFilter = () => {
       var filter = input.value.toUpperCase();
       // Loop through list of individual elements
       for (var i = 0; i < options.length; i++) {
-        // Get the name of the country in the element list
-        // will be in the form <<country_name>>__ess_export so need to split the value
-        var countryChoice = options[i].value.split("__")[0];
+        // Get the name of the market in the element list
+        // will be in the form <<market_name>>__ess_export so need to split the value
+        var marketChoice = options[i].value.split("__")[0];
         // If the choice does not contain the characters in the input,
         // set the display style to none for the parent (to catch the select box and its label)
-        if (countryChoice.toUpperCase().indexOf(filter) > -1) {
+        if (marketChoice.toUpperCase().indexOf(filter) > -1) {
           options[i].parentNode.style.display = "";
         } else {
           options[i].parentNode.style.display = "none";
@@ -39,30 +39,30 @@ const initLocationFilter = () => {
     });
 
     // ***
-    // COUNTRY NAME TAGS LIST
+    // MARKET NAME TAGS LIST
     // ***
     // Initialise tags array
-    var countryTags = [];
-    // Loop through all country checkbox options
+    var marketTags = [];
+    // Loop through all market checkbox options
     for (var i = 0; i < options.length; i++) {
       // Get the HTML element and make it a usable object
-      const countryOption = options[i];
+      const marketOption = options[i];
 
       // Check if option is already ticked (through returning to the page)
-      if (countryOption.checked == true) {
-        createCountryTag(countryOption);
+      if (marketOption.checked == true) {
+        createMarketTag(marketOption);
       }
 
       // Add event listener to trigger when the input is checked or unchecked
       options[i].addEventListener("change", () => {
         // If box has been checked, add new tag
         // Else, remove tag element
-        if (countryOption.checked == true) {
-          createCountryTag(countryOption);
+        if (marketOption.checked == true) {
+          createMarketTag(marketOption);
           updateTagsDisplay();
         } else {
           // Remove tag from tag array
-          destroyCountryTag(countryOption);
+          destroyMarketTag(marketOption);
           updateTagsDisplay();
         }
       });
@@ -76,55 +76,55 @@ const initLocationFilter = () => {
       updateTagsDisplay();
     });
 
-    function createCountryTag(countryOption) {
-      // Get the backend name of the country from the checkbox value
-      var countryName = countryOption.value.split("__")[0];
+    function createMarketTag(marketOption) {
+      // Get the backend name of the market from the checkbox value
+      var marketName = marketOption.value.split("__")[0];
       // Create the tag using the option value
       const tag = document.createElement("div");
-      tag.className = "country-selected-tag";
-      //tag.className = "govuk-tag country-selected-tag";
-      tag.id = "country-selected-tag-" + countryName;
+      tag.className = "market-selected-tag";
+      //tag.className = "govuk-tag market-selected-tag";
+      tag.id = "market-selected-tag-" + marketName;
 
-      // Get the country name as it appears on the checkbox label
-      var formattedCountryName = countryOption.labels[0].innerText;
+      // Get the market name as it appears on the checkbox label
+      var formattedMarketName = marketOption.labels[0].innerText;
 
-      // Format the content of the tag; a cross followed by the country name
+      // Format the content of the tag; a cross followed by the market name
       tag.innerHTML =
         "<span class='remove-cross'>\u00D7</span>" +
-        "<p class='country-tag-text'>" +
-        formattedCountryName +
+        "<p class='market-tag-text'>" +
+        formattedMarketName +
         "</p>";
 
       // Add an onclick function to the tag, so when clicked, the tag is removed
-      // and the corresponding checkbox is unticked. Call function to check if we need the country overflow message.
+      // and the corresponding checkbox is unticked. Call function to check if we need the market overflow message.
       tag.onclick = function () {
-        destroyCountryTag(countryOption);
-        countryOption.checked = false;
+        destroyMarketTag(marketOption);
+        marketOption.checked = false;
         updateTagsDisplay();
       };
 
       // Add tag to tags array
-      countryTags.push(tag);
+      marketTags.push(tag);
     }
 
-    function destroyCountryTag(countryOption) {
-      // Get the name of the country from the checkbox value, remove tag from display
-      var countryName = countryOption.value.split("__")[0];
+    function destroyMarketTag(marketOption) {
+      // Get the name of the market from the checkbox value, remove tag from display
+      var marketName = marketOption.value.split("__")[0];
       // Get the tag to remove
       const tagToRemove = document.getElementById(
-        "country-selected-tag-" + countryName
+        "market-selected-tag-" + marketName
       );
       // Identify the position of the tag in the tag array
-      var indexNum = countryTags.indexOf(tagToRemove);
+      var indexNum = marketTags.indexOf(tagToRemove);
       // Remove tag from array and display
-      countryTags.splice(indexNum, 1);
+      marketTags.splice(indexNum, 1);
       tagToRemove.remove();
     }
 
     function updateTagsDisplay() {
-      const tagContainer = document.getElementById("country-tag-container");
+      const tagContainer = document.getElementById("market-tag-container");
       const hiddenTagContainer = document.getElementById(
-        "country-tag-long-list-container"
+        "market-tag-long-list-container"
       );
 
       // Clear existing tags so they get ordered correctly on update
@@ -132,22 +132,22 @@ const initLocationFilter = () => {
       hiddenTagContainer.innerHTML = "";
 
       // Sort tags (so if re-added they return in alphabetical order)
-      countryTags = countryTags.sort(function (a, b) {
+      marketTags = marketTags.sort(function (a, b) {
         var x = a["innerHTML"];
         var y = b["innerHTML"];
         return x < y ? -1 : x > y ? 1 : 0;
       });
 
       // Loop through tags array and add the tags to the correct container
-      for (var i = 0; i < countryTags.length; i++) {
+      for (var i = 0; i < marketTags.length; i++) {
         // Add tag to visible container
-        tagContainer.appendChild(countryTags[i]);
+        tagContainer.appendChild(marketTags[i]);
         // Check if adding the tag has caused overflow
-        var tooManyCountryTags = checkOverflow();
-        if (tooManyCountryTags == true) {
+        var tooManyMarketTags = checkOverflow();
+        if (tooManyMarketTags == true) {
           // If there is overflow, move the tag to the overflow container
-          tagContainer.removeChild(countryTags[i]);
-          hiddenTagContainer.appendChild(countryTags[i]);
+          tagContainer.removeChild(marketTags[i]);
+          hiddenTagContainer.appendChild(marketTags[i]);
         }
       }
 
@@ -157,10 +157,10 @@ const initLocationFilter = () => {
 
     function checkOverflow() {
       // Get the container for the scroll height
-      const tagContainer = document.getElementById("country-tag-container");
+      const tagContainer = document.getElementById("market-tag-container");
       // Get a tag so we can determine the height of one tag row
       // No JS method exists for height including margins, so will need to work this out
-      const tagList = document.getElementsByClassName("country-selected-tag");
+      const tagList = document.getElementsByClassName("market-selected-tag");
       var tagStyle = getComputedStyle(tagList[0]);
       var tagHeight =
         parseInt(tagList[0].offsetHeight) +
@@ -168,7 +168,7 @@ const initLocationFilter = () => {
         parseInt(tagStyle.marginBottom);
       // Scroll height is the height of the content (tags list),
       // if the scroll height is more than the height of one tag,
-      // we have too many country tags
+      // we have too many market tags
       if (tagHeight >= tagContainer.scrollHeight) {
         return false;
       } else {
@@ -177,15 +177,15 @@ const initLocationFilter = () => {
     }
 
     // ***
-    // COUNTRY NAME LONG TAGS LIST SHOW/HIDE
+    // MARKET NAME LONG TAGS LIST SHOW/HIDE
     // ***
     function updateOverflowIndicator() {
       // Identify the container for the lon-list of tags and the indicator div
       const longListTagContainer = document.getElementById(
-        "country-tag-long-list-container"
+        "market-tag-long-list-container"
       );
       const longListIndicator = document.getElementById(
-        "country-tag-long-list-indicator"
+        "market-tag-long-list-indicator"
       );
 
       // Count how many tags are in the long-list container
@@ -204,14 +204,14 @@ const initLocationFilter = () => {
 
         // Set the text in the indicator div
         const longListIndicatorText = document.getElementById(
-          "country-tag-long-list-indicator-text"
+          "market-tag-long-list-indicator-text"
         );
         longListIndicatorText.innerHTML =
-          "...and " + hiddenTagsCount + " other countries";
+          "...and " + hiddenTagsCount + " other markets";
 
         // Build the show/hide button and attach it to the indicator div
         const showHideButton = document.getElementById(
-          "country-tag-long-list-indicator-button"
+          "market-tag-long-list-indicator-button"
         );
         // Add an onclick listener to the show/hide button
         showHideButton.onclick = function () {
