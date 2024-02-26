@@ -923,7 +923,7 @@ class SectorsForm(gds_forms.FormErrorMixin, forms.Form):
 
 
 class HowDidYouHearAboutThisServiceChoices(models.TextChoices):
-    SEARCH_ENGINE = "search_enging__ess_acquisition", "Search engine"
+    SEARCH_ENGINE = "search_engine__ess_acquisition", "Search engine"
     LINKED_IN = "linkedin__ess_acquisition", "LinkedIn"
     TWITTER = "twitter__ess_acquisition", "Twitter"
     FACEBOOK = "facebook__ess_acquisition", "Facebook"
