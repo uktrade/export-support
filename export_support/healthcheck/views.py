@@ -27,23 +27,23 @@ def check_companies_house_api():
         raise HealthCheckError("Companies API healthcheck failed") from e
 
 
-class HealthCheckView(TemplateView):
+class BaseHealthCheckView(TemplateView):
     content_type = "text/xml"
     template_name = "healthcheck/healthcheck.xml"
-
-    checks = [
-        check_directory_forms_api,
-        check_companies_house_api,
-    ]
+    check = None
 
     def get_context_data(self, **kwargs):
-        """Adds status and response time to response context"""
         context = super().get_context_data(**kwargs)
-
-        for check in self.checks:
-            check()
-
+        self.check()
         context["status"] = "OK"
         # nearest approximation of a response time
         context["response_time"] = time.time() - self.request.start_time
         return context
+
+
+class CompaniesHouseHealthCheckView(TemplateView):
+    check = check_companies_house_api
+
+
+class DirectoryFormsHealthCheckView(BaseHealthCheckView):
+    check = check_directory_forms_api
