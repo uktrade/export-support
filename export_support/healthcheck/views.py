@@ -11,26 +11,31 @@ class HealthCheckError(Exception):
     pass
 
 
-def check_directory_forms_api():
-    response = requests.get(settings.DIRECTORY_FORMS_API_HEALTHCHECK_URL)
-    try:
-        response.raise_for_status()
-    except Exception as e:
-        raise HealthCheckError("Directory forms API healthcheck failed") from e
+class CheckDirectoryFormsApi:
+    def __call__(self):
+        response = requests.get(settings.DIRECTORY_FORMS_API_HEALTHCHECK_URL)
+        try:
+            response.raise_for_status()
+        except Exception as e:
+            raise HealthCheckError("Directory forms API healthcheck failed") from e
 
 
-def check_companies_house_api():
-    response = _search_companies_house_api("test", 0)
-    try:
-        response.raise_for_status()
-    except Exception as e:
-        raise HealthCheckError("Companies API healthcheck failed") from e
+class CheckCompaniesHouseApi:
+    def __call__(self):
+        response = _search_companies_house_api("test", 0)
+        try:
+            response.raise_for_status()
+        except Exception as e:
+            raise HealthCheckError("Companies API healthcheck failed") from e
 
 
 class BaseHealthCheckView(TemplateView):
     content_type = "text/xml"
     template_name = "healthcheck/healthcheck.xml"
     check = None
+
+    def check(self):
+        self.CHECK_FUNCTION()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -41,9 +46,9 @@ class BaseHealthCheckView(TemplateView):
         return context
 
 
-class CompaniesHouseHealthCheckView(TemplateView):
-    check = check_companies_house_api
+class CompaniesHouseHealthCheckView(BaseHealthCheckView):
+    check = CheckDirectoryFormsApi
 
 
 class DirectoryFormsHealthCheckView(BaseHealthCheckView):
-    check = check_directory_forms_api
+    check = CheckCompaniesHouseApi
