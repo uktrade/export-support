@@ -20,7 +20,7 @@ def test_healthcheck_success(client, settings, mocker, requests_mock):
 
     requests_mock.get("https://api.companieshouse.gov.uk/search/companies")
 
-    url = reverse("healthcheck:healthcheck")
+    url = reverse("healthcheck:companies-house")
     response = client.get(url)
 
     assert response.status_code == 200
@@ -39,11 +39,15 @@ def test_healthcheck_success(client, settings, mocker, requests_mock):
 def test_healthcheck_directory_forms_api_failure(client, settings, requests_mock):
     requests_mock.get(ANY_URL)
 
-    directory_forms_api_healthcheck_url = "http://example.com/healthcheck"
-    settings.DIRECTORY_FORMS_API_HEALTHCHECK_URL = "http://example.com/healthcheck"
+    directory_forms_api_healthcheck_url = (
+        "http://example.com/healthcheck/directory-forms"
+    )
+    settings.DIRECTORY_FORMS_API_HEALTHCHECK_URL = (
+        "http://example.com/healthcheck/directory-forms"
+    )
     requests_mock.get(directory_forms_api_healthcheck_url, status_code=404)
 
-    url = reverse("healthcheck:healthcheck")
+    url = reverse("healthcheck:directory-forms")
     with pytest.raises(HealthCheckError):
         client.get(url)
 
@@ -54,11 +58,11 @@ def test_healthcheck_companies_house_failure(client, requests_mock):
     companies_house_url = "https://api.companieshouse.gov.uk/search/companies"
 
     requests_mock.get(companies_house_url, status_code=404)
-    url = reverse("healthcheck:healthcheck")
+    url = reverse("healthcheck:companies-house")
     with pytest.raises(HealthCheckError):
         client.get(url)
 
     requests_mock.get(companies_house_url, status_code=403)
-    url = reverse("healthcheck:healthcheck")
+    url = reverse("healthcheck:companies-house")
     with pytest.raises(HealthCheckError):
         client.get(url)
