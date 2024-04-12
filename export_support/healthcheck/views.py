@@ -34,9 +34,6 @@ class BaseHealthCheckView(TemplateView):
     template_name = "healthcheck/healthcheck.xml"
     check = None
 
-    def check(self):
-        self.CHECK_FUNCTION()
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         self.check()
@@ -47,8 +44,8 @@ class BaseHealthCheckView(TemplateView):
 
 
 class CompaniesHouseHealthCheckView(BaseHealthCheckView):
-    check = CheckDirectoryFormsApi
+    check = CheckDirectoryFormsApi()
 
 
 class DirectoryFormsHealthCheckView(BaseHealthCheckView):
-    check = CheckCompaniesHouseApi
+    check = CheckCompaniesHouseApi()
