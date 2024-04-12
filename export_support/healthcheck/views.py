@@ -3,11 +3,12 @@ import time
 import requests
 from django.conf import settings
 from django.views.generic import TemplateView
+from requests.exceptions import HTTPError
 
 from export_support.companies.search import _search_companies_house_api
 
 
-class HealthCheckError(Exception):
+class HealthCheckError(HTTPError):
     pass
 
 
@@ -16,7 +17,7 @@ class CheckDirectoryFormsApi:
         response = requests.get(settings.DIRECTORY_FORMS_API_HEALTHCHECK_URL)
         try:
             response.raise_for_status()
-        except Exception as e:
+        except HTTPError as e:
             raise HealthCheckError("Directory forms API healthcheck failed") from e
 
 
@@ -25,7 +26,7 @@ class CheckCompaniesHouseApi:
         response = _search_companies_house_api("test", 0)
         try:
             response.raise_for_status()
-        except Exception as e:
+        except HTTPError as e:
             raise HealthCheckError("Companies API healthcheck failed") from e
 
 
