@@ -49,7 +49,7 @@ def test_healthcheck_directory_forms_api_failure(client, settings, requests_mock
     settings.DIRECTORY_FORMS_API_HEALTHCHECK_URL = directory_forms_api_healthcheck_url
     requests_mock.get(directory_forms_api_healthcheck_url, status_code=404)
 
-    url = reverse("healthcheck:directory-forms")
+    url = reverse("healthcheck:healthcheck")
     with pytest.raises(HealthCheckError):
         client.get(url)
 

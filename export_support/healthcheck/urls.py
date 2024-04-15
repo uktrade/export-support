@@ -7,13 +7,13 @@ app_name = "healthcheck"
 
 urlpatterns = [
     path(
+        "",
+        csp_exempt(views.DirectoryFormsHealthCheckView.as_view()),
+        name="healthcheck",
+    ),
+    path(
         "companies-house/",
         csp_exempt(views.CompaniesHouseHealthCheckView.as_view()),
         name="companies-house",
-    ),
-    path(
-        "directory-forms/",
-        csp_exempt(views.DirectoryFormsHealthCheckView.as_view()),
-        name="directory-forms",
     ),
 ]
