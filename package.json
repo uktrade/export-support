@@ -14,7 +14,7 @@
   "dependencies": {
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
-    "@sentry/browser": "6.7.1",
+    "@sentry/browser": "8.33.0",
     "accessible-autocomplete": "^2.0.3",
     "babel-loader": "^8.2.2",
     "copy-webpack-plugin": "^12.0.2",
