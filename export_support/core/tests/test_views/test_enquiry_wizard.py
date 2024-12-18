@@ -68,8 +68,6 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
     settings.ZENDESK_SERVICE_NAME = "ZENDESK_SERVICE_NAME"
     settings.ZENDESK_SUBDOMAIN = "ZENDESK_SUBDOMAIN"
     settings.ZENDESK_CUSTOM_FIELD_MAPPING = {}
-    settings.CONSENT_API_URL = "http://placeholder:8080/api/v1/person/"
-    settings.CONSENT_API_METHOD = "POST"
 
     mock_zendesk_form_action_class = mocker.patch(
         "export_support.core.forms.ZendeskForm.action_class"
@@ -246,18 +244,10 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
     assert response.url == done_url
 
     with requests_mock.mock() as m:
-        # Mock the post request to the consent api
-        adapter = m.post("http://placeholder:8080/api/v1/person/")
         response = client.get(done_url)
 
     assert response.status_code == 200
     assertTemplateUsed(response, "core/enquiry_contact_success.html")
-
-    # Check the contents of the request to the consent api
-    consent_request_content = adapter.last_request.json()
-    assert consent_request_content["consents"] == ["email_marketing"]
-    assert consent_request_content["email"] == "test@example.com"
-    assert consent_request_content["key_type"] == "email"
 
     mock_zendesk_form_action_class.assert_called_with(
         form_url="FORM_URL",
@@ -309,8 +299,6 @@ def test_full_steps_other_organisation_business_type_wizard_success(
     settings.ZENDESK_SERVICE_NAME = "ZENDESK_SERVICE_NAME"
     settings.ZENDESK_SUBDOMAIN = "ZENDESK_SUBDOMAIN"
     settings.ZENDESK_CUSTOM_FIELD_MAPPING = {}
-    settings.CONSENT_API_URL = "http://placeholder:8080/api/v1/person/"
-    settings.CONSENT_API_METHOD = "POST"
 
     mock_zendesk_form_action_class = mocker.patch(
         "export_support.core.forms.ZendeskForm.action_class"
@@ -487,18 +475,10 @@ def test_full_steps_other_organisation_business_type_wizard_success(
     assert response.url == done_url
 
     with requests_mock.mock() as m:
-        # Mock the post request to the consent api
-        adapter = m.post("http://placeholder:8080/api/v1/person/")
         response = client.get(done_url)
 
     assert response.status_code == 200
     assertTemplateUsed(response, "core/enquiry_contact_success.html")
-
-    # Check the contents of the request to the consent api
-    consent_request_content = adapter.last_request.json()
-    assert consent_request_content["consents"] == ["email_marketing"]
-    assert consent_request_content["email"] == "test@example.com"
-    assert consent_request_content["key_type"] == "email"
 
     mock_zendesk_form_action_class.assert_called_with(
         form_url="FORM_URL",
@@ -550,8 +530,6 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
     settings.ZENDESK_SERVICE_NAME = "ZENDESK_SERVICE_NAME"
     settings.ZENDESK_SUBDOMAIN = "ZENDESK_SUBDOMAIN"
     settings.ZENDESK_CUSTOM_FIELD_MAPPING = {}
-    settings.CONSENT_API_URL = "http://placeholder:8080/api/v1/person/"
-    settings.CONSENT_API_METHOD = "POST"
 
     mock_zendesk_form_action_class = mocker.patch(
         "export_support.core.forms.ZendeskForm.action_class"
@@ -732,18 +710,10 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
     assert response.url == done_url
 
     with requests_mock.mock() as m:
-        # Mock the post request to the consent api
-        adapter = m.post("http://placeholder:8080/api/v1/person/")
         response = client.get(done_url)
 
     assert response.status_code == 200
     assertTemplateUsed(response, "core/enquiry_contact_success.html")
-
-    # Check the contents of the request to the consent api
-    consent_request_content = adapter.last_request.json()
-    assert consent_request_content["consents"] == ["email_marketing"]
-    assert consent_request_content["email"] == "test@example.com"
-    assert consent_request_content["key_type"] == "email"
 
     mock_zendesk_form_action_class.assert_called_with(
         form_url="FORM_URL",
@@ -1774,8 +1744,6 @@ def test_zendesk_form_is_not_valid_wizard_raises_error(client, settings, mocker)
     settings.ZENDESK_SERVICE_NAME = "ZENDESK_SERVICE_NAME"
     settings.ZENDESK_SUBDOMAIN = "ZENDESK_SUBDOMAIN"
     settings.ZENDESK_CUSTOM_FIELD_MAPPING = {}
-    settings.CONSENT_API_URL = "http://placeholder:8080/api/v1/person/"
-    settings.CONSENT_API_METHOD = "POST"
 
     mock_zendesk_form_action_class = mocker.patch(
         "export_support.core.forms.ZendeskForm.action_class"
