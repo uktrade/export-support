@@ -243,7 +243,7 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
     done_url = get_step_url("done")
     assert response.url == done_url
 
-    with requests_mock.mock() as m:
+    with requests_mock.mock():
         response = client.get(done_url)
 
     assert response.status_code == 200
@@ -474,7 +474,7 @@ def test_full_steps_other_organisation_business_type_wizard_success(
     done_url = get_step_url("done")
     assert response.url == done_url
 
-    with requests_mock.mock() as m:
+    with requests_mock.mock():
         response = client.get(done_url)
 
     assert response.status_code == 200
@@ -709,7 +709,7 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
     done_url = get_step_url("done")
     assert response.url == done_url
 
-    with requests_mock.mock() as m:
+    with requests_mock.mock():
         response = client.get(done_url)
 
     assert response.status_code == 200
