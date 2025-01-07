@@ -979,13 +979,6 @@ class EnquiryDetailsForm(gds_forms.FormErrorMixin, forms.Form):
             },
         ),
     )
-    email_consent = forms.BooleanField(
-        label="I would like to receive additional information by email",
-        required=False,
-        widget=forms.CheckboxInput(
-            attrs={"class": "govuk-checkboxes__input"},
-        ),
-    )
 
     def clean(self):
         cleaned_data = super().clean()
