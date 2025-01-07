@@ -56,7 +56,6 @@ def test_get_zendesk_data():
             "nature_of_enquiry": "NATURE OF ENQUIRY",
             "question": "QUESTION",
             "how_did_you_hear_about_this_service": HowDidYouHearAboutThisServiceChoices.SEARCH_ENGINE,
-            "email_consent": True,
         }
     )
 

@@ -234,7 +234,6 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
                 "nature_of_enquiry": "NATURE OF ENQUIRY",
                 "question": "QUESTION",
                 "how_did_you_hear_about_this_service": HowDidYouHearAboutThisServiceChoices.SEARCH_ENGINE,
-                "email_consent": True,
             },
         ),
     )
@@ -465,7 +464,6 @@ def test_full_steps_other_organisation_business_type_wizard_success(
                 "nature_of_enquiry": "NATURE OF ENQUIRY",
                 "question": "QUESTION",
                 "how_did_you_hear_about_this_service": HowDidYouHearAboutThisServiceChoices.SEARCH_ENGINE,
-                "email_consent": True,
             },
         ),
     )
@@ -700,7 +698,6 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
                 "nature_of_enquiry": "NATURE OF ENQUIRY",
                 "question": "QUESTION",
                 "how_did_you_hear_about_this_service": HowDidYouHearAboutThisServiceChoices.SEARCH_ENGINE,
-                "email_consent": True,
             },
         ),
     )
