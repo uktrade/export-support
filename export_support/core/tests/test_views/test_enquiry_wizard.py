@@ -281,7 +281,6 @@ def test_full_steps_private_or_limited_business_type_wizard_success(
             "other_sector": "ANOTHER SECTOR",
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
             "how_did_you_hear_about_this_service": "Search engine",
-            "marketing_consent": True,
             "have_you_exported_before": "No",
             "do_you_have_a_product_you_want_to_export": "Yes",
             "positivity_for_growth": "Neutral",
@@ -511,7 +510,6 @@ def test_full_steps_other_organisation_business_type_wizard_success(
             "other_sector": "ANOTHER SECTOR",
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
             "how_did_you_hear_about_this_service": "Search engine",
-            "marketing_consent": True,
             "have_you_exported_before": "No",
             "do_you_have_a_product_you_want_to_export": "Yes",
             "positivity_for_growth": "Neutral",
@@ -746,7 +744,6 @@ def test_full_steps_solo_exporter_business_type_wizard_success(
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
             # noqa: E501
             "how_did_you_hear_about_this_service": "Search engine",
-            "marketing_consent": True,
             "have_you_exported_before": "No",
             "do_you_have_a_product_you_want_to_export": "Yes",
             "positivity_for_growth": "Neutral",
@@ -980,7 +977,6 @@ def test_full_steps_private_or_limited_business_type_wizard_success_custom_field
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
             # noqa: E501
             "how_did_you_hear_about_this_service": "Search engine",
-            "marketing_consent": False,
             "have_you_exported_before": "No",
             "do_you_have_a_product_you_want_to_export": "Yes",
             "positivity_for_growth": "Neutral",
@@ -1234,7 +1230,6 @@ def test_full_steps_other_organisation_business_type_wizard_success_custom_field
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
             # noqa: E501
             "how_did_you_hear_about_this_service": "Search engine",
-            "marketing_consent": False,
             "have_you_exported_before": "No",
             "do_you_have_a_product_you_want_to_export": "Yes",
             "positivity_for_growth": "Neutral",
@@ -1484,7 +1479,6 @@ def test_full_steps_solo_exporter_business_type_wizard_success_custom_fields(
             "have_you_exported_before": "No",
             "do_you_have_a_product_you_want_to_export": "Yes",
             "positivity_for_growth": "Neutral",
-            "marketing_consent": False,
             "_custom_fields": [
                 {
                     "222": [
@@ -1728,7 +1722,6 @@ def test_full_steps_wizard_success_private_custom_fields_are_ignored(
             "sectors": "Advanced engineering, Aerospace, Agriculture, horticulture, fisheries and pets, Airports, Automotive, Chemicals, Construction, Consumer and retail, Creative industries, Defence, Education and training, Energy, Environment, Financial and professional services, Food and drink, Healthcare services, Logistics, Maritime, Medical devices and equipment, Mining, Pharmaceuticals and biotechnology, Railways, Security, Space, Sports economy, Technology and smart cities, Water",  # noqa: E501
             # noqa: E501
             "how_did_you_hear_about_this_service": "Search engine",
-            "marketing_consent": False,
             "_custom_fields": [
                 {"222": CompanyTurnoverChoices.BELOW_85000},
             ],
