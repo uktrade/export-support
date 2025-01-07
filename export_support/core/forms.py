@@ -1015,7 +1015,6 @@ class EnquiryDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         how_did_you_hear_about_this_service = self.cleaned_data[
             "how_did_you_hear_about_this_service"
         ]
-        email_consent = self.cleaned_data["email_consent"]
 
         if (
             how_did_you_hear_about_this_service
@@ -1036,7 +1035,6 @@ class EnquiryDetailsForm(gds_forms.FormErrorMixin, forms.Form):
             "nature_of_enquiry": nature_of_enquiry,
             "question": question,
             "how_did_you_hear_about_this_service": how_did_you_hear_about_this_service,
-            "marketing_consent": email_consent,
         }
 
 
