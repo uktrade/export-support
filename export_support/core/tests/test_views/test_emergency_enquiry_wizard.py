@@ -94,7 +94,6 @@ def test_submit_russia_ukraine_form(client, settings, mocker):
             "full_name": "Jimmy Space",
             "email": "jimmy.space@test.com",
             "how_did_you_hear_about_this_service": "-",
-            "marketing_consent": False,
             "phone": "07786179011",
             "_custom_fields": [
                 {"111": "Golden Throne Inc."},
@@ -198,7 +197,6 @@ def test_submit_israel_palestine_form(client, settings, mocker):
             "full_name": "Jimmy Space",
             "email": "jimmy.space@test.com",
             "how_did_you_hear_about_this_service": "-",
-            "marketing_consent": False,
             "phone": "07786179011",
             "_custom_fields": [
                 {"111": "Golden Throne Inc."},
