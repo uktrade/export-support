@@ -8,6 +8,8 @@ jobs:
             docker:
                   - image: "circleci/python:3.9.9-node"
                   - image: "redis:5"
+            environment:
+                  ZENDESK_SUBDOMAIN: test
             steps:
                   - checkout
                   - run:
