@@ -979,13 +979,6 @@ class EnquiryDetailsForm(gds_forms.FormErrorMixin, forms.Form):
             },
         ),
     )
-    email_consent = forms.BooleanField(
-        label="I would like to receive additional information by email",
-        required=False,
-        widget=forms.CheckboxInput(
-            attrs={"class": "govuk-checkboxes__input"},
-        ),
-    )
 
     def clean(self):
         cleaned_data = super().clean()
@@ -1022,7 +1015,6 @@ class EnquiryDetailsForm(gds_forms.FormErrorMixin, forms.Form):
         how_did_you_hear_about_this_service = self.cleaned_data[
             "how_did_you_hear_about_this_service"
         ]
-        email_consent = self.cleaned_data["email_consent"]
 
         if (
             how_did_you_hear_about_this_service
@@ -1043,7 +1035,6 @@ class EnquiryDetailsForm(gds_forms.FormErrorMixin, forms.Form):
             "nature_of_enquiry": nature_of_enquiry,
             "question": question,
             "how_did_you_hear_about_this_service": how_did_you_hear_about_this_service,
-            "marketing_consent": email_consent,
         }
 
 
@@ -1205,7 +1196,6 @@ class ZendeskForm(ZendeskAPIForm):
     full_name = forms.CharField()
     email = forms.CharField()
     how_did_you_hear_about_this_service = forms.CharField()
-    marketing_consent = forms.BooleanField(required=False)
     have_you_exported_before = forms.CharField(required=False)
     do_you_have_a_product_you_want_to_export = forms.CharField(required=False)
     positivity_for_growth = forms.CharField(required=False)
@@ -1235,6 +1225,5 @@ class EmergencySituationZendeskForm(ZendeskAPIForm):
     full_name = forms.CharField()
     email = forms.CharField()
     how_did_you_hear_about_this_service = forms.CharField()
-    marketing_consent = forms.BooleanField(required=False)
     phone = forms.CharField(required=False)
     _custom_fields = forms.JSONField(required=False)
