@@ -161,7 +161,7 @@ class EnquiryWizardView(NamedUrlSessionWizardView):
         subject = enquiry_details_cleaned_data["nature_of_enquiry"] or "N/A"
         question = enquiry_details_cleaned_data["question"]
 
-        spam_control = helpers.SpamControl(contents=question)
+        spam_control = {"contents": question}
         sender = helpers.Sender(
             country_code="",
             email_address=email_address,
