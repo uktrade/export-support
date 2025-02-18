@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+
 import os
 import sys
 from pathlib import Path
@@ -287,13 +288,8 @@ DIRECTORY_CLIENT_CORE_CACHE_LOG_THROTTLING_SECONDS = env.int(
 DIRECTORY_FORMS_API_HEALTHCHECK_URL = env.str("DIRECTORY_FORMS_API_HEALTHCHECK_URL")
 
 ZENDESK_SERVICE_NAME = env.str("ZENDESK_SERVICE_NAME")
-ZENDESK_SUBDOMAIN = env.str("ZENDESK_SUBDOMAIN", "dit")
+ZENDESK_SUBDOMAIN = env.str("ZENDESK_SUBDOMAIN")
 ZENDESK_CUSTOM_FIELD_MAPPING = env.dict("ZENDESK_CUSTOM_FIELD_MAPPING", default=dict())
-
-CONSENT_API_KEY = env.str("CONSENT_API_KEY")
-CONSENT_API_ID = env.str("CONSENT_API_ID")
-CONSENT_API_URL = env.str("CONSENT_API_URL")
-CONSENT_API_METHOD = env.str("CONSENT_API_METHOD")
 
 GA_MEASUREMENT_PROTOCOL_UA = env.str("GA_MEASUREMENT_PROTOCOL_UA")
 GA_MEASUREMENT_PROTOCOL_TRACK_EVENTS = env.str(
